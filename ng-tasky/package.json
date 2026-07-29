@@ -20,8 +20,12 @@
     "@angular/platform-server": "^22.0.0",
     "@angular/router": "^22.0.0",
     "@angular/ssr": "^22.0.9",
+    "@fortawesome/angular-fontawesome": "^5.1.0",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "bootstrap": "^5.3.8",
     "express": "^5.1.0",
+    "i18n": "^0.15.3",
+    "i18next": "^26.3.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
