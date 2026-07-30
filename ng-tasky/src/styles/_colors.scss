@@ -1,0 +1,26 @@
+$tasky-green-50:  #ecfdf3;
+$tasky-green-100: #d1fae0;
+$tasky-green-200: #a7f3c8;
+$tasky-green-300: #6ee7a8;
+$tasky-green-400: #34d07a;
+$tasky-green-500: #2eb85c; 
+$tasky-green-600: #259a4c;
+$tasky-green-700: #1f7a3e;
+$tasky-green-800: #1a6134;
+$tasky-green-900: #145029;
+
+$tasky-primary:       $tasky-green-500;
+$tasky-primary-hover: $tasky-green-600;
+$tasky-primary-light: $tasky-green-100;
+$tasky-primary-dark:  $tasky-green-700;
+
+$tasky-text:        #2c3e50;
+$tasky-text-muted:  #6c757d;
+$tasky-surface:     #ffffff;
+$tasky-surface-alt: #f8faf9;
+
+$tasky-gradient-auth:    linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+$tasky-gradient-landing: linear-gradient(135deg, #f5f7fa 0%, #d1fae0 100%);
+
+$tasky-bubble-1: rgba($tasky-green-400, 0.45);
+$tasky-bubble-2: rgba($tasky-green-300, 0.4);

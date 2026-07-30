@@ -1,0 +1,55 @@
+// =============================================================================
+// Tasky — surcharge des variables Bootstrap
+// Ces valeurs remplacent les défauts Bootstrap avant compilation.
+// =============================================================================
+
+@import './colors';
+
+// --- Couleurs Bootstrap ---
+$primary:   $tasky-primary;
+$success:   $tasky-green-500;
+$green:     $tasky-green-500;
+
+$body-color: $tasky-text;
+$body-bg:    $tasky-surface;
+
+$link-color:       $tasky-primary;
+$link-hover-color: $tasky-primary-hover;
+
+// --- Typographie ---
+$font-family-sans-serif: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+$headings-color: $tasky-text;
+
+// --- Formes & espacements ---
+$border-radius:    0.75rem;
+$border-radius-sm: 0.5rem;
+$border-radius-lg: 1rem;
+$border-radius-xl: 1.25rem;
+$border-radius-pill: 50rem;
+
+$btn-border-radius:    $border-radius-pill;
+$input-border-radius:  $border-radius;
+$card-border-radius:   $border-radius-lg;
+
+// --- Boutons ---
+$btn-font-weight: 600;
+$btn-padding-y:   0.625rem;
+$btn-padding-x:   1.75rem;
+
+$btn-primary-bg:           $tasky-primary;
+$btn-primary-border-color: $tasky-primary;
+$btn-primary-hover-bg:     $tasky-primary-hover;
+$btn-primary-hover-border-color: $tasky-primary-hover;
+
+// --- Formulaires ---
+$input-bg:              $tasky-surface-alt;
+$input-border-color:    #e2e8f0;
+$input-focus-border-color: $tasky-primary;
+$input-focus-box-shadow:   0 0 0 0.2rem rgba($tasky-primary, 0.15);
+
+// --- Cartes & ombres ---
+$card-border-width: 0;
+$card-box-shadow:   0 10px 25px rgba(0, 0, 0, 0.08);
+
+$box-shadow:    0 4px 12px rgba(0, 0, 0, 0.08);
+$box-shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.12);

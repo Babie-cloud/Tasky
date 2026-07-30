@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
   selector: 'app-landingpage',
   imports: [],
   templateUrl: './landingpage.html',
-  styleUrl: './landingpage.scss',
 })
 export class Landingpage {
   private router = inject (Router)

@@ -6,8 +6,8 @@ import { Resetpassword } from './auth/resetpassword/resetpassword';
 import { DashboardUser } from './components/dashboard-user/dashboard-user';
 export const routes: Routes = [
     { path: '', component: Landingpage },
-    { path: '/login', component: Login},
-    { path: '/signup', component: Signup},
-    { path: '/resetpassword', component: Resetpassword},
-    { path:'/dashboard-user', component: DashboardUser}
+    { path: 'login', component: Login},
+    { path: 'signup', component: Signup},
+    { path: 'resetpassword', component: Resetpassword},
+    { path:'dashboard-user', component: DashboardUser}
 ];

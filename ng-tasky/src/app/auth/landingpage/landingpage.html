@@ -1,11 +1,18 @@
-<div class="container">
-    <div class="content">
-        <h1>Welcome to Tasky</h1>
+<div class="landing-wrapper d-flex justify-content-center align-items-center">
+  <div class="card landing-card border-0 shadow text-center">
+    <div class="card-body p-4 p-md-5">
+      <h1 class="card-title fw-bold mb-3">
+        Welcome to <span class="text-brand">Tasky</span>
+      </h1>
 
-        <p>We help you to organise your agenda in putting every single details in functions. <br/>
-        Click on the button to start</p>
+      <p class="text-muted mb-4">
+        We help you organize your schedule by structuring every single detail effortlessly.
+        Click the button below to get started.
+      </p>
 
-        <button class="btn btn-outlet-success" (click)="OpenLogin()">Start</button>
-
+      <button type="button" class="btn btn-outline-primary btn-lg px-4" (click)="OpenLogin()">
+        Start
+      </button>
     </div>
+  </div>
 </div>

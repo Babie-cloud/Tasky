@@ -1,61 +1,73 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../core/services/auth-service';
-import { Router } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../core/services/auth-service';
+
+function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.get('password')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+  return password === confirmPassword ? null : { passwordMismatch: true };
+}
 
 @Component({
   selector: 'app-signup',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule ],
+  imports: [RouterLink, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './signup.html',
-  styleUrls: ['./signup.scss']
 })
 export class Signup {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  signupForm: FormGroup;
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
-
-  constructor() {
-    this.signupForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+  SignupForm: FormGroup = this.fb.group(
+    {
+      name: ['', Validators.required],
+      prenom: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required],
+    },
+    { validators: passwordMatchValidator }
+  );
+
+  isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
 
   onSubmit(): void {
-    console.log('Form submitted! Valid:', this.signupForm.valid); 
-    console.log('Form values:', this.signupForm.value);
-
-    if (this.signupForm.valid) {
-      const { username, email, password } = this.signupForm.value;
-      console.log('Sending request to backend...'); 
-      this.authService.register(username, email, password).subscribe({
-        next: (res) => {
-          console.log('Success response:', res); 
-          this.successMessage = 'Inscription réussie ! Redirection vers le login...';
-          this.errorMessage = null;
-          setTimeout(() => this.router.navigate(['login']), 2000);
-        },
-        error: (err: HttpErrorResponse) => {
-          console.error('Error response:', err); 
-          this.errorMessage = err.error?.error || 'Erreur lors de l\'inscription.';
-          this.successMessage = null;
-        },
-        complete: () => console.log('Request complete') 
-      });
-    } else {
-      console.log('Form invalid, not sending request'); 
+    if (this.SignupForm.invalid || this.isSubmitting()) {
+      this.SignupForm.markAllAsTouched();
+      return;
     }
-  }
 
-  OpenLogin(): void {
-    this.router.navigate(['/login']);
+    this.isSubmitting.set(true);
+    this.errorMessage.set(null);
+
+    const { name, prenom, email, password, confirmPassword } = this.SignupForm.value;
+
+    this.authService
+      .signup({
+        first_name: prenom,
+        last_name: name,
+        email,
+        password,
+        confirm_password: confirmPassword,
+      })
+      .subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          this.router.navigate(['/userdashboard']);
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          console.error('[Signup] Erreur d\'inscription', err);
+          this.errorMessage.set(
+            err.status === 409
+              ? 'An account already exists with this email.'
+              : 'Something went wrong. Please try again.'
+          );
+        },
+      });
   }
 }

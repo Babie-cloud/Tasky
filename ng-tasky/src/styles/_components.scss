@@ -1,0 +1,102 @@
+@import './colors';
+
+// --- Wrapper plein écran (login, signup, reset) ---
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $tasky-gradient-auth;
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem;
+}
+
+// --- Bulles décoratives ---
+.auth-bubble {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.auth-bubble-1 {
+  width: 250px;
+  height: 250px;
+  background: $tasky-bubble-1;
+  top: -50px;
+  left: -50px;
+}
+
+.auth-bubble-2 {
+  width: 300px;
+  height: 300px;
+  background: $tasky-bubble-2;
+  bottom: -80px;
+  right: -80px;
+}
+
+// --- Carte auth centrée ---
+.auth-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  background-color: rgba($tasky-surface, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba($tasky-surface, 0.5);
+}
+
+// --- Landing page ---
+.landing-wrapper {
+  min-height: 100vh;
+  background: $tasky-gradient-landing;
+  padding: 1.25rem;
+}
+
+.landing-card {
+  max-width: 30rem;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $box-shadow-lg;
+  }
+}
+
+// --- Icône circulaire (reset password, etc.) ---
+.icon-circle {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $tasky-primary-light;
+  color: $tasky-primary;
+}
+
+// --- Séparateur "ou" ---
+.divider-or {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1.25rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $tasky-text-muted;
+  }
+}

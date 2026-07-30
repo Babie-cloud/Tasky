@@ -1,67 +1,111 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card p-4 w-50 shadow">
-    <h2 class="text-center mb-4 text-primary-2" i18n>Please sign up</h2>
+<div class="auth-wrapper">
+  <div class="auth-bubble auth-bubble-1" aria-hidden="true"></div>
+  <div class="auth-bubble auth-bubble-2" aria-hidden="true"></div>
 
-    
-    <div class="alert alert-success" [class.d-none]="!successMessage">
-      {{ successMessage || '' }}
-    </div>
-    <div class="alert alert-danger" [class.d-none]="!errorMessage">
-      {{ errorMessage || '' }}
-    </div>
-
-    
-    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-      <div class="mb-3">
-        <label for="username" class="form-label" i18n>Username <code class="text-danger">*</code></label>
-        <input
-          type="text"
-          class="form-control"
-          id="username"
-          formControlName="username"
-          [ngClass]="{'is-invalid': signupForm.get('username')?.invalid && signupForm.get('username')?.touched}"
-         required >
-        <div class="invalid-feedback" [class.d-none]="!(signupForm.get('username')?.invalid && signupForm.get('username')?.touched)" i18n>
-          Username must contain at list 3 caracters.
-        </div>
+  <div class="auth-card card shadow-lg max-w-auth-lg my-3">
+    <div class="card-body p-4 p-md-5">
+      <div class="text-center mb-4">
+        <h1 class="h3 fw-bold text-brand mb-1">Create an account</h1>
+        <p class="text-muted small mb-0">Start organizing your tasks in seconds</p>
       </div>
 
-      <div class="mb-3">
-        <label for="email" class="form-label" i18n>Email<code class="text-danger">*</code></label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          formControlName="email"
-          [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}"
-        required >
-        <div class="invalid-feedback" [class.d-none]="!(signupForm.get('email')?.invalid && signupForm.get('email')?.touched)" i18n>
-          Please can you enter a correct mail!
+      <form [formGroup]="SignupForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <label for="floatingName" class="form-label fw-semibold">Last name</label>
+            <input
+              type="text"
+              id="floatingName"
+              class="form-control form-control-lg"
+              placeholder="Doe"
+              formControlName="name"
+              [class.is-invalid]="SignupForm.get('name')?.invalid && SignupForm.get('name')?.touched"
+            />
+            @if (SignupForm.get('name')?.invalid && SignupForm.get('name')?.touched) {
+              <div class="invalid-feedback d-block">Last name is required.</div>
+            }
+          </div>
+
+          <div class="col-sm-6">
+            <label for="floatingPrenom" class="form-label fw-semibold">First name</label>
+            <input
+              type="text"
+              id="floatingPrenom"
+              class="form-control form-control-lg"
+              placeholder="John"
+              formControlName="prenom"
+              [class.is-invalid]="SignupForm.get('prenom')?.invalid && SignupForm.get('prenom')?.touched"
+            />
+            @if (SignupForm.get('prenom')?.invalid && SignupForm.get('prenom')?.touched) {
+              <div class="invalid-feedback d-block">First name is required.</div>
+            }
+          </div>
         </div>
-      </div>
 
-      <div class="mb-3">
-        <label for="password" class="form-label" i18n>Password<code class="text-danger">*</code></label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          formControlName="password"
-          [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && signupForm.get('password')?.touched}"
-        required>
-        <div class="invalid-feedback" [class.d-none]="!(signupForm.get('password')?.invalid && signupForm.get('password')?.touched)" i18n>
-          The Password must have 6 caracters.
+        <div>
+          <label for="floatingInput" class="form-label fw-semibold">Email address</label>
+          <input
+            type="email"
+            id="floatingInput"
+            class="form-control form-control-lg"
+            placeholder="babie@gmail.com"
+            formControlName="email"
+            [class.is-invalid]="SignupForm.get('email')?.invalid && SignupForm.get('email')?.touched"
+          />
+          @if (SignupForm.get('email')?.invalid && SignupForm.get('email')?.touched) {
+            <div class="invalid-feedback d-block">Please enter a valid email.</div>
+          }
         </div>
-      </div>
 
-      <button type="submit" class="btn bg-primary-2 text-white w-100 mb-3" [disabled]="signupForm.invalid" i18n>
-        Create an account
-      </button>
-    </form>
+        <div>
+          <label for="floatingPassword" class="form-label fw-semibold">Password</label>
+          <input
+            type="password"
+            id="floatingPassword"
+            class="form-control form-control-lg"
+            placeholder="At least 8 characters"
+            formControlName="password"
+            [class.is-invalid]="SignupForm.get('password')?.invalid && SignupForm.get('password')?.touched"
+          />
+          @if (SignupForm.get('password')?.invalid && SignupForm.get('password')?.touched) {
+            <div class="invalid-feedback d-block">Password must be at least 8 characters.</div>
+          }
+        </div>
 
-    
-    <div class="text-center mt-3" i18n>
-      <p>Already have an account ? <a class="nav-link text-secondary fw-semibold" routerLink="login"> Log in</a></p>
+        <div>
+          <label for="floatingConfirmPassword" class="form-label fw-semibold">Confirm password</label>
+          <input
+            type="password"
+            id="floatingConfirmPassword"
+            class="form-control form-control-lg"
+            placeholder="Re-enter your password"
+            formControlName="confirmPassword"
+            [class.is-invalid]="SignupForm.hasError('passwordMismatch') && SignupForm.get('confirmPassword')?.touched"
+          />
+          @if (SignupForm.hasError('passwordMismatch') && SignupForm.get('confirmPassword')?.touched) {
+            <div class="invalid-feedback d-block">Passwords do not match.</div>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <div class="alert alert-danger py-2 small text-center mb-0" role="alert">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg w-100 shadow-brand mt-1"
+          [disabled]="SignupForm.invalid || isSubmitting()"
+        >
+          {{ isSubmitting() ? 'Creating account...' : 'Sign up' }}
+        </button>
+
+        <p class="text-center text-muted small mb-0">
+          Already have an account?
+          <a [routerLink]="['/login']" class="text-brand fw-bold text-decoration-none ms-1">Log in</a>
+        </p>
+      </form>
     </div>
   </div>
 </div>
