@@ -1,1 +1,67 @@
-<p>signup works!</p>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card p-4 w-50 shadow">
+    <h2 class="text-center mb-4 text-primary-2" i18n>Please sign up</h2>
+
+    
+    <div class="alert alert-success" [class.d-none]="!successMessage">
+      {{ successMessage || '' }}
+    </div>
+    <div class="alert alert-danger" [class.d-none]="!errorMessage">
+      {{ errorMessage || '' }}
+    </div>
+
+    
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="username" class="form-label" i18n>Username <code class="text-danger">*</code></label>
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          formControlName="username"
+          [ngClass]="{'is-invalid': signupForm.get('username')?.invalid && signupForm.get('username')?.touched}"
+         required >
+        <div class="invalid-feedback" [class.d-none]="!(signupForm.get('username')?.invalid && signupForm.get('username')?.touched)" i18n>
+          Username must contain at list 3 caracters.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label" i18n>Email<code class="text-danger">*</code></label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          formControlName="email"
+          [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}"
+        required >
+        <div class="invalid-feedback" [class.d-none]="!(signupForm.get('email')?.invalid && signupForm.get('email')?.touched)" i18n>
+          Please can you enter a correct mail!
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label" i18n>Password<code class="text-danger">*</code></label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          formControlName="password"
+          [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && signupForm.get('password')?.touched}"
+        required>
+        <div class="invalid-feedback" [class.d-none]="!(signupForm.get('password')?.invalid && signupForm.get('password')?.touched)" i18n>
+          The Password must have 6 caracters.
+        </div>
+      </div>
+
+      <button type="submit" class="btn bg-primary-2 text-white w-100 mb-3" [disabled]="signupForm.invalid" i18n>
+        Create an account
+      </button>
+    </form>
+
+    
+    <div class="text-center mt-3" i18n>
+      <p>Already have an account ? <a class="nav-link text-secondary fw-semibold" routerLink="login"> Log in</a></p>
+    </div>
+  </div>
+</div>

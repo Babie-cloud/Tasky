@@ -1,1 +1,52 @@
-<p>login works!</p>
+
+      <div className="auth-page relative overflow-hidden max-w-md mx-auto bg-white/90 backdrop-blur p-8 rounded-2xl shadow-2xl">
+        <div className="bubble bubble-1">
+        <div className="bubble bubble-2">
+
+        <h2 className="text-3xl font-bold text-prune mb-6 text-center">Log in</h2>
+
+        <div className="text-center text-sm text-gray-400 mb-6">or</div>
+
+        <form className="space-y-6">
+          <div>
+            <label className="block text-prune font-medium mb-2 text-left">Email</label>
+            <input
+              type="email"
+              required
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-prune focus:ring-2 focus:ring-prune/30 transition-all outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-prune font-medium mb-2 text-left">Password</label>
+            <input
+              type="password"
+              required
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-prune focus:ring-2 focus:ring-prune/30 transition-all outline-none"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-prune text-white py-3 rounded-lg font-semibold hover:bg-prune/90 transition shadow-md active:scale-[0.98]"
+          >
+            Log In
+          </button>
+        </form>
+
+        <button className="w-full mt-4 flex items-center justify-center gap-3 py-3 border rounded-lg hover:bg-gray-50 transition">
+          <FcGoogle size={20} /> Continue with Google
+        </button>
+
+        <button className="w-full mt-3 flex items-center justify-center gap-3 py-3 border rounded-lg hover:bg-gray-50 transition text-blue-600">
+          <FaFacebookF size={20} /> Continue with Facebook
+        </button>
+
+        <div className="mt-6 text-center text-sm">
+          Don’t have an account? <a routerlink="/signup" className="text-prune font-bold hover:underline">Create an account</a>
+        </div>
+        <div className="mt-2 text-center text-sm">
+          <a href="/reset-password" className="text-prune hover:underline">Forgot password?</a>
+        </div>
+        </div>
+        </div>
+      </div>
+
