@@ -1,7 +1,5 @@
-// =============================================================================
-// Tasky — point d'entrée global des styles
-// =============================================================================
-
-@import 'styles/bootstrap';
-@import 'styles/components';
-@import '@fortawesome/fontawesome-free/css/all.min.css';
+@use 'bootstrap/scss/bootstrap';
+@use '../public/styles/colors' as *;
+@use '../public/styles/variables';
+@use '../public/styles/components';
+@use '../public/styles/utilities';

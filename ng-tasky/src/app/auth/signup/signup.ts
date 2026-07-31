@@ -15,6 +15,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
   selector: 'app-signup',
   imports: [RouterLink, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './signup.html',
+  styleUrl: './signup.scss',
 })
 export class Signup {
   private fb = inject(FormBuilder);
@@ -57,7 +58,7 @@ export class Signup {
       .subscribe({
         next: () => {
           this.isSubmitting.set(false);
-          this.router.navigate(['/userdashboard']);
+          this.router.navigate(['/dashboard-user']);
         },
         error: (err) => {
           this.isSubmitting.set(false);

@@ -1,0 +1,44 @@
+@import './colors';
+
+$primary:   $tasky-primary;
+$success:   $tasky-green-500;
+$green:     $tasky-green-500;
+
+$body-color: $tasky-text;
+$body-bg:    $tasky-surface;
+
+$link-color:       $tasky-primary;
+$link-hover-color: $tasky-primary-hover;
+
+$font-family-sans-serif: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+$headings-color: $tasky-text;
+
+$border-radius:    0.75rem;
+$border-radius-sm: 0.5rem;
+$border-radius-lg: 1rem;
+$border-radius-xl: 1.25rem;
+$border-radius-pill: 50rem;
+
+$btn-border-radius:   0.75rem;
+$input-border-radius:   $border-radius;
+$card-border-radius:    $border-radius-lg;
+
+$btn-font-weight: 600;
+$btn-padding-y:   0.625rem;
+$btn-padding-x:   1.75rem;
+
+$btn-primary-bg:                 $tasky-primary;
+$btn-primary-border-color:       $tasky-primary;
+$btn-primary-hover-bg:           $tasky-primary-hover;
+$btn-primary-hover-border-color: $tasky-primary-hover;
+
+$input-bg:                 $tasky-surface-alt;
+$input-border-color:       rgba($tasky-green-300, 0.55);
+$input-focus-border-color: $tasky-primary;
+$input-focus-box-shadow:   0 0 0 0.2rem rgba($tasky-primary, 0.15);
+
+$card-border-width: 0;
+$card-box-shadow:   0 10px 25px rgba($tasky-primary, 0.1);
+
+$box-shadow:    0 4px 12px rgba(0, 0, 0, 0.08);
+$box-shadow-lg: 0 15px 35px rgba($tasky-primary, 0.12);

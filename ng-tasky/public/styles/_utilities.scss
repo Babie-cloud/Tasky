@@ -1,0 +1,61 @@
+@import './colors';
+
+.text-brand {
+  color: $tasky-primary !important;
+}
+
+.text-brand-hover:hover {
+  color: $tasky-primary-hover !important;
+}
+
+.bg-brand {
+  background-color: $tasky-primary !important;
+}
+
+.bg-brand-subtle {
+  background-color: $tasky-primary-light !important;
+}
+
+.border-brand {
+  border-color: $tasky-primary !important;
+}
+
+.shadow-brand {
+  box-shadow: 0 4px 14px rgba($tasky-primary, 0.28) !important;
+}
+
+.shadow-brand-lg {
+  box-shadow: 0 10px 25px rgba($tasky-primary, 0.2) !important;
+}
+
+.bg-gradient-auth {
+  background: $tasky-gradient-auth !important;
+}
+
+.bg-gradient-landing {
+  background: $tasky-gradient-landing !important;
+}
+
+.max-w-auth {
+  max-width: 28rem;
+}
+
+.max-w-auth-lg {
+  max-width: 32rem;
+}
+
+.btn-outline-brand {
+  color: $tasky-primary;
+  border: 1.5px solid rgba($tasky-primary, 0.45);
+  background-color: rgba($tasky-surface, 0.85);
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding-block: 0.65rem;
+
+  &:hover,
+  &:focus {
+    color: $tasky-surface;
+    background-color: $tasky-primary;
+    border-color: $tasky-primary;
+  }
+}

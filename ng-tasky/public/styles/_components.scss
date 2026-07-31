@@ -1,0 +1,195 @@
+@import './colors';
+
+// =============================================================================
+// Pages auth (login, signup, reset)
+// =============================================================================
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $tasky-gradient-auth;
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem;
+}
+
+.auth-bubble {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.55;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.auth-bubble-1 {
+  width: 260px;
+  height: 260px;
+  background: $tasky-bubble-1;
+  top: -60px;
+  left: -60px;
+}
+
+.auth-bubble-2 {
+  width: 320px;
+  height: 320px;
+  background: $tasky-bubble-2;
+  bottom: -90px;
+  right: -90px;
+}
+
+.auth-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  background-color: rgba($tasky-surface, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba($tasky-green-200, 0.6);
+  border-radius: 1.25rem;
+}
+
+.auth-logo {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $tasky-green-400, $tasky-green-600);
+  box-shadow: 0 8px 20px rgba($tasky-primary, 0.3);
+}
+
+.auth-logo-mark {
+  color: $tasky-surface;
+  font-weight: 800;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.divider-or {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1.25rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid rgba($tasky-green-300, 0.45);
+  }
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $tasky-text-muted;
+  }
+}
+
+.landing-wrapper {
+  min-height: 100vh;
+  background: $tasky-gradient-landing;
+  padding: 1.25rem;
+}
+
+.landing-card {
+  max-width: 30rem;
+  width: 100%;
+  border: 1px solid rgba($tasky-green-200, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba($tasky-primary, 0.12);
+  }
+}
+
+.icon-circle {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $tasky-primary-light;
+  color: $tasky-primary;
+}
+
+.contact-form-container {
+  width: 100%;
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  background-color: rgba($tasky-surface, 0.92);
+  border: 1px solid rgba($tasky-green-200, 0.6);
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 25px rgba($tasky-primary, 0.1);
+}
+
+.contact-form-container h4 {
+  color: $tasky-primary-dark;
+  margin-bottom: 1.25rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.Form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.Form-group label {
+  color: $tasky-text;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.Form-group input,
+.contact-form input {
+  background-color: $tasky-surface-alt;
+  color: $tasky-text;
+  border: 1px solid rgba($tasky-green-300, 0.55);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &::placeholder {
+    color: rgba($tasky-text-muted, 0.75);
+  }
+
+  &:focus {
+    border-color: $tasky-primary;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba($tasky-primary, 0.15);
+    background-color: $tasky-surface;
+  }
+}
+
+.redirect-text {
+  text-align: center;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: $tasky-text-muted;
+
+  a {
+    color: $tasky-primary;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      color: $tasky-primary-hover;
+      text-decoration: underline;
+    }
+  }
+}
