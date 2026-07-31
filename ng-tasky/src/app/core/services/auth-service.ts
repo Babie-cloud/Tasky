@@ -55,6 +55,16 @@ export class AuthService {
       );
   }
 
+    // Pour google
+  loginWithGoogle(credential: string) {
+  return this.http.post<any>(`${environment.apiUrl}/auth/google`, { credential });
+}
+ 
+// Pour Facebook
+loginWithFacebook(accessToken: string, userID: string) {
+  return this.http.post<any>(`${environment.apiUrl}/auth/facebook`, { accessToken, userID });
+}
+
 // Pour l'inscription
   signup(data: RegisterData): Observable<AuthResponse> {
     return this.http
