@@ -56,7 +56,7 @@ export class AuthService {
   }
 
     // Pour google
-  loginWithGoogle(credential: string) {
+loginWithGoogle(credential: string) {
   return this.http.post<any>(`${environment.apiUrl}/auth/google`, { credential });
 }
  

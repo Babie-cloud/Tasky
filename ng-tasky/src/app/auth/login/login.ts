@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth-service';
+import { environment } from '../../../environments/environment';
 
 declare const google: any;
 declare const FB: any;
@@ -33,7 +34,7 @@ export class Login implements AfterViewInit {
     // Google
     if (typeof google !== 'undefined') {
       google.accounts.id.initialize({
-        client_id: 'TON_CLIENT_ID.apps.googleusercontent.com',
+        client_id: environment.googleClientId,
         callback: (response: any) => this.handleGoogleResponse(response),
       });
       google.accounts.id.renderButton(this.googleBtn.nativeElement, {

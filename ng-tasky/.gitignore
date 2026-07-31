@@ -46,3 +46,13 @@ node_modules
 node_modules/
 dist/
 .angular/
+
+**/node_modules/
+node_modules/
+
+.env
+.env.*
+!.env.example
+src/environments/environment.development.ts
+src/environments/environment.ts
+/src/environments/
