@@ -46,7 +46,7 @@ export class Login implements AfterViewInit {
 
     // Facebook
     if (typeof FB !== 'undefined') {
-      FB.init({ appId: 'TON_APP_ID_FACEBOOK', version: 'v19.0', xfbml: false });
+      FB.init({ appId: environment.facebookAppId, version: 'v19.0', xfbml: false });
     }
   }
 

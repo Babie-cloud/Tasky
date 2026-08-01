@@ -45,38 +45,36 @@ export class AuthService {
   token$: Observable<string | null> = this.tokenSubject.asObservable();
 
 // Pour la connection
-  login(data: LoginData): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/login`, data)
-      .pipe(
-        tap((response) => {
-          this.setToken(response.token);
-        })
-      );
-  }
+login(data: LoginData): Observable<AuthResponse> {
+  return this.http
+    .post<AuthResponse>(`${environment.apiUrl}/api/auth/login`, data)
+    .pipe(
+      tap((response) => {
+        this.setToken(response.token);
+      })
+    );
+}
 
-    // Pour google
 loginWithGoogle(credential: string) {
-  return this.http.post<any>(`${environment.apiUrl}/auth/google`, { credential });
-}
- 
-// Pour Facebook
-loginWithFacebook(accessToken: string, userID: string) {
-  return this.http.post<any>(`${environment.apiUrl}/auth/facebook`, { accessToken, userID });
+  return this.http.post<any>(`${environment.apiUrl}/api/auth/google`, { credential });
 }
 
-// Pour l'inscription
-  signup(data: RegisterData): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/register`, data)
-      .pipe(
-        tap((response) => {
-          if (response?.token) {
-            this.setToken(response.token);
-          }
-        })
-      );
-  }
+loginWithFacebook(accessToken: string, userID: string) {
+  return this.http.post<any>(`${environment.apiUrl}/api/auth/facebook`, { accessToken, userID });
+}
+
+signup(data: RegisterData): Observable<AuthResponse> {
+  return this.http
+    .post<AuthResponse>(`${environment.apiUrl}/api/auth/register`, data)
+    .pipe(
+      tap((response) => {
+        if (response?.token) {
+          this.setToken(response.token);
+        }
+      })
+    );
+}
+
 
   // Pour la déconnection
   logout(): void {

@@ -1,9 +1,10 @@
 import { Component, inject, signal, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators,  AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth-service';
+import { environment } from '../../../environments/environment';
 
 declare const google: any;
 declare const FB: any;
@@ -18,12 +19,12 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
   selector: 'app-signup',
   imports: [RouterLink, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './signup.html',
+  styleUrl: './signup.scss',
 })
-export class Signup{
+export class Signup implements AfterViewInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
 
   @ViewChild('googleBtn') googleBtn!: ElementRef;
 
@@ -42,10 +43,9 @@ export class Signup{
   errorMessage = signal<string | null>(null);
 
   ngAfterViewInit(): void {
-    // Google
     if (typeof google !== 'undefined') {
       google.accounts.id.initialize({
-        client_id: 'TON_CLIENT_ID.apps.googleusercontent.com',
+        client_id: environment.googleClientId,
         callback: (response: any) => this.handleGoogleResponse(response),
       });
       google.accounts.id.renderButton(this.googleBtn.nativeElement, {
@@ -55,9 +55,8 @@ export class Signup{
       });
     }
 
-    // Facebook
     if (typeof FB !== 'undefined') {
-      FB.init({ appId: 'TON_APP_ID_FACEBOOK', version: 'v19.0', xfbml: false });
+      FB.init({ appId: environment.facebookAppId, version: 'v19.0', xfbml: false });
     }
   }
 
@@ -72,27 +71,28 @@ export class Signup{
 
     const { name, prenom, email, password, confirmPassword } = this.SignupForm.value;
 
-    this.authService.signup({  first_name: prenom,
+    this.authService
+      .signup({
+        first_name: prenom,
         last_name: name,
         email,
         password,
-        confirm_password: confirmPassword
-       }).subscribe({
-      next: () => {
-        this.isSubmitting.set(false);
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard-user';
-        this.router.navigateByUrl(returnUrl);
-      },
-       error: (err) => {
+        confirm_password: confirmPassword,
+      })
+      .subscribe({
+        next: () => {
           this.isSubmitting.set(false);
-          console.error('[Signup] Erreur d\'inscription', err);
+          this.router.navigate(['/dashboard-user']);
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
           this.errorMessage.set(
             err.status === 409
               ? 'An account already exists with this email.'
               : 'Something went wrong. Please try again.'
           );
         },
-    });
+      });
   }
 
   handleGoogleResponse(response: any): void {
