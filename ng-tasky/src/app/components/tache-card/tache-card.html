@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="content">
+        <!-- Insérer une liste de tâches ici -->
+         <div class="card">
+            <div class="card-body border border-2 border-primary rounded-3">
+                <h5 class="card-title">Listes des tâches à faire</h5>
+                <p class="card-text">Voici la liste de vos tâches à accomplir.</p>
+                <div cdkDropListGroup>
+  <div class="example-container">
+    <h2>To do</h2>
+    <div
+      cdkDropList
+      [cdkDropListData]="todo"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      @for (item of todo; track item) {
+        <div class="example-box" cdkDrag>{{ item }}</div>
+      }
+    </div>
+  </div>
+  <div class="example-container">
+    <h2>Done</h2>
+    <div
+      cdkDropList
+      [cdkDropListData]="done"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      @for (item of done; track item) {
+        <div class="example-box" cdkDrag>{{ item }}</div>
+      }
+    </div>
+  </div>
+</div>
+            </div>
+         </div>
+    </div>
+</div>
