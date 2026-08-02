@@ -80,7 +80,7 @@ export class Login implements AfterViewInit {
     this.authService.loginWithGoogle(response.credential).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('/dashboard-user');
+        this.router.navigateByUrl('/homepage');
       },
       error: () => this.errorMessage.set('Google authentication failed.'),
     });
@@ -93,7 +93,7 @@ export class Login implements AfterViewInit {
         this.authService.loginWithFacebook(accessToken, userID).subscribe({
           next: (res: any) => {
             localStorage.setItem('token', res.token);
-            this.router.navigateByUrl('/dashboard-user');
+            this.router.navigateByUrl('/homepage');
           },
           error: () => this.errorMessage.set('Facebook authentication failed.'),
         });

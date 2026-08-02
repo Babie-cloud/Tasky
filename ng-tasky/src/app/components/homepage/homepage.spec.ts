@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DashboardUser } from './dashboard-user';
+import { Homepage } from './homepage';
 
-describe('DashboardUser', () => {
-  let component: DashboardUser;
-  let fixture: ComponentFixture<DashboardUser>;
+describe('Homepage', () => {
+  let component: Homepage;
+  let fixture: ComponentFixture<Homepage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardUser],
+      imports: [Homepage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardUser);
+    fixture = TestBed.createComponent(Homepage);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
@@ -19,6 +19,4 @@ describe('DashboardUser', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  
 });

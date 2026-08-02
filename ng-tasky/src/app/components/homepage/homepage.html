@@ -1,0 +1,93 @@
+<nav class="navbar-tasky d-flex align-items-center justify-content-between px-4 py-3">
+  <div class="d-flex align-items-center gap-2">
+    <img src="/logo.png" alt="Logo" class="logo" width="28" height="28">
+    <h4 class="fw-bold mb-0">Tasky</h4>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+    @if (isLoggedIn) {
+      <span class="text-muted small">Welcome, {{ userName }}</span>
+      <a routerLink="/dashboard-user" class="btn btn-dark btn-sm">Go to dashboard</a>
+    } @else {
+      <a routerLink="/login" class="btn btn-outline-dark btn-sm">Log in</a>
+      <a routerLink="/signup" class="btn btn-dark btn-sm">Sign up</a>
+    }
+  </div>
+</nav>
+
+<div class="hero-section">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+
+      <!-- Colonne texte -->
+      <div class="col-lg-6">
+        <span class="eyebrow-badge">
+          <i class="fa-sharp fa-regular fa-star me-1"></i> Trusted by thousands of users
+        </span>
+        <h1 class="hero-title mt-3">
+          Organize your work with <br>
+          <span class="text-brand">Tasky</span>
+        </h1>
+        <p class="text-muted hero-subtitle">
+          Tasky is a task management application that helps you organize your work
+          and increase productivity. Create, manage, and track your tasks in one place.
+        </p>
+        <div class="d-flex gap-2 mt-4">
+          <button type="button" class="btn btn-dark btn-lg px-4" (click)="OpenSignup()">
+            Get Started Free
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="OpenLogin()">
+            Log in
+          </button>
+        </div>
+        <div class="hero-checks mt-4">
+          <p><i class="fa-solid fa-check text-success me-2"></i>Free forever</p>
+          <p><i class="fa-solid fa-check text-success me-2"></i>No credit card required</p>
+          <p><i class="fa-solid fa-check text-success me-2"></i>Setup in minutes</p>
+        </div>
+      </div>
+
+      <!-- Colonne preview du board -->
+      <div class="col-lg-6">
+        <div class="board-preview-card">
+          <div class="board-preview-header">
+            <span class="fw-semibold">Project Board</span>
+            <span class="board-dots">
+              <i class="dot dot-red"></i><i class="dot dot-yellow"></i><i class="dot dot-green"></i>
+            </span>
+          </div>
+          <div class="board-preview-columns">
+            <div class="board-preview-col">
+              <p class="board-preview-col-title">To Do</p>
+              <div class="board-preview-mini-card">Design new logo</div>
+              <div class="board-preview-mini-card">Update website</div>
+            </div>
+            <div class="board-preview-col">
+              <p class="board-preview-col-title">In Progress</p>
+              <div class="board-preview-mini-card">Write documentation</div>
+            </div>
+            <div class="board-preview-col">
+              <p class="board-preview-col-title">Done</p>
+              <div class="board-preview-mini-card">Setup project</div>
+              <div class="board-preview-mini-card">Team meeting</div>
+            </div>
+          </div>
+          <div class="board-preview-fab">
+            <i class="fa-solid fa-check"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer class="footer-tasky">
+  <div class="container text-center">
+    <h2 class="fw-bold">Everything you need to stay organized</h2>
+    <p class="text-muted mb-2">&copy; 2026 Tasky. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#" class="text-muted">Privacy Policy</a>
+      <a href="#" class="text-muted ms-3">Terms of Service</a>
+    </div>
+  </div>
+</footer>

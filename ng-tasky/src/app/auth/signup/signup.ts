@@ -82,7 +82,7 @@ export class Signup implements AfterViewInit {
       .subscribe({
         next: () => {
           this.isSubmitting.set(false);
-          this.router.navigate(['/dashboard-user']);
+          this.router.navigate(['/homepage']);
         },
         error: (err) => {
           this.isSubmitting.set(false);
@@ -99,7 +99,7 @@ export class Signup implements AfterViewInit {
     this.authService.loginWithGoogle(response.credential).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('/dashboard-user');
+        this.router.navigateByUrl('/homepage');
       },
       error: () => this.errorMessage.set('Google authentication failed.'),
     });
@@ -112,7 +112,7 @@ export class Signup implements AfterViewInit {
         this.authService.loginWithFacebook(accessToken, userID).subscribe({
           next: (res: any) => {
             localStorage.setItem('token', res.token);
-            this.router.navigateByUrl('/dashboard-user');
+            this.router.navigateByUrl('/homepage');
           },
           error: () => this.errorMessage.set('Facebook authentication failed.'),
         });

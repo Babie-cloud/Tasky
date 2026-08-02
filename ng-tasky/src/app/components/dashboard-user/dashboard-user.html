@@ -1,3 +1,47 @@
-<div class="container">
-    <app-tache-card></app-tache-card>
+<div class="container py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-0">Welcome back, {{ userName }}</h2>
+      <p class="text-muted mb-0">Here's what's happening with your tasks today.</p>
+    </div>
+    <button type="button" class="btn btn-dark" routerLink="/add-task">
+      <i class="fa-solid fa-plus me-1"></i> Add Task
+    </button>
+  </div>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Total Tasks</p>
+          <p class="stat-value">{{ totalTasks }}</p>
+        </div>
+        <div class="stat-icon bg-primary-subtle text-primary"><i class="fa-solid fa-list-check"></i></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">In Progress</p>
+          <p class="stat-value">{{ inProgressCount }}</p>
+        </div>
+        <div class="stat-icon bg-warning-subtle text-warning"><i class="fa-solid fa-rocket"></i></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Completed</p>
+          <p class="stat-value">{{ completedCount }}</p>
+        </div>
+        <div class="stat-icon bg-success-subtle text-success"><i class="fa-solid fa-circle-check"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Board -->
+  <app-tache-card></app-tache-card>
+
 </div>
