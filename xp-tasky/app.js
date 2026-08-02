@@ -12,6 +12,7 @@ const connectDB = require('./db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./components/auth');
+var tasksRouter = require('./routes/tasks');
 
 var app = express();
 
@@ -48,6 +49,7 @@ app.use(async (req, res, next) => {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/tasks', tasksRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

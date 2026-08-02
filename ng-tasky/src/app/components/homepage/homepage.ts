@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth-service';
-
+import { ThemeService } from '../../core/services/theme-service';
 @Component({
   selector: 'app-homepage',
   imports: [RouterLink],
@@ -11,10 +11,9 @@ import { AuthService } from '../../core/services/auth-service';
 export class Homepage {
   private router = inject(Router);
   private authService = inject(AuthService);
-
+ themeService = inject(ThemeService);
   isLoggedIn = this.authService.isLoggedIn();
-  userName = 'there'; // à remplacer une fois le prénom disponible dans AuthService
-
+  userName = 'there'; 
   OpenLogin(): void {
     this.router.navigate(['/login']);
   }
