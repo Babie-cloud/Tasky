@@ -1,27 +1,30 @@
-const { OAuth2Client } = require('google-auth-library');
-const axios = require('axios');
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const router = express.Router();
+const nodemailer = require('nodemailer');
+const axios = require('axios');
+const { OAuth2Client } = require('google-auth-library');
 
+const User = require('../models/User');
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Configuration unique du transporteur Email (Nodemailer)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: Number(process.env.SMTP_PORT) || 587,
+  secure: process.env.SMTP_SECURE === 'true', // true pour le port 465, false pour les autres
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
 });
 
-// Pour l'inscription 
+// INSCRIPTION
 router.post('/register', async (req, res) => {
-  
   try {
     const { email, password, confirm_password, first_name, last_name } = req.body;
 
@@ -51,7 +54,7 @@ router.post('/register', async (req, res) => {
       expiresIn: '2h',
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       token,
       user: {
         id: newUser._id,
@@ -61,12 +64,12 @@ router.post('/register', async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('[Register] Erreur serveur', err);
-    res.status(500).json({ message: 'Server error.' });
+    console.error('[Register Error]:', err);
+    return res.status(500).json({ message: 'Server error.' });
   }
 });
 
-// Pour la connection
+// CONNEXION CLASSIQUE
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -89,7 +92,7 @@ router.post('/login', async (req, res) => {
       expiresIn: '2h',
     });
 
-    res.json({
+    return res.json({
       token,
       user: {
         id: user._id,
@@ -99,17 +102,15 @@ router.post('/login', async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('[Login] Erreur serveur', err);
-    res.status(500).json({ message: 'Server error.' });
+    console.error('[Login Error]:', err);
+    return res.status(500).json({ message: 'Server error.' });
   }
-
-  
 });
 
-// Connexion via Google
+// CONNEXION GOOGLE
 router.post('/google', async (req, res) => {
   try {
-    const { credential } = req.body; // le token envoyé par Angular
+    const { credential } = req.body;
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -131,17 +132,17 @@ router.post('/google', async (req, res) => {
     }
 
     const token = jwt.sign({ sub: user._id.toString(), email: user.email }, JWT_SECRET, { expiresIn: '2h' });
-    res.json({ token, user: { id: user._id, email: user.email, first_name: user.first_name, last_name: user.last_name } });
+    return res.json({ token, user: { id: user._id, email: user.email, first_name: user.first_name, last_name: user.last_name } });
   } catch (err) {
-    console.error('[Google Auth] Erreur', err);
-    res.status(401).json({ message: 'Authentification Google invalide.' });
+    console.error('[Google Auth Error]:', err);
+    return res.status(401).json({ message: 'Authentification Google invalide.' });
   }
 });
 
-// Connexion via Facebook
+// CONNEXION FACEBOOK
 router.post('/facebook', async (req, res) => {
   try {
-    const { accessToken, userID } = req.body; 
+    const { accessToken, userID } = req.body;
     const fbResponse = await axios.get(`https://graph.facebook.com/${userID}`, {
       params: { fields: 'id,email,first_name,last_name', access_token: accessToken },
     });
@@ -150,7 +151,7 @@ router.post('/facebook', async (req, res) => {
     let user = await User.findOne({ $or: [{ facebookId }, { email }] });
     if (!user) {
       user = await User.create({
-        email: email || `${facebookId}@facebook.local`, 
+        email: email || `${facebookId}@facebook.local`,
         facebookId,
         first_name: first_name || '',
         last_name: last_name || '',
@@ -161,55 +162,50 @@ router.post('/facebook', async (req, res) => {
     }
 
     const token = jwt.sign({ sub: user._id.toString(), email: user.email }, JWT_SECRET, { expiresIn: '2h' });
-    res.json({ token, user: { id: user._id, email: user.email, first_name: user.first_name, last_name: user.last_name } });
+    return res.json({ token, user: { id: user._id, email: user.email, first_name: user.first_name, last_name: user.last_name } });
   } catch (err) {
-    console.error('[Facebook Auth] Erreur', err);
-    res.status(401).json({ message: 'Authentification Facebook invalide.' });
+    console.error('[Facebook Auth Error]:', err);
+    return res.status(401).json({ message: 'Authentification Facebook invalide.' });
   }
-}
+});
 
-
-);
-
-
-// En cas d'oublie de mot de passe | Reset-Password
+// DEMANDE DE RÉINITIALISATION DU MOT DE PASSE
 router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
 
-    // Toujours répondre pareil, même si l'email n'existe pas (évite l'énumération de comptes)
+    // Réponse générique pour des raisons de sécurité
     if (!user) {
       return res.json({ message: 'Si ce compte existe, un email a été envoyé.' });
     }
+
     const resetToken = crypto.randomBytes(32).toString('hex');
     user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1h
+    user.resetPasswordExpires = Date.now() + 3600000; // Valide 1 heure
     await user.save();
-
-    const resetUrl = `${process.env.FRONTEND_URL}/resetpassword?token=${resetToken}`;
-
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: false,
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-    });
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
+const resetUrl = `${frontendUrl}/resetpassword?token=${resetToken}`;
 
     await transporter.sendMail({
-      from: '"Tasky" <no-reply@tasky.com>',
+      from: `"Tasky" <${process.env.SMTP_USER}>`,
       to: user.email,
       subject: 'Réinitialisation de votre mot de passe',
-      html: `<p>Bonjour,</p><p>Cliquez sur ce lien pour réinitialiser votre mot de passe (valide 1h) :</p><a href="${resetUrl}">${resetUrl}</a>`,
+      html: `
+        <p>Bonjour,</p>
+        <p>Cliquez sur ce lien pour réinitialiser votre mot de passe (valide 1h) :</p>
+        <a href="${resetUrl}">${resetUrl}</a>
+      `,
     });
 
-    res.json({ message: 'Si ce compte existe, un email a été envoyé.' });
+    return res.json({ message: 'Si ce compte existe, un email a été envoyé.' });
   } catch (err) {
-    console.error('[Forgot Password] Erreur', err);
-    res.status(500).json({ message: 'Erreur serveur.' });
+    console.error('[Forgot Password Error Details]:', err);
+    return res.status(500).json({ message: 'Erreur serveur lors de l\'envoi de l\'email.' });
   }
 });
 
+// CONFIRMATION DU NOUVEAU MOT DE PASSE
 router.post('/reset-password', async (req, res) => {
   try {
     const { token, password } = req.body;
@@ -226,12 +222,12 @@ router.post('/reset-password', async (req, res) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
-        res.json({ message: 'Mot de passe mis à jour avec succès.' });
+
+    return res.json({ message: 'Mot de passe mis à jour avec succès.' });
   } catch (err) {
-    console.error('[Reset Password] Erreur', err);
-    res.status(500).json({ message: 'Erreur serveur.' });
+    console.error('[Reset Password Error]:', err);
+    return res.status(500).json({ message: 'Erreur serveur.' });
   }
 });
 
-
-module.exports = router;
+module.exports = router;s
