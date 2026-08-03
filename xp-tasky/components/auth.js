@@ -5,11 +5,21 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+// Pour l'inscription 
 router.post('/register', async (req, res) => {
   
   try {
@@ -56,6 +66,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// Pour la connection
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -155,6 +166,72 @@ router.post('/facebook', async (req, res) => {
     console.error('[Facebook Auth] Erreur', err);
     res.status(401).json({ message: 'Authentification Facebook invalide.' });
   }
+}
+
+
+);
+
+
+// En cas d'oublie de mot de passe | Reset-Password
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    // Toujours répondre pareil, même si l'email n'existe pas (évite l'énumération de comptes)
+    if (!user) {
+      return res.json({ message: 'Si ce compte existe, un email a été envoyé.' });
+    }
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1h
+    await user.save();
+
+    const resetUrl = `${process.env.FRONTEND_URL}/resetpassword?token=${resetToken}`;
+
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    });
+
+    await transporter.sendMail({
+      from: '"Tasky" <no-reply@tasky.com>',
+      to: user.email,
+      subject: 'Réinitialisation de votre mot de passe',
+      html: `<p>Bonjour,</p><p>Cliquez sur ce lien pour réinitialiser votre mot de passe (valide 1h) :</p><a href="${resetUrl}">${resetUrl}</a>`,
+    });
+
+    res.json({ message: 'Si ce compte existe, un email a été envoyé.' });
+  } catch (err) {
+    console.error('[Forgot Password] Erreur', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
 });
+
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Lien invalide ou expiré.' });
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+        res.json({ message: 'Mot de passe mis à jour avec succès.' });
+  } catch (err) {
+    console.error('[Reset Password] Erreur', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
+
 
 module.exports = router;

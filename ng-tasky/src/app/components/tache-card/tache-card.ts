@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, PLATFORM_ID} from '@angular/core';
 import {
   CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup,
   moveItemInArray, transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { TaskService, Task } from '../../core/services/task-service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-tache-card',
@@ -13,11 +14,13 @@ import { TaskService, Task } from '../../core/services/task-service';
 })
 export class TacheCard implements OnInit {
   private taskService = inject(TaskService);
+  private platformId = inject(PLATFORM_ID);
 
   todo: Task[] = [];
   done: Task[] = [];
 
   ngOnInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     this.taskService.getTasks().subscribe((tasks) => {
       this.todo = tasks.filter(t => t.status === 'todo');
       this.done = tasks.filter(t => t.status === 'done');

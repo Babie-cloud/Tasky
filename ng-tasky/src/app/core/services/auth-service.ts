@@ -75,7 +75,6 @@ signup(data: RegisterData): Observable<AuthResponse> {
     );
 }
 
-
   // Pour la déconnection
   logout(): void {
     if (this.isBrowser) {
@@ -83,7 +82,6 @@ signup(data: RegisterData): Observable<AuthResponse> {
     }
     this.tokenSubject.next(null);
   }
-
  
   getToken(): string | null {
     return this.tokenSubject.value;
@@ -100,4 +98,13 @@ signup(data: RegisterData): Observable<AuthResponse> {
     }
     this.tokenSubject.next(token);
   }
+
+  // Pour la réinitialisation du mot de passe
+  forgotPassword(email: string): Observable<any> {
+  return this.http.post(`${environment.apiUrl}/api/auth/forgot-password`, { email });
+}
+
+resetPassword(token: string, password: string): Observable<any> {
+  return this.http.post(`${environment.apiUrl}/api/auth/reset-password`, { token, password });
+}
 }
