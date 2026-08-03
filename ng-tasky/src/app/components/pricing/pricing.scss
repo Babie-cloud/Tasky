@@ -1,0 +1,189 @@
+@use 'variables' as *;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $tasky-gradient-landing;
+}
+
+.navbar-tasky {
+  background-color: rgba($tasky-surface, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba($tasky-green-200, 0.5);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.theme-toggle {
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-color: rgba($tasky-green-300, 0.6);
+  color: $tasky-text;
+
+  &:hover {
+    background-color: $tasky-primary-light;
+    border-color: $tasky-primary;
+  }
+}
+
+
+
+.pricing-header {
+  max-width: 40rem;
+  padding-top: 3.5rem;
+
+  h1 {
+    font-weight: 800;
+    color: $tasky-primary-dark;
+  }
+
+  p {
+    color: $tasky-text-muted;
+  }
+}
+
+
+.pricing-card {
+  border: 1px solid rgba($tasky-green-200, 0.6);
+  border-radius: $border-radius-xl;
+  background-color: rgba($tasky-surface, 0.92);
+  backdrop-filter: blur(14px);
+  box-shadow: $box-shadow;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $box-shadow-lg;
+  }
+
+  .card-header {
+    background-color: $tasky-surface-alt;
+    border-bottom: 1px solid rgba($tasky-green-200, 0.5);
+    color: $tasky-text;
+    font-weight: 700;
+  }
+
+  .card-body {
+    padding: 2rem 1.75rem;
+  }
+
+  ul {
+    li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-block: 0.4rem;
+      font-size: 0.92rem;
+      color: $tasky-text;
+
+      i {
+        color: $tasky-primary;
+      }
+    }
+  }
+}
+
+.pricing-card-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: $tasky-text;
+  margin-bottom: 0.25rem;
+
+  small {
+    font-size: 1rem;
+    font-weight: 400;
+    color: $tasky-text-muted;
+  }
+}
+
+.pricing-card-featured {
+  position: relative;
+  border: 2px solid $tasky-primary;
+  transform: scale(1.04);
+  z-index: 1;
+
+  &:hover {
+    transform: scale(1.04) translateY(-6px);
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, $tasky-green-400, $tasky-green-600);
+    color: #fff;
+    border-bottom: none;
+  }
+
+  .pricing-card-title {
+    color: $tasky-primary-dark;
+  }
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $tasky-primary;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 1rem;
+  border-radius: $border-radius-pill;
+  box-shadow: 0 6px 14px rgba($tasky-primary, 0.35);
+}
+
+.pricing-compare {
+  h2 {
+    color: $tasky-primary-dark;
+    font-weight: 700;
+  }
+
+  table {
+    background-color: rgba($tasky-surface, 0.9);
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    box-shadow: $box-shadow;
+
+    thead th {
+      background-color: $tasky-surface-alt;
+      color: $tasky-text;
+      font-weight: 600;
+      border-bottom: 2px solid rgba($tasky-green-200, 0.6);
+    }
+
+    th, td {
+      vertical-align: middle;
+      border-color: rgba($tasky-green-200, 0.4);
+    }
+
+    i.fa-check {
+      color: $tasky-primary;
+    }
+  }
+}
+
+.pricing-footer {
+  border-top: 1px solid rgba($tasky-green-200, 0.5);
+
+  h5 {
+    color: $tasky-primary-dark;
+    font-weight: 700;
+  }
+
+  a {
+    color: $tasky-text-muted;
+    text-decoration: none;
+
+    &:hover {
+      color: $tasky-primary;
+    }
+  }
+}

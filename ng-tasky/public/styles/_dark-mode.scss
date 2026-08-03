@@ -1,22 +1,22 @@
 @import './colors';
 
 [data-bs-theme='dark'] {
-  --bs-body-bg: #0f2117;
+  --bs-body-bg: #242526 !important;
   --bs-body-color: #e6f4ea;
 
   .auth-wrapper {
-    background: linear-gradient(135deg, #0d1f16 0%, #163325 100%);
+    background: #242526 !important;
   }
 
   .auth-card,
   .contact-form-container {
-    background-color: rgba(#132a1e, 0.92);
+    background-color: #242526 !important;
     border-color: rgba($tasky-green-700, 0.5);
   }
 
   .Form-group input,
   .contact-form input {
-    background-color: #16301f;
+    background-color: #242526;
     color: #e6f4ea;
     border-color: rgba($tasky-green-700, 0.6);
 
@@ -26,22 +26,22 @@
   }
 
   .stat-card {
-    background: #16301f;
+    background: #242526;
     border-color: rgba(#fff, 0.08);
   }
 
   .board-preview-card {
-    background: #16301f;
+    background: #242526;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
   }
 
   .board-preview-mini-card {
-    background: #1d3d29;
+    background: #242526;
     color: #e6f4ea;
   }
 
   .example-box {
-    background: #16301f;
+    background: #242526;
     color: #e6f4ea;
   }
 
@@ -49,5 +49,28 @@
     &::before, &::after {
       border-top-color: rgba($tasky-green-700, 0.45);
     }
+  }
+   .navbar-tasky {
+    background-color: #242526 !important;
+    border-bottom-color: rgba($tasky-green-700, 0.4);
+  }
+
+  .pricing-card {
+    background-color: #242526;
+    border-color: rgba($tasky-green-700, 0.4);
+
+    .card-header {
+      background-color: #3a3b3c;
+      border-bottom-color: rgba($tasky-green-700, 0.4);
+    }
+  }
+  .pricing-card-featured .card-header {
+    background: linear-gradient(135deg, $tasky-green-700, $tasky-green-900);
+  }
+
+  .table {
+    --bs-table-color: #e6f4ea;
+    --bs-table-bg: transparent;
+    --bs-table-border-color: rgba($tasky-green-700, 0.35);
   }
 }

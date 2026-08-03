@@ -7,6 +7,7 @@ import { DashboardUser } from './components/dashboard-user/dashboard-user';
 import { TacheCard } from './components/tache-card/tache-card';
 import { AddTask } from './components/add-task/add-task';
 import { Homepage } from './components/homepage/homepage';
+import { Pricing } from './components/pricing/pricing';
 export const routes: Routes = [
     { path: '', component: Landingpage },
     { path: 'homepage', component: Homepage },
@@ -16,5 +17,6 @@ export const routes: Routes = [
     { path:'dashboard-user', component: DashboardUser},
     { path:'tache-card', component: TacheCard},
     { path: 'add-task', component: AddTask },
+    { path : 'pricing', component: Pricing },
 ];
  

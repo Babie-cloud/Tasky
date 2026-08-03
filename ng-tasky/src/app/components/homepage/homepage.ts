@@ -14,8 +14,8 @@ export class Homepage {
  themeService = inject(ThemeService);
   isLoggedIn = this.authService.isLoggedIn();
   userName = 'there'; 
-  OpenLogin(): void {
-    this.router.navigate(['/login']);
+  Openpricing(): void {
+    this.router.navigate(['/pricing']);
   }
 
   OpenSignup(): void {
