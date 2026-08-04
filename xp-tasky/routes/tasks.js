@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
   res.status(201).json(task);
 });
 
-// Modifier une tâche (titre et/ou statut, ex: après drag & drop)
+// Modifier une tâche
 router.put('/:id', async (req, res) => {
   const task = await Task.findOneAndUpdate(
     { _id: req.params.id, user: req.userId },
