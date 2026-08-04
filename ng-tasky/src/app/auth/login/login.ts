@@ -76,28 +76,27 @@ export class Login implements AfterViewInit {
     });
   }
 
-  handleGoogleResponse(response: any): void {
-    this.authService.loginWithGoogle(response.credential).subscribe({
-      next: (res: any) => {
-        localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('/homepage');
-      },
-      error: () => this.errorMessage.set('Google authentication failed.'),
-    });
-  }
 
-  loginWithFacebook(): void {
-    FB.login((response: any) => {
-      if (response.authResponse) {
-        const { accessToken, userID } = response.authResponse;
-        this.authService.loginWithFacebook(accessToken, userID).subscribe({
-          next: (res: any) => {
-            localStorage.setItem('token', res.token);
-            this.router.navigateByUrl('/homepage');
-          },
-          error: () => this.errorMessage.set('Facebook authentication failed.'),
-        });
-      }
-    }, { scope: 'email' });
-  }
+handleGoogleResponse(response: any): void {
+  this.authService.loginWithGoogle(response.credential).subscribe({
+    next: () => {
+      this.router.navigateByUrl('/dashboard-user');
+    },
+    error: () => this.errorMessage.set('Google authentication failed.'),
+  });
+}
+
+loginWithFacebook(): void {
+  FB.login((response: any) => {
+    if (response.authResponse) {
+      const { accessToken, userID } = response.authResponse;
+      this.authService.loginWithFacebook(accessToken, userID).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/dashboard-user');
+        },
+        error: () => this.errorMessage.set('Facebook authentication failed.'),
+      });
+    }
+  }, { scope: 'email' });
+}
 }

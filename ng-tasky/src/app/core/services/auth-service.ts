@@ -55,12 +55,16 @@ login(data: LoginData): Observable<AuthResponse> {
     );
 }
 
-loginWithGoogle(credential: string) {
-  return this.http.post<any>(`${environment.apiUrl}/api/auth/google`, { credential });
+loginWithGoogle(credential: string): Observable<AuthResponse> {
+  return this.http
+    .post<AuthResponse>(`${environment.apiUrl}/api/auth/google`, { credential })
+    .pipe(tap((response) => this.setToken(response.token)));
 }
 
-loginWithFacebook(accessToken: string, userID: string) {
-  return this.http.post<any>(`${environment.apiUrl}/api/auth/facebook`, { accessToken, userID });
+loginWithFacebook(accessToken: string, userID: string): Observable<AuthResponse> {
+  return this.http
+    .post<AuthResponse>(`${environment.apiUrl}/api/auth/facebook`, { accessToken, userID })
+    .pipe(tap((response) => this.setToken(response.token)));
 }
 
 signup(data: RegisterData): Observable<AuthResponse> {

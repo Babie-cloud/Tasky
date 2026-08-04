@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Landingpage } from './auth/landingpage/landingpage';
+//import { Landingpage } from './auth/landingpage/landingpage';
 import { Login } from './auth/login/login';
 import { Signup } from './auth/signup/signup';
 import { Resetpassword } from './auth/resetpassword/resetpassword';
@@ -9,8 +9,8 @@ import { AddTask } from './components/add-task/add-task';
 import { Homepage } from './components/homepage/homepage';
 import { Pricing } from './components/pricing/pricing';
 export const routes: Routes = [
-    { path: '', component: Landingpage },
-    { path: 'homepage', component: Homepage },
+    //{ path: '', component: Landingpage },
+    { path: '', component: Homepage },
     { path: 'login', component: Login},
     { path: 'signup', component: Signup},
     { path: 'resetpassword', component: Resetpassword},

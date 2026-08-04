@@ -12,13 +12,8 @@
 >
   <i class="fa-solid" [class.fa-moon]="themeService.theme() === 'light'" [class.fa-sun]="themeService.theme() === 'dark'"></i>
 </button>
-    @if (isLoggedIn) {
-      <span class="text-muted small">Welcome, {{ userName }}</span>
-      <a routerLink="/dashboard-user" class="btn btn-dark btn-sm">Go to dashboard</a>
-    } @else {
       <a routerLink="/login" class="btn btn-outline-dark btn-sm">Log in</a>
       <a routerLink="/signup" class="btn btn-dark btn-sm">Sign up</a>
-    }
     
   </div>
 </nav>
