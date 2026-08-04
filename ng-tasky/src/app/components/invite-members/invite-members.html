@@ -1,0 +1,37 @@
+<div
+  class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+  style="background: rgba(0,0,0,0.5); z-index: 1050;"
+  (click)="close()"
+>
+  <div class="bg-white rounded-3 p-4" style="width: 400px; max-width: 90vw;" (click)="$event.stopPropagation()">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Inviter un coworker</h5>
+      <button type="button" class="btn-close" (click)="close()"></button>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" placeholder="coworker@entreprise.com" [(ngModel)]="email" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Rôle</label>
+      <select class="form-select" [(ngModel)]="role">
+        <option value="admin">Administrateur</option>
+        <option value="member">Membre</option>
+        <option value="observer">Observateur</option>
+      </select>
+    </div>
+
+    @if (message()) {
+      <p class="text-success small">{{ message() }}</p>
+    }
+    @if (error()) {
+      <p class="text-danger small">{{ error() }}</p>
+    }
+
+    <button type="button" class="btn btn-dark w-100" [disabled]="isSending()" (click)="send()">
+      {{ isSending() ? 'Envoi...' : "Envoyer l'invitation" }}
+    </button>
+  </div>
+</div>

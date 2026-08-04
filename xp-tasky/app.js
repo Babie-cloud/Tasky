@@ -13,6 +13,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./components/auth');
 var tasksRouter = require('./routes/tasks');
+var boardsRouter = require('./routes/boards');
+var listsRouter = require('./routes/lists');
 
 var app = express();
 
@@ -50,6 +52,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/tasks', tasksRouter);
+app.use('/api/boards', boardsRouter);
+app.use('/api/lists', listsRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

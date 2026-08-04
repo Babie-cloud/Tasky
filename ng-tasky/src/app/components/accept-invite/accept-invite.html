@@ -1,0 +1,11 @@
+<div class="container py-5 text-center">
+  @if (status() === 'loading') {
+    <p>Validation de l'invitation...</p>
+  }
+  @if (status() === 'success') {
+    <p class="text-success">Invitation acceptée ! Redirection...</p>
+  }
+  @if (status() === 'error') {
+    <p class="text-danger">{{ errorMessage() }}</p>
+  }
+</div>

@@ -1,32 +1,82 @@
-<div class="card">
-  <div class="card-body border border-2 border-primary rounded-3">
-    <h5 class="card-title">Listes des tâches à faire</h5>
-    <p class="card-text">Voici la liste de vos tâches à accomplir.</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h5 class="mb-0">{{ board()?.name || 'Mon tableau' }}</h5>
+    <p class="text-muted small mb-0">Glissez-déposez les tâches pour changer leur statut.</p>
+  </div>
+  <button type="button" class="btn btn-outline-dark btn-sm" (click)="showInviteModal.set(true)">
+    <i class="fa-solid fa-user-plus me-1"></i> Inviter
+  </button>
+</div>
 
-    <div cdkDropListGroup class="d-flex gap-3">
-      <div class="example-container flex-fill">
-        <h2>To do</h2>
-        <div cdkDropList [cdkDropListData]="todo" class="example-list" (cdkDropListDropped)="drop($event)">
-          @for (task of todo; track task._id) {
-            <div class="example-box d-flex justify-content-between align-items-center" cdkDrag>
-              <span>{{ task.title }}</span>
-              <button class="btn btn-sm btn-danger" (click)="deleteTask(task._id, todo)">Supprimer</button>
-            </div>
-          }
-        </div>
+<div cdkDropListGroup class="d-flex gap-3 align-items-start overflow-auto pb-2">
+
+  @for (list of lists(); track list._id) {
+    <div class="board-column flex-shrink-0" style="width: 280px;">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="fw-bold mb-0">{{ list.title }}</h6>
+        <button type="button" class="btn btn-sm btn-link text-danger p-0" (click)="deleteList(list._id)" title="Supprimer la liste">
+          <i class="fa-solid fa-trash"></i>
+        </button>
       </div>
 
-      <div class="example-container flex-fill">
-        <h2>Done</h2>
-        <div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
-          @for (task of done; track task._id) {
-            <div class="example-box d-flex justify-content-between align-items-center" cdkDrag>
+      <div
+        cdkDropList
+        [cdkDropListData]="tasksOf(list._id)"
+        [cdkDropListConnectedTo]="connectedLists()"
+        class="example-list"
+        (cdkDropListDropped)="drop($event, list._id)"
+      >
+        @for (task of tasksOf(list._id); track task._id) {
+          <div class="example-box d-flex flex-column gap-1" cdkDrag>
+            <div class="d-flex justify-content-between align-items-start">
               <span>{{ task.title }}</span>
-              <button class="btn btn-sm btn-danger" (click)="deleteTask(task._id, done)">Supprimer</button>
+              <button class="btn btn-sm btn-link text-danger p-0" (click)="deleteTask(task._id, list._id)">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
             </div>
-          }
-        </div>
+            @if (dueBadge(task); as badge) {
+              <span class="badge align-self-start {{ badge.class }}">{{ badge.label }}</span>
+            }
+          </div>
+        }
       </div>
+
+      @if (showAddInput[list._id]) {
+        <div class="mt-2">
+          <input
+            type="text"
+            class="form-control form-control-sm mb-1"
+            placeholder="Titre de la tâche"
+            [(ngModel)]="newTaskTitles[list._id]"
+            (keyup.enter)="addTask(list._id)"
+          />
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-dark" (click)="addTask(list._id)">Ajouter</button>
+            <button class="btn btn-sm btn-light" (click)="toggleAddInput(list._id)">Annuler</button>
+          </div>
+        </div>
+      } @else {
+        <button type="button" class="btn btn-sm btn-light w-100 mt-2" (click)="toggleAddInput(list._id)">
+          <i class="fa-solid fa-plus me-1"></i> Ajouter une tâche
+        </button>
+      }
     </div>
+  }
+
+  <div class="board-column flex-shrink-0" style="width: 280px;">
+    <input
+      type="text"
+      class="form-control form-control-sm mb-1"
+      placeholder="Nom de la nouvelle liste"
+      [(ngModel)]="newListTitle"
+      (keyup.enter)="addList()"
+    />
+    <button type="button" class="btn btn-sm btn-outline-dark w-100" (click)="addList()">
+      <i class="fa-solid fa-plus me-1"></i> Ajouter une liste
+    </button>
   </div>
 </div>
+
+@if (showInviteModal()) {
+  <app-invite-members [boardId]="board()?._id ?? ''" (closed)="showInviteModal.set(false)"></app-invite-members>
+}
