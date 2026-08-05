@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../core/services/task.service';
-import { BoardService } from '../../core/services/board.service';
+import { BoardService } from '../../core/services/board-service';
 import { ListService, TaskList } from '../../core/services/list.service';
 
 @Component({

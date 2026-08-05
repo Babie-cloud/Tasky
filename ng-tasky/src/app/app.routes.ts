@@ -8,6 +8,9 @@ import { TacheCard } from './components/tache-card/tache-card';
 import { AddTask } from './components/add-task/add-task';
 import { Homepage } from './components/homepage/homepage';
 import { Pricing } from './components/pricing/pricing';
+import { AcceptInvite } from './components/accept-invite/accept-invite';
+import { authGuard } from './core/guard/auth-guard';
+import { Profile } from './components/profile/profile';
 export const routes: Routes = [
     //{ path: '', component: Landingpage },
     { path: '', component: Homepage },
@@ -18,5 +21,7 @@ export const routes: Routes = [
     { path:'tache-card', component: TacheCard},
     { path: 'add-task', component: AddTask },
     { path : 'pricing', component: Pricing },
-];
+    { path: 'boards/accept-invite', component: AcceptInvite, canActivate: [authGuard] },
+    { path: 'profile', component: Profile},
+];  
  

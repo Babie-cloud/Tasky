@@ -28,4 +28,5 @@ export class DashboardUser {
   OpenAddTask() {
     this.router.navigate(['/add-task']);
   }
+
 }

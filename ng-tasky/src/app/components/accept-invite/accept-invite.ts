@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { BoardService } from '../../core/services/board.service';
+import { BoardService } from '../../core/services/board-service';
 
 @Component({
   selector: 'app-accept-invite',

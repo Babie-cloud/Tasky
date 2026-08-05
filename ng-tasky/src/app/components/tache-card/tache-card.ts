@@ -5,7 +5,7 @@ import {
   CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup,
   moveItemInArray, transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { BoardService, Board } from '../../core/services/board.service';
+import { BoardService, Board } from '../../core/services/board-service';
 import { ListService, TaskList } from '../../core/services/list.service';
 import { TaskService, Task } from '../../core/services/task.service';
 import { InviteMembers } from '../invite-members/invite-members';

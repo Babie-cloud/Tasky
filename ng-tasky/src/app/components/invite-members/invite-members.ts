@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BoardService } from '../../core/services/board.service';
+import { BoardService } from '../../core/services/board-service';
 
 @Component({
   selector: 'app-invite-members',
