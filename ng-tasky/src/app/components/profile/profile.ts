@@ -83,6 +83,9 @@ export class Profile implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+  goToBilling() {
+    this.router.navigate(['/pricing']);
+  }
 
   initials(): string {
     const user = this.user();
