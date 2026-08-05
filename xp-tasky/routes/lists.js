@@ -7,13 +7,13 @@ const boardAccess = require('../middlewares/board-access');
 
 router.use(requireAuth);
 
-// Lister les listes d'un board (?board=<id>)
+// Lister les listes d'un board
 router.get('/', boardAccess('observer'), async (req, res) => {
   const lists = await List.find({ board: req.board._id }).sort({ order: 1 });
   res.json(lists);
 });
 
-// Créer une liste (body: { board, title })
+// Créer une liste
 router.post('/', boardAccess('member'), async (req, res) => {
   const { title } = req.body;
   if (!title) return res.status(400).json({ message: 'Titre requis.' });
@@ -22,7 +22,7 @@ router.post('/', boardAccess('member'), async (req, res) => {
   res.status(201).json(list);
 });
 
-// Renommer une liste (body: { board, title })
+// Renommer une liste 
 router.put('/:id', boardAccess('member'), async (req, res) => {
   const list = await List.findOneAndUpdate(
     { _id: req.params.id, board: req.board._id },
@@ -33,7 +33,7 @@ router.put('/:id', boardAccess('member'), async (req, res) => {
   res.json(list);
 });
 
-// Réordonner les listes (body: { board, orderedIds: [...] })
+// Réordonner les listes 
 router.put('/reorder', boardAccess('member'), async (req, res) => {
   const { orderedIds } = req.body;
   await Promise.all(
@@ -44,7 +44,7 @@ router.put('/reorder', boardAccess('member'), async (req, res) => {
   res.json({ message: 'Ordre mis à jour.' });
 });
 
-// Supprimer une liste (et ses tâches) (?board=<id>)
+// Supprimer une liste (et ses tâches) 
 router.delete('/:id', boardAccess('admin'), async (req, res) => {
   const list = await List.findOneAndDelete({ _id: req.params.id, board: req.board._id });
   if (!list) return res.status(404).json({ message: 'Liste introuvable.' });
