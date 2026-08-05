@@ -142,7 +142,7 @@ export class TacheCard implements OnInit {
       this.newListTitle = '';
     });
   }
-
+ // Pour supprimer la liste et toutes ses tâches associés
   deleteList(listId: string): void {
     const board = this.board();
     if (!board) return;
