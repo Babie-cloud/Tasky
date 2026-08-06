@@ -1,4 +1,4 @@
-@import './colors';
+@use './colors' as *;
 
 .text-brand {
   color: $tasky-primary !important;

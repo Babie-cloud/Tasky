@@ -6,7 +6,12 @@ import { BoardService, Board } from '../../core/services/board-service';
 
 @Component({
   selector: 'app-dashboard-user',
-  imports: [CommonModule, FormsModule, RouterLink],
+  standalone: true,
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink
+  ],
   templateUrl: './dashboard-user.html',
   styleUrl: './dashboard-user.scss',
 })
@@ -20,9 +25,6 @@ export class DashboardUser implements OnInit {
   isCreating = signal(false);
   userName = 'there';
 
-  editingBoardId = signal<string | null>(null);
-  editName = '';
-
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.loadBoards();
@@ -31,8 +33,8 @@ export class DashboardUser implements OnInit {
 
   loadBoards(): void {
     this.boardService.getBoards().subscribe({
-      next: (boards) => this.boards.set(boards),
-      error: (err) => console.error('Erreur chargement tableaux:', err)
+      next: (boards: Board[]) => this.boards.set(boards),
+      error: (err: unknown) => console.error('Erreur chargement tableaux:', err)
     });
   }
 
@@ -41,7 +43,7 @@ export class DashboardUser implements OnInit {
     if (!name) return;
     this.isCreating.set(true);
     this.boardService.createBoard(name).subscribe({
-      next: (board) => {
+      next: (board: Board) => {
         this.isCreating.set(false);
         this.newBoardName = '';
         this.router.navigate(['/boards', board._id]);
@@ -53,5 +55,4 @@ export class DashboardUser implements OnInit {
   openBoard(boardId: string): void {
     this.router.navigate(['/boards', boardId]);
   }
-
 }

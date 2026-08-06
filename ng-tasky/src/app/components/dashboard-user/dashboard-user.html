@@ -1,17 +1,10 @@
 <div class="container py-4">
-
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h2 class="fw-bold mb-0">Welcome back, {{ userName }}</h2>
       <p class="text-muted mb-0">Choisis un tableau ou crée-en un nouveau.</p>
     </div>
-    <button
-      type="button"
-      class="btn btn-light rounded-circle d-flex align-items-center justify-content-center"
-      routerLink="/profile"
-      title="Mon profil"
-      style="width: 40px; height: 40px;"
-    >
+    <button type="button" class="btn btn-light rounded-circle" routerLink="/profile">
       <i class="fa-solid fa-user"></i>
     </button>
   </div>
@@ -19,22 +12,18 @@
   <div class="row g-3">
     @for (board of boards(); track board._id) {
       <div class="col-md-4">
-        <div class="card h-100 shadow-sm" role="button" (click)="openBoard(board._id)">
+        <div class="card h-100 shadow-sm board-card" (click)="openBoard(board._id)" style="cursor: pointer;">
           <div class="card-body">
-            <h5 class="card-title mb-1">{{ board.name }}</h5>
+            <h5 class="card-title mb-1 text-primary">{{ board.name }}</h5>
             <p class="text-muted small mb-0">
-              {{ board.members?.length || 0 }} membre{{ (board.members?.length || 0) > 1 ? 's' : '' }}
+              {{ board.members?.length || 0 }} membre(s)
             </p>
           </div>
         </div>
       </div>
-    } @empty {
-      <div class="col-md-12 text-center py-3 text-muted">
-        Aucun tableau trouvé. Crée ton premier tableau ci-dessous !
-      </div>
     }
 
-    <!-- Formulaire de création de tableau -->
+    <!-- Carte pour créer un nouveau tableau -->
     <div class="col-md-4">
       <div class="card h-100 border-dashed">
         <div class="card-body">
@@ -53,5 +42,4 @@
       </div>
     </div>
   </div>
-
 </div>

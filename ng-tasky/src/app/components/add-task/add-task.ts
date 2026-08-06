@@ -28,7 +28,7 @@ export class AddTask implements OnInit {
   isSubmitting = signal(false);
 
   ngOnInit(): void {
-    this.boardService.getBoards().subscribe((boards) => {
+    this.boardService.getBoards().subscribe((boards: Board[]) => {
       this.boards.set(boards);
       if (boards.length) this.form.patchValue({ board: boards[0]._id });
     });
