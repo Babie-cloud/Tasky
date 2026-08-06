@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../core/services/task.service';
-import { BoardService } from '../../core/services/board-service';
-import { ListService, TaskList } from '../../core/services/list.service';
+import { BoardService, Board } from '../../core/services/board-service';
+import { ListService } from '../../core/services/list.service';
 
 @Component({
   selector: 'app-add-task',
@@ -20,31 +20,36 @@ export class AddTask implements OnInit {
 
   form: FormGroup = this.fb.group({
     title: ['', Validators.required],
-    list: ['', Validators.required],
+    board: ['', Validators.required],
     dueDate: [''],
   });
 
-  lists = signal<TaskList[]>([]);
+  boards = signal<Board[]>([]);
   isSubmitting = signal(false);
-  private boardId = '';
 
   ngOnInit(): void {
-    this.boardService.getMyBoard().subscribe((board) => {
-      this.boardId = board._id;
-      this.listService.getLists(board._id).subscribe((lists) => {
-        this.lists.set(lists);
-        if (lists.length) this.form.patchValue({ list: lists[0]._id });
-      });
+    this.boardService.getBoards().subscribe((boards) => {
+      this.boards.set(boards);
+      if (boards.length) this.form.patchValue({ board: boards[0]._id });
     });
   }
 
   onSubmit(): void {
-    if (this.form.invalid || !this.boardId) return;
+    if (this.form.invalid) return;
     this.isSubmitting.set(true);
-    const { title, list, dueDate } = this.form.value;
-    this.taskService.createTask(this.boardId, list, title, dueDate || null).subscribe({
-      next: () => this.router.navigate(['/dashboard-user']),
-      error: () => this.isSubmitting.set(false),
+    const { title, board, dueDate } = this.form.value;
+
+    // La tâche est toujours déposée dans la 1ère liste du tableau choisi ("À faire")
+    this.listService.getLists(board).subscribe((lists) => {
+      const firstList = lists[0];
+      if (!firstList) {
+        this.isSubmitting.set(false);
+        return;
+      }
+      this.taskService.createTask(board, firstList._id, title, dueDate || null).subscribe({
+        next: () => this.router.navigate(['/boards', board]),
+        error: () => this.isSubmitting.set(false),
+      });
     });
   }
 }

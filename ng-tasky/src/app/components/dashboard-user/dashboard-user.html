@@ -3,55 +3,55 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h2 class="fw-bold mb-0">Welcome back, {{ userName }}</h2>
-      <p class="text-muted mb-0">Here's what's happening with your tasks today.</p>
+      <p class="text-muted mb-0">Choisis un tableau ou crée-en un nouveau.</p>
     </div>
-    <div class="d-flex align-items-center gap-2">
-      <button type="button" class="btn btn-dark" routerLink="/add-task">
-        <i class="fa-solid fa-plus me-1"></i> Add Task
-      </button>
-      <button
-        type="button"
-        class="btn btn-light rounded-circle d-flex align-items-center justify-content-center"
-        routerLink="/profile"
-        title="Mon profil"
-        style="width: 40px; height: 40px;" >
-        <i class="fa-solid fa-user"></i>
-      </button>
-    </div>
+    <button
+      type="button"
+      class="btn btn-light rounded-circle d-flex align-items-center justify-content-center"
+      routerLink="/profile"
+      title="Mon profil"
+      style="width: 40px; height: 40px;"
+    >
+      <i class="fa-solid fa-user"></i>
+    </button>
   </div>
 
-  <!-- Stats -->
-  <div class="row g-3 mb-4">
-    <div class="col-md-4">
-      <div class="stat-card">
-        <div>
-          <p class="stat-label">Total Tasks</p>
-          <p class="stat-value">{{ totalTasks }}</p>
+  <div class="row g-3">
+    @for (board of boards(); track board._id) {
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm" role="button" (click)="openBoard(board._id)">
+          <div class="card-body">
+            <h5 class="card-title mb-1">{{ board.name }}</h5>
+            <p class="text-muted small mb-0">
+              {{ board.members?.length || 0 }} membre{{ (board.members?.length || 0) > 1 ? 's' : '' }}
+            </p>
+          </div>
         </div>
-        <div class="stat-icon bg-primary-subtle text-primary"><i class="fa-solid fa-list-check"></i></div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="stat-card">
-        <div>
-          <p class="stat-label">In Progress</p>
-          <p class="stat-value">{{ inProgressCount }}</p>
-        </div>
-        <div class="stat-icon bg-warning-subtle text-warning"><i class="fa-solid fa-rocket"></i></div>
+    } @empty {
+      <div class="col-md-12 text-center py-3 text-muted">
+        Aucun tableau trouvé. Crée ton premier tableau ci-dessous !
       </div>
-    </div>
+    }
+
+    <!-- Formulaire de création de tableau -->
     <div class="col-md-4">
-      <div class="stat-card">
-        <div>
-          <p class="stat-label">Completed</p>
-          <p class="stat-value">{{ completedCount }}</p>
+      <div class="card h-100 border-dashed">
+        <div class="card-body">
+          <h6 class="fw-bold mb-2"><i class="fa-solid fa-plus me-1"></i> Nouveau tableau</h6>
+          <input
+            type="text"
+            class="form-control form-control-sm mb-2"
+            placeholder="Ex: Études, Projet client..."
+            [(ngModel)]="newBoardName"
+            (keyup.enter)="createBoard()"
+          />
+          <button type="button" class="btn btn-sm btn-dark w-100" [disabled]="isCreating()" (click)="createBoard()">
+            {{ isCreating() ? 'Création...' : 'Créer' }}
+          </button>
         </div>
-        <div class="stat-icon bg-success-subtle text-success"><i class="fa-solid fa-circle-check"></i></div>
       </div>
     </div>
   </div>
-
-  <!-- Board -->
-  <app-tache-card></app-tache-card>
 
 </div>

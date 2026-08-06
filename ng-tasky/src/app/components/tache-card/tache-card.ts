@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup,
   moveItemInArray, transferArrayItem,
@@ -9,68 +10,96 @@ import { BoardService, Board } from '../../core/services/board-service';
 import { ListService, TaskList } from '../../core/services/list.service';
 import { TaskService, Task } from '../../core/services/task.service';
 import { InviteMembers } from '../invite-members/invite-members';
+import { TaskDetail } from '../task-detail/task-detail';
 
 @Component({
   selector: 'app-tache-card',
-  imports: [CommonModule, FormsModule, CdkDropListGroup, CdkDropList, CdkDrag, InviteMembers],
+  imports: [CommonModule, FormsModule, CdkDropListGroup, CdkDropList, CdkDrag, InviteMembers, TaskDetail],
   templateUrl: './tache-card.html',
   styleUrl: './tache-card.scss',
 })
 export class TacheCard implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private boardService = inject(BoardService);
   private listService = inject(ListService);
   private taskService = inject(TaskService);
   private platformId = inject(PLATFORM_ID);
 
   board = signal<Board | null>(null);
+  // Toujours exactement 3 listes fixes : À faire / En cours / Terminé (triées par 'order')
   lists = signal<TaskList[]>([]);
   tasksByList = signal<Record<string, Task[]>>({});
 
-  newListTitle = '';
   showInviteModal = signal(false);
   showAddInput: Record<string, boolean> = {};
   newTaskTitles: Record<string, string> = {};
 
-  get todo(): Task[] {
-    return this.allTasks().filter((t) => !this.isLastList(t.list));
-  }
-  get done(): Task[] {
-    return this.allTasks().filter((t) => this.isLastList(t.list));
-  }
+  // Filtres
+  filterDueStatus: 'all' | 'overdue' | 'today' | 'week' = 'all';
+  filterAssignee = 'all';
+  searchText = '';
+
+  // Panneau de détail
+  selectedTask = signal<Task | null>(null);
+
+  private boardId = '';
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
+    this.boardId = this.route.snapshot.paramMap.get('boardId') || '';
+    if (!this.boardId) {
+      this.router.navigate(['/dashboard-user']);
+      return;
+    }
     this.loadBoard();
   }
 
   loadBoard(): void {
-    this.boardService.getMyBoard().subscribe((board) => {
-      this.board.set(board);
-      this.listService.getLists(board._id).subscribe((lists) => {
-        this.lists.set(lists);
-        this.taskService.getTasks(board._id).subscribe((tasks) => {
-          const grouped: Record<string, Task[]> = {};
-          for (const list of lists) grouped[list._id] = [];
-          for (const task of tasks) {
-            if (!grouped[task.list]) grouped[task.list] = [];
-            grouped[task.list].push(task);
-          }
-          for (const key of Object.keys(grouped)) {
-            grouped[key].sort((a, b) => a.order - b.order);
-          }
-          this.tasksByList.set(grouped);
+    this.boardService.getBoard(this.boardId).subscribe({
+      next: (board) => {
+        this.board.set(board);
+        this.listService.getLists(board._id).subscribe((lists) => {
+          this.lists.set(lists);
+          this.taskService.getTasks(board._id).subscribe((tasks) => {
+            const grouped: Record<string, Task[]> = {};
+            for (const list of lists) grouped[list._id] = [];
+            for (const task of tasks) {
+              if (!grouped[task.list]) grouped[task.list] = [];
+              grouped[task.list].push(task);
+            }
+            for (const key of Object.keys(grouped)) {
+              grouped[key].sort((a, b) => a.order - b.order);
+            }
+            this.tasksByList.set(grouped);
+          });
         });
-      });
+      },
+      error: () => this.router.navigate(['/dashboard-user']),
     });
   }
 
-  private allTasks(): Task[] {
-    return Object.values(this.tasksByList()).flat();
+  // --- Stats du header ---
+  // Convention : la liste d'index 0 = "À faire", 1 = "En cours", 2 = "Terminé"
+  // (elles sont créées dans cet ordre côté serveur et triées par 'order').
+  private listAt(index: number): TaskList | undefined {
+    return this.lists()[index];
   }
 
-  private isLastList(listId: string): boolean {
-    const lists = this.lists();
-    return lists.length > 0 && lists[lists.length - 1]._id === listId;
+  get totalCount(): number {
+    return Object.values(this.tasksByList()).reduce((sum, arr) => sum + arr.length, 0);
+  }
+  get inProgressCount(): number {
+    const todo = this.listAt(0);
+    const inProgress = this.listAt(1);
+    return (
+      (todo ? this.tasksOf(todo._id).length : 0) +
+      (inProgress ? this.tasksOf(inProgress._id).length : 0)
+    );
+  }
+  get completedCount(): number {
+    const done = this.listAt(2);
+    return done ? this.tasksOf(done._id).length : 0;
   }
 
   tasksOf(listId: string): Task[] {
@@ -79,6 +108,26 @@ export class TacheCard implements OnInit {
 
   connectedLists(): string[] {
     return this.lists().map((l) => l._id);
+  }
+
+  taskVisible(task: Task): boolean {
+    if (this.filterAssignee !== 'all' && (task.assignedTo || '') !== this.filterAssignee) {
+      return false;
+    }
+    if (this.searchText.trim()) {
+      const needle = this.searchText.trim().toLowerCase();
+      if (!task.title.toLowerCase().includes(needle)) return false;
+    }
+    if (this.filterDueStatus !== 'all') {
+      const badge = this.dueBadge(task);
+      const labelByFilter: Record<string, string> = {
+        overdue: 'En retard',
+        today: "Aujourd'hui",
+        week: 'Cette semaine',
+      };
+      if (!badge || badge.label !== labelByFilter[this.filterDueStatus]) return false;
+    }
+    return true;
   }
 
   drop(event: CdkDragDrop<Task[]>, targetListId: string): void {
@@ -97,7 +146,6 @@ export class TacheCard implements OnInit {
       );
     }
 
-    // Recalcule l'ordre local puis persiste le déplacement côté serveur
     event.container.data.forEach((t, index) => (t.order = index));
     this.taskService.moveTask(board._id, task._id, targetListId, event.currentIndex).subscribe();
   }
@@ -130,31 +178,6 @@ export class TacheCard implements OnInit {
     });
   }
 
-  addList(): void {
-    const board = this.board();
-    const title = this.newListTitle.trim();
-    if (!title || !board) return;
-    this.listService.createList(board._id, title).subscribe((list) => {
-      this.lists.set([...this.lists(), list]);
-      const grouped = { ...this.tasksByList() };
-      grouped[list._id] = [];
-      this.tasksByList.set(grouped);
-      this.newListTitle = '';
-    });
-  }
- // Pour supprimer la liste et toutes ses tâches associés
-  deleteList(listId: string): void {
-    const board = this.board();
-    if (!board) return;
-    if (!confirm('Supprimer cette liste et toutes ses tâches ?')) return;
-    this.listService.deleteList(board._id, listId).subscribe(() => {
-      this.lists.set(this.lists().filter((l) => l._id !== listId));
-      const grouped = { ...this.tasksByList() };
-      delete grouped[listId];
-      this.tasksByList.set(grouped);
-    });
-  }
-
   dueBadge(task: Task): { label: string; class: string } | null {
     if (!task.dueDate) return null;
     const due = new Date(task.dueDate);
@@ -167,5 +190,45 @@ export class TacheCard implements OnInit {
     if (diffDays === 0) return { label: "Aujourd'hui", class: 'bg-warning text-dark' };
     if (diffDays <= 7) return { label: 'Cette semaine', class: 'bg-info text-dark' };
     return { label: due.toLocaleDateString('fr-FR'), class: 'bg-secondary' };
+  }
+
+  assigneeInitials(task: Task): string | null {
+    if (!task.assignedTo) return null;
+    const board = this.board();
+    const member = board?.members.find((m) => m.user?._id === task.assignedTo);
+    if (!member?.user) return null;
+    const first = member.user.first_name?.[0] || member.user.email[0];
+    const last = member.user.last_name?.[0] || '';
+    return (first + last).toUpperCase();
+  }
+
+  openTask(task: Task): void {
+    this.selectedTask.set(task);
+  }
+
+  closeTaskDetail(): void {
+    this.selectedTask.set(null);
+  }
+
+  onTaskUpdated(updated: Task): void {
+    const grouped = { ...this.tasksByList() };
+    for (const listId of Object.keys(grouped)) {
+      grouped[listId] = grouped[listId].map((t) => (t._id === updated._id ? updated : t));
+    }
+    this.tasksByList.set(grouped);
+    this.selectedTask.set(null);
+  }
+
+  onTaskDeleted(taskId: string): void {
+    const grouped = { ...this.tasksByList() };
+    for (const listId of Object.keys(grouped)) {
+      grouped[listId] = grouped[listId].filter((t) => t._id !== taskId);
+    }
+    this.tasksByList.set(grouped);
+    this.selectedTask.set(null);
+  }
+
+  backToBoards(): void {
+    this.router.navigate(['/dashboard-user']);
   }
 }

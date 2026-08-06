@@ -3,6 +3,7 @@ const router = express.Router();
 const crypto = require('crypto');
 const Board = require('../models/Board');
 const List = require('../models/List');
+const Task = require('../models/Task');
 const User = require('../models/User');
 const requireAuth = require('../middlewares/auth');
 const boardAccess = require('../middlewares/board-access');
@@ -12,28 +13,56 @@ router.use(requireAuth);
 
 const DEFAULT_LISTS = ['À faire', 'En cours', 'Terminé'];
 
-// Récupère le board principal de l'utilisateur, ou le crée s'il n'en a pas encore
-router.get('/me', async (req, res) => {
+// Lister tous les tableaux de l'utilisateur (propriétaire ou membre actif)
+router.get('/', async (req, res) => {
   try {
-    let board = await Board.findOne({
+    const boards = await Board.find({
       $or: [
         { owner: req.userId },
         { members: { $elemMatch: { user: req.userId, status: 'active' } } },
       ],
     })
       .populate('owner', 'email first_name last_name')
-      .populate('members.user', 'email first_name last_name');
+      .populate('members.user', 'email first_name last_name')
+      .sort({ createdAt: -1 });
 
-    if (!board) {
-      board = await Board.create({ name: 'Mon tableau', owner: req.userId, members: [] });
-      await List.insertMany(
-        DEFAULT_LISTS.map((title, index) => ({ board: board._id, title, order: index }))
-      );
-      board = await Board.findById(board._id)
-        .populate('owner', 'email first_name last_name')
-        .populate('members.user', 'email first_name last_name');
+    res.json(boards);
+  } catch (err) {
+    console.error('[List Boards Error]:', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
+
+// Créer un nouveau tableau, avec ses 3 listes fixes (À faire / En cours / Terminé)
+router.post('/', async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: 'Nom du tableau requis.' });
     }
 
+    let board = await Board.create({ name: name.trim(), owner: req.userId, members: [] });
+    await List.insertMany(
+      DEFAULT_LISTS.map((title, index) => ({ board: board._id, title, order: index }))
+    );
+
+    board = await Board.findById(board._id)
+      .populate('owner', 'email first_name last_name')
+      .populate('members.user', 'email first_name last_name');
+
+    res.status(201).json(board);
+  } catch (err) {
+    console.error('[Create Board Error]:', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
+
+// Récupérer un tableau précis
+router.get('/:boardId', boardAccess('observer'), async (req, res) => {
+  try {
+    const board = await Board.findById(req.board._id)
+      .populate('owner', 'email first_name last_name')
+      .populate('members.user', 'email first_name last_name');
     res.json(board);
   } catch (err) {
     console.error('[Get Board Error]:', err);
@@ -41,7 +70,7 @@ router.get('/me', async (req, res) => {
   }
 });
 
-// Renommer le board
+// Renommer le tableau
 router.put('/:boardId', boardAccess('admin'), async (req, res) => {
   try {
     const { name } = req.body;
@@ -50,6 +79,19 @@ router.put('/:boardId', boardAccess('admin'), async (req, res) => {
     res.json(req.board);
   } catch (err) {
     console.error('[Rename Board Error]:', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
+
+// Supprimer un tableau (et ses listes + tâches)
+router.delete('/:boardId', boardAccess('admin'), async (req, res) => {
+  try {
+    await List.deleteMany({ board: req.board._id });
+    await Task.deleteMany({ board: req.board._id });
+    await req.board.deleteOne();
+    res.json({ message: 'Tableau supprimé.' });
+  } catch (err) {
+    console.error('[Delete Board Error]:', err);
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 });
@@ -140,7 +182,7 @@ router.put('/:boardId/members/:memberId', boardAccess('admin'), async (req, res)
   }
 });
 
-// Retirer un membre du board
+// Retirer un membre du tableau
 router.delete('/:boardId/members/:memberId', boardAccess('admin'), async (req, res) => {
   try {
     const member = req.board.members.id(req.params.memberId);

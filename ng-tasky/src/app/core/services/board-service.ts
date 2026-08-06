@@ -23,12 +23,30 @@ export class BoardService {
   private http = inject(HttpClient);
   private base = `${environment.apiUrl}/api/boards`;
 
+  // Liste tous les tableaux de l'utilisateur
+  getBoards(): Observable<Board[]> {
+    return this.http.get<Board[]>(this.base);
+  }
+
+  // Permet de récupérer le tableau (ajoute/adapte l'URL selon ton API backend)
   getMyBoard(): Observable<Board> {
     return this.http.get<Board>(`${this.base}/me`);
   }
 
+  createBoard(name: string): Observable<Board> {
+    return this.http.post<Board>(this.base, { name });
+  }
+
+  getBoard(boardId: string): Observable<Board> {
+    return this.http.get<Board>(`${this.base}/${boardId}`);
+  }
+
   renameBoard(boardId: string, name: string): Observable<Board> {
     return this.http.put<Board>(`${this.base}/${boardId}`, { name });
+  }
+
+  deleteBoard(boardId: string): Observable<any> {
+    return this.http.delete(`${this.base}/${boardId}`);
   }
 
   invite(boardId: string, email: string, role: 'admin' | 'member' | 'observer'): Observable<any> {

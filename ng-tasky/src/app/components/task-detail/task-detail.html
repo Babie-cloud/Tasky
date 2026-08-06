@@ -1,0 +1,54 @@
+@if (task) {
+  <div
+    class="position-fixed top-0 start-0 w-100 h-100"
+    style="background: rgba(0,0,0,0.35); z-index: 1055;"
+    (click)="close()"
+  ></div>
+
+  <div
+    class="position-fixed top-0 end-0 h-100 bg-white shadow p-4"
+    style="width: 380px; max-width: 90vw; z-index: 1060; overflow-y: auto;"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Détail de la tâche</h5>
+      <button type="button" class="btn-close" (click)="close()"></button>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Titre</label>
+      <input type="text" class="form-control" [(ngModel)]="title" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea class="form-control" rows="3" [(ngModel)]="description"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Date limite</label>
+      <input type="date" class="form-control" [(ngModel)]="dueDate" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Attribuée à</label>
+      <select class="form-select" [(ngModel)]="assignedTo">
+        <option value="">Non assignée</option>
+        @for (member of members; track member._id) {
+          @if (member.user) {
+            <option [value]="member.user._id">{{ assigneeLabel(member) }}</option>
+          }
+        }
+      </select>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-dark flex-fill" [disabled]="isSaving()" (click)="save()">
+        {{ isSaving() ? 'Enregistrement...' : 'Enregistrer' }}
+      </button>
+      <button type="button" class="btn btn-outline-danger" (click)="remove()" title="Supprimer">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+  </div>
+}
