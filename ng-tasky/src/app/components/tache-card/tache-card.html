@@ -3,9 +3,14 @@
     <h5 class="mb-0">{{ board()?.name || 'Mon tableau' }}</h5>
     <p class="text-muted small mb-0">Glissez-déposez les tâches pour changer leur statut.</p>
   </div>
-  <button type="button" class="btn btn-outline-dark btn-sm" (click)="showInviteModal.set(true)">
-    <i class="fa-solid fa-user-plus me-1"></i> Inviter
-  </button>
+  <div class="d-flex gap-2">
+    <button type="button" class="btn btn-dark btn-sm" routerLink="/add-task">
+      <i class="fa-solid fa-plus me-1"></i> Ajouter une tâche
+    </button>
+    <button type="button" class="btn btn-outline-dark btn-sm" (click)="showInviteModal.set(true)">
+      <i class="fa-solid fa-user-plus me-1"></i> Inviter
+    </button>
+  </div>
 </div>
 
 <!-- Stats -->
@@ -65,7 +70,7 @@
 
 <!-- Kanban fixe : 3 colonnes alignées de largeur égale -->
 <div cdkDropListGroup class="row g-3">
-  @for (list of lists(); track list._id) {
+  @for (list of lists(); track list._id; let i = $index) {
     <div class="col-md-4">
       <div class="board-column h-100">
         <h6 class="fw-bold mb-2">{{ list.title }}</h6>
@@ -104,25 +109,6 @@
           }
         </div>
 
-        @if (showAddInput[list._id]) {
-          <div class="mt-2">
-            <input
-              type="text"
-              class="form-control form-control-sm mb-1"
-              placeholder="Titre de la tâche"
-              [(ngModel)]="newTaskTitles[list._id]"
-              (keyup.enter)="addTask(list._id)"
-            />
-            <div class="d-flex gap-2">
-              <button class="btn btn-sm btn-dark" (click)="addTask(list._id)">Ajouter</button>
-              <button class="btn btn-sm btn-light" (click)="toggleAddInput(list._id)">Annuler</button>
-            </div>
-          </div>
-        } @else {
-          <button type="button" class="btn btn-sm btn-light w-100 mt-2" (click)="toggleAddInput(list._id)">
-            <i class="fa-solid fa-plus me-1"></i> Ajouter une tâche
-          </button>
-        }
       </div>
     </div>
   }

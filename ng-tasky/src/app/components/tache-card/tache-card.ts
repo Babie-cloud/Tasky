@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import {
   CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup,
   moveItemInArray, transferArrayItem,
@@ -13,7 +14,7 @@ import { TaskDetail } from '../task-detail/task-detail';
 
 @Component({
   selector: 'app-tache-card',
-  imports: [CommonModule, FormsModule, CdkDropListGroup, CdkDropList, CdkDrag, InviteMembers, TaskDetail],
+  imports: [CommonModule, FormsModule, RouterLink, CdkDropListGroup, CdkDropList, CdkDrag, InviteMembers, TaskDetail],
   templateUrl: './tache-card.html',
   styleUrl: './tache-card.scss',
 })
@@ -29,8 +30,6 @@ export class TacheCard implements OnInit {
   tasksByList = signal<Record<string, Task[]>>({});
 
   showInviteModal = signal(false);
-  showAddInput: Record<string, boolean> = {};
-  newTaskTitles: Record<string, string> = {};
   newListTitle = '';
 
   // Filtres
@@ -135,24 +134,6 @@ export class TacheCard implements OnInit {
 
     event.container.data.forEach((t, index) => (t.order = index));
     this.taskService.moveTask(board._id, task._id, targetListId, event.currentIndex).subscribe();
-  }
-
-  toggleAddInput(listId: string): void {
-    this.showAddInput[listId] = !this.showAddInput[listId];
-  }
-
-  addTask(listId: string): void {
-    const title = (this.newTaskTitles[listId] || '').trim();
-    const board = this.board();
-    if (!title || !board) return;
-
-    this.taskService.createTask(board._id, listId, title).subscribe((task) => {
-      const grouped = { ...this.tasksByList() };
-      grouped[listId] = [...(grouped[listId] ?? []), task];
-      this.tasksByList.set(grouped);
-      this.newTaskTitles[listId] = '';
-      this.showAddInput[listId] = false;
-    });
   }
 
   deleteTask(taskId: string, listId: string): void {
