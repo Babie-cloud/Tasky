@@ -12,9 +12,6 @@ router.use(requireAuth);
 
 const DEFAULT_LISTS = ['À faire', 'En cours', 'Terminé'];
 
-// Récupère le board unique de l'utilisateur, ou le crée s'il n'en a pas encore.
-// Auto-réparation : si un board existe déjà mais n'a pas ses 3 listes (données
-// issues d'une version antérieure, migration incomplète...), elles sont recréées.
 router.get('/me', async (req, res) => {
   try {
     let board = await Board.findOne({
@@ -46,7 +43,6 @@ router.get('/me', async (req, res) => {
   }
 });
 
-// Renommer le board
 router.put('/:boardId', boardAccess('admin'), async (req, res) => {
   try {
     const { name } = req.body;
@@ -59,7 +55,6 @@ router.put('/:boardId', boardAccess('admin'), async (req, res) => {
   }
 });
 
-// Inviter un coworker par email, avec un rôle
 router.post('/:boardId/invite', boardAccess('admin'), async (req, res) => {
   try {
     const { email, role } = req.body;
@@ -102,7 +97,6 @@ router.post('/:boardId/invite', boardAccess('admin'), async (req, res) => {
   }
 });
 
-// Accepter une invitation (l'utilisateur doit être connecté avec l'email invité)
 router.post('/invite/accept/:token', async (req, res) => {
   try {
     const board = await Board.findOne({ 'members.inviteToken': req.params.token });
@@ -127,7 +121,6 @@ router.post('/invite/accept/:token', async (req, res) => {
   }
 });
 
-// Changer le rôle d'un membre
 router.put('/:boardId/members/:memberId', boardAccess('admin'), async (req, res) => {
   try {
     const { role } = req.body;
@@ -145,7 +138,6 @@ router.put('/:boardId/members/:memberId', boardAccess('admin'), async (req, res)
   }
 });
 
-// Retirer un membre du board
 router.delete('/:boardId/members/:memberId', boardAccess('admin'), async (req, res) => {
   try {
     const member = req.board.members.id(req.params.memberId);

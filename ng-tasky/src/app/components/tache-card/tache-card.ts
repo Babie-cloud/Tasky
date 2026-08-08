@@ -31,6 +31,7 @@ export class TacheCard implements OnInit {
   showInviteModal = signal(false);
   showAddInput: Record<string, boolean> = {};
   newTaskTitles: Record<string, string> = {};
+  newListTitle = '';
 
   // Filtres
   filterDueStatus: 'all' | 'overdue' | 'today' | 'week' = 'all';
@@ -161,6 +162,19 @@ export class TacheCard implements OnInit {
       const grouped = { ...this.tasksByList() };
       grouped[listId] = (grouped[listId] ?? []).filter((t) => t._id !== taskId);
       this.tasksByList.set(grouped);
+    });
+  }
+
+  addList(): void {
+    const board = this.board();
+    const title = this.newListTitle.trim();
+    if (!title || !board) return;
+    this.listService.createList(board._id, title).subscribe((list) => {
+      this.lists.set([...this.lists(), list]);
+      const grouped = { ...this.tasksByList() };
+      grouped[list._id] = [];
+      this.tasksByList.set(grouped);
+      this.newListTitle = '';
     });
   }
 
