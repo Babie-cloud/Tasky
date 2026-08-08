@@ -7,10 +7,10 @@
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Tableau</label>
-      <select class="form-select" formControlName="board">
-        @for (b of boards(); track b._id) {
-          <option [value]="b._id">{{ b.name }}</option>
+      <label class="form-label">Liste</label>
+      <select class="form-select" formControlName="list">
+        @for (list of lists(); track list._id) {
+          <option [value]="list._id">{{ list.title }}</option>
         }
       </select>
     </div>

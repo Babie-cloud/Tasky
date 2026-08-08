@@ -1,35 +1,124 @@
-<div class="dashboard pe-3">
+<div class="dashboard pe-3 d-flex">
   <!-- Sidebar -->
   <aside class="sidebar x-lg-radius pe-3 px-3 bg-gray">
     <div class="logo bg-gray">Paramètres de l'utilisateur</div>
     <nav class="menu">
-      <a  class="text-secondary pt-2 px-1"><i class="fas fa-calendar-alt"></i> Informations personnelles</a>
-      <a  class="text-secondary pt-2 px-1"><i class="fas fa-chalkboard-teacher"></i> Cartes</a>
-      <a  class="text-secondary pt-2 px-1"><i class="fas fa-user-graduate"></i> Membres actifs</a>
-      <a click="goToBilling()" class="text-secondary pt-2 px-1"><i class="fas fa-calendar-check"></i> Facturation</a>
+      <a (click)="setTab('info')" class="text-secondary pt-2 px-1" role="button" [class.active]="activeTab() === 'info'">
+        <i class="fas fa-calendar-alt"></i> Informations personnelles
+      </a>
+      <a (click)="setTab('cards')" class="text-secondary pt-2 px-1" role="button" [class.active]="activeTab() === 'cards'">
+        <i class="fas fa-chalkboard-teacher"></i> Cartes
+      </a>
+      <a (click)="setTab('members')" class="text-secondary pt-2 px-1" role="button" [class.active]="activeTab() === 'members'">
+        <i class="fas fa-user-graduate"></i> Membres actifs
+      </a>
+      <a (click)="setTab('billing')" class="text-secondary pt-2 px-1" role="button" [class.active]="activeTab() === 'billing'">
+        <i class="fas fa-calendar-check"></i> Facturation
+      </a>
     </nav>
     <div class="other menu">
       <p class="text-secondary mt-3 font-impact pt-4 px-1">OTHER</p>
       <a class="text-secondary pt-2 px-1"><i class="fas fa-user"></i> Profile</a>
-      <a  class="text-secondary pt-2 px-1"><i class="fas fa-cog"></i> Setting</a>
-      
-      <a click="logout()" class="text-secondary pt-2 px-1"><i class="fas fa-sign-out-alt"></i> Logout</a>
-
+      <a class="text-secondary pt-2 px-1"><i class="fas fa-cog"></i> Setting</a>
+      <a (click)="logout()" class="text-secondary pt-2 px-1" role="button">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
     </div>
     <div class="app-banner lg-radius mt-4 pt-4">
-     <div class="align-items-center">
-    <p >Let’s Manage<br>Your Data Better<br>in Your Hand</p>
-    <!-- <button class="btn-download bg-white mt-4 mb-4 align-items-center">Download the App</button> -->
-  </div>
-</div>
-  <footer class="sidebar-footer">
+      <div class="align-items-center">
+        <p>Let's Manage<br>Your Data Better<br>in Your Hand</p>
+      </div>
+    </div>
+    <footer class="sidebar-footer">
       <p>&copy; 2026 Tasky</p>
     </footer>
- </aside>
+  </aside>
 
+  <div class="content flex-fill p-4">
+    @if (activeTab() === 'info') {
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <div
+          class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center"
+          style="width: 56px; height: 56px; font-weight: bold;"
+        >
+          {{ initials() }}
+        </div>
+        <div>
+          <h4 class="mb-0">{{ user()?.first_name }} {{ user()?.last_name }}</h4>
+          <p class="text-muted mb-0">{{ user()?.email }}</p>
+        </div>
+      </div>
 
-    <div>
-  
- </div>
-   
+      <div class="card mb-4" style="max-width: 500px;">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">Informations personnelles</h6>
+          <div class="mb-2">
+            <label class="form-label">Prénom</label>
+            <input type="text" class="form-control" [(ngModel)]="firstName" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nom</label>
+            <input type="text" class="form-control" [(ngModel)]="lastName" />
+          </div>
+          @if (saveMessage()) {
+            <p class="small text-success">{{ saveMessage() }}</p>
+          }
+          <button type="button" class="btn btn-dark" [disabled]="isSaving()" (click)="saveProfile()">
+            {{ isSaving() ? 'Enregistrement...' : 'Enregistrer' }}
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (activeTab() === 'cards') {
+      <p class="text-muted">Bientôt disponible.</p>
+    }
+
+    @if (activeTab() === 'members') {
+      <div class="card" style="max-width: 600px;">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">Membres du tableau « {{ board()?.name }} »</h6>
+
+          @if (!board()) {
+            <p class="text-muted">Chargement...</p>
+          } @else if ((board()?.members?.length ?? 0) === 0) {
+            <p class="text-muted">Aucun membre invité pour l'instant.</p>
+          }
+
+          @for (member of board()?.members; track member._id) {
+            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+              <span>
+                {{ member.email }}
+                <span class="badge bg-secondary ms-1">{{ member.status === 'active' ? 'actif' : 'en attente' }}</span>
+              </span>
+
+              @if (isAdmin()) {
+                <div class="d-flex gap-2 align-items-center">
+                  <select
+                    class="form-select form-select-sm"
+                    style="width: auto;"
+                    [ngModel]="member.role"
+                    (ngModelChange)="changeRole(member._id, $event)"
+                  >
+                    <option value="admin">Administrateur</option>
+                    <option value="member">Membre</option>
+                    <option value="observer">Observateur</option>
+                  </select>
+                  <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeMember(member._id)" title="Retirer">
+                    <i class="fa-solid fa-user-minus"></i>
+                  </button>
+                </div>
+              } @else {
+                <span class="text-muted small">{{ member.role }}</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (activeTab() === 'billing') {
+      <p class="text-muted">Bientôt disponible.</p>
+    }
+  </div>
 </div>

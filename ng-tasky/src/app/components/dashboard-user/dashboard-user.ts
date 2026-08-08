@@ -1,58 +1,25 @@
-import { Component, inject, OnInit, signal, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser, CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { BoardService, Board } from '../../core/services/board-service';
+import { Component, OnInit, inject, signal, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { TacheCard } from '../tache-card/tache-card';
+import { UserService } from '../../core/services/user-service';
 
 @Component({
   selector: 'app-dashboard-user',
-  standalone: true,
-  imports: [
-    CommonModule, 
-    FormsModule, 
-    RouterLink
-  ],
+  imports: [TacheCard, RouterLink],
   templateUrl: './dashboard-user.html',
   styleUrl: './dashboard-user.scss',
 })
 export class DashboardUser implements OnInit {
-  private boardService = inject(BoardService);
-  private router = inject(Router);
-  private platformId = inject(PLATFORM_ID); 
+  private userService = inject(UserService);
+  private platformId = inject(PLATFORM_ID);
 
-  boards = signal<Board[]>([]);
-  newBoardName = '';
-  isCreating = signal(false);
-  userName = 'there';
+  userName = signal('there');
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.loadBoards();
-    }
-  }
-
-  loadBoards(): void {
-    this.boardService.getBoards().subscribe({
-      next: (boards: Board[]) => this.boards.set(boards),
-      error: (err: unknown) => console.error('Erreur chargement tableaux:', err)
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.userService.getMe().subscribe((user) => {
+      this.userName.set(user.first_name || user.email);
     });
-  }
-
-  createBoard(): void {
-    const name = this.newBoardName.trim();
-    if (!name) return;
-    this.isCreating.set(true);
-    this.boardService.createBoard(name).subscribe({
-      next: (board: Board) => {
-        this.isCreating.set(false);
-        this.newBoardName = '';
-        this.router.navigate(['/boards', board._id]);
-      },
-      error: () => this.isCreating.set(false),
-    });
-  }
-
-  openBoard(boardId: string): void {
-    this.router.navigate(['/boards', boardId]);
   }
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup,
   moveItemInArray, transferArrayItem,
@@ -19,8 +18,6 @@ import { TaskDetail } from '../task-detail/task-detail';
   styleUrl: './tache-card.scss',
 })
 export class TacheCard implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private boardService = inject(BoardService);
   private listService = inject(ListService);
   private taskService = inject(TaskService);
@@ -43,45 +40,34 @@ export class TacheCard implements OnInit {
   // Panneau de détail
   selectedTask = signal<Task | null>(null);
 
-  private boardId = '';
-
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    this.boardId = this.route.snapshot.paramMap.get('boardId') || '';
-    if (!this.boardId) {
-      this.router.navigate(['/dashboard-user']);
-      return;
-    }
     this.loadBoard();
   }
 
   loadBoard(): void {
-    this.boardService.getBoard(this.boardId).subscribe({
-      next: (board) => {
-        this.board.set(board);
-        this.listService.getLists(board._id).subscribe((lists) => {
-          this.lists.set(lists);
-          this.taskService.getTasks(board._id).subscribe((tasks) => {
-            const grouped: Record<string, Task[]> = {};
-            for (const list of lists) grouped[list._id] = [];
-            for (const task of tasks) {
-              if (!grouped[task.list]) grouped[task.list] = [];
-              grouped[task.list].push(task);
-            }
-            for (const key of Object.keys(grouped)) {
-              grouped[key].sort((a, b) => a.order - b.order);
-            }
-            this.tasksByList.set(grouped);
-          });
+    this.boardService.getMyBoard().subscribe((board) => {
+      this.board.set(board);
+      this.listService.getLists(board._id).subscribe((lists) => {
+        this.lists.set(lists);
+        this.taskService.getTasks(board._id).subscribe((tasks) => {
+          const grouped: Record<string, Task[]> = {};
+          for (const list of lists) grouped[list._id] = [];
+          for (const task of tasks) {
+            if (!grouped[task.list]) grouped[task.list] = [];
+            grouped[task.list].push(task);
+          }
+          for (const key of Object.keys(grouped)) {
+            grouped[key].sort((a, b) => a.order - b.order);
+          }
+          this.tasksByList.set(grouped);
         });
-      },
-      error: () => this.router.navigate(['/dashboard-user']),
+      });
     });
   }
 
   // --- Stats du header ---
   // Convention : la liste d'index 0 = "À faire", 1 = "En cours", 2 = "Terminé"
-  // (elles sont créées dans cet ordre côté serveur et triées par 'order').
   private listAt(index: number): TaskList | undefined {
     return this.lists()[index];
   }
@@ -226,9 +212,5 @@ export class TacheCard implements OnInit {
     }
     this.tasksByList.set(grouped);
     this.selectedTask.set(null);
-  }
-
-  backToBoards(): void {
-    this.router.navigate(['/dashboard-user']);
   }
 }
