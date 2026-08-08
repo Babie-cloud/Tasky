@@ -9,13 +9,13 @@ import { ThemeService } from '../../core/services/theme-service';
   styleUrl: './homepage.scss',
 })
 export class Homepage {
-  private router = inject(Router);
-  private authService = inject(AuthService);
- themeService = inject(ThemeService);
+  themeService = new ThemeService();
+      private authService = inject(AuthService);
+      private router = inject(Router);
   isLoggedIn = this.authService.isLoggedIn();
   userName = 'there'; 
   Openpricing(): void {
-    this.router.navigate(['/pricing']);
+  this.router.navigate(['/pricing']);
   }
 
   OpenSignup(): void {

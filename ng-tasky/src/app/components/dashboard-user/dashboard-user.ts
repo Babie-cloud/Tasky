@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TacheCard } from '../tache-card/tache-card';
 import { UserService } from '../../core/services/user-service';
+import { ThemeService } from '../../core/services/theme-service';
 
 @Component({
   selector: 'app-dashboard-user',
@@ -13,6 +14,8 @@ import { UserService } from '../../core/services/user-service';
 export class DashboardUser implements OnInit {
   private userService = inject(UserService);
   private platformId = inject(PLATFORM_ID);
+    themeService = new ThemeService();
+   private router = inject(Router);
 
   userName = signal('there');
 

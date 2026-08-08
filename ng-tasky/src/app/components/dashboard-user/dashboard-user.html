@@ -5,6 +5,16 @@
       <h2 class="fw-bold mb-0">Welcome back, {{ userName() }}</h2>
       <p class="text-muted mb-0">Voici ce qui se passe sur ton tableau aujourd'hui.</p>
     </div>
+    <div class="d-flex align-items-center gap-3">
+        <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary theme-toggle"
+      (click)="themeService.toggle()"
+      [attr.aria-label]="themeService.theme() === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair'"
+    >
+      <i class="fa-solid" [class.fa-moon]="themeService.theme() === 'light'" [class.fa-sun]="themeService.theme() === 'dark'"></i>
+    </button>
+
     <button
       type="button"
       class="btn btn-light rounded-circle d-flex align-items-center justify-content-center"
@@ -14,6 +24,10 @@
     >
       <i class="fa-solid fa-user"></i>
     </button>
+
+    </div>
+   
+    
   </div>
 
   <app-tache-card></app-tache-card>
