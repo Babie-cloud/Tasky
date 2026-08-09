@@ -49,6 +49,18 @@
         </div>
       </div>
 
+      @if (isCollaborator) {
+        <div class="alert alert-info" style="max-width: 500px;">
+          <p class="mb-1"><strong>Vous collaborez sur le tableau « {{ board()?.name }} »</strong></p>
+          <p class="mb-1">
+            Votre rôle : <span class="badge bg-dark">{{ roleLabel(myRole) }}</span>
+          </p>
+          <p class="mb-0">
+            Propriétaire du tableau : {{ ownerName }} <span class="badge bg-secondary">Administrateur</span>
+          </p>
+        </div>
+      }
+
       <div class="card mb-4" style="max-width: 500px;">
         <div class="card-body">
           <h6 class="fw-bold mb-3">Informations personnelles</h6>
@@ -77,7 +89,12 @@
     @if (activeTab() === 'members') {
       <div class="card" style="max-width: 600px;">
         <div class="card-body">
-          <h6 class="fw-bold mb-3">Membres du tableau « {{ board()?.name }} »</h6>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0">Membres du tableau « {{ board()?.name }} »</h6>
+            <button type="button" class="btn btn-sm btn-light" (click)="refreshBoard()" title="Rafraîchir">
+              <i class="fa-solid fa-rotate"></i>
+            </button>
+          </div>
 
           @if (!board()) {
             <p class="text-muted">Chargement...</p>

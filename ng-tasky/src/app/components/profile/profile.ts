@@ -45,6 +45,13 @@ export class Profile implements OnInit {
 
   setTab(tab: 'info' | 'cards' | 'members' | 'billing'): void {
     this.activeTab.set(tab);
+    if (tab === 'members') {
+      this.refreshBoard();
+    }
+  }
+
+  refreshBoard(): void {
+    this.boardService.getMyBoard().subscribe((board) => this.board.set(board));
   }
 
   saveProfile(): void {
@@ -71,6 +78,41 @@ export class Profile implements OnInit {
     if (board.owner._id === this.currentUserId) return true;
     const member = board.members.find((m) => m.user?._id === this.currentUserId);
     return member?.role === 'admin';
+  }
+
+  // Vrai si l'utilisateur connecté est un collaborateur (pas le propriétaire) du tableau
+  get isCollaborator(): boolean {
+    const board = this.board();
+    return !!board && board.owner._id !== this.currentUserId && !!this.currentUserId;
+  }
+
+  // Le rôle de l'utilisateur connecté sur ce tableau
+  get myRole(): string | null {
+    const board = this.board();
+    if (!board) return null;
+    if (board.owner._id === this.currentUserId) return 'admin';
+    const member = board.members.find((m) => m.user?._id === this.currentUserId);
+    return member?.role ?? null;
+  }
+
+  get ownerName(): string {
+    const board = this.board();
+    if (!board) return '';
+    const o = board.owner;
+    return `${o.first_name || ''} ${o.last_name || ''}`.trim() || o.email;
+  }
+
+  roleLabel(role: string | null): string {
+    switch (role) {
+      case 'admin':
+        return 'Administrateur';
+      case 'member':
+        return 'Membre';
+      case 'observer':
+        return 'Observateur';
+      default:
+        return '';
+    }
   }
 
   changeRole(memberId: string, role: string): void {
