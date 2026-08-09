@@ -2,16 +2,16 @@ name: Vérification de l'application (Angular + ExpressJS)
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   verification-backend:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./xp-hotel
+        working-directory: ./xp-tasky
 
     steps:
       - name: Récupérer le code du dépôt
@@ -20,19 +20,19 @@ jobs:
       - name: Installer Node.js pour Express
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Installer les dépendances d'Express
         run: npm ci
 
-      - name: Lancer les tests Express
+      - name: Lancer les tests Express (si présents)
         run: npm test --if-present
 
   verification-frontend:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./ng-hotel
+        working-directory: ./ng-tasky
 
     steps:
       - name: Récupérer le code du dépôt
@@ -47,4 +47,9 @@ jobs:
         run: npm ci
 
       - name: Lancer les tests Angular
-        run: npm run test -- --no-watch --no-progress
+        run: npm run test -- --watch=false
+        env:
+          CI: true
+
+      - name: Vérifier que le build de production passe
+        run: npm run build
