@@ -23,6 +23,6 @@ export const routes: Routes = [
     { path : 'pricing', component: Pricing },
     { path: 'boards/accept-invite', component: AcceptInvite, canActivate: [authGuard] },
     { path: 'profile', component: Profile},
-    { path: 'boards/:id', component: DashboardUser },
+  //  { path: 'boards/:id', component: DashboardUser },
 ];  
  
