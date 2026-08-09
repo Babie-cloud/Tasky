@@ -7,6 +7,22 @@ describe('Pricing', () => {
   let fixture: ComponentFixture<Pricing>;
 
   beforeEach(async () => {
+    if (!window.matchMedia) {
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        value: (query: string) => ({
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener: () => {},
+          removeListener: () => {},
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          dispatchEvent: () => false,
+        }),
+      });
+    }
+
     await TestBed.configureTestingModule({
       imports: [Pricing],
     }).compileComponents();
