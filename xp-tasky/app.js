@@ -18,7 +18,7 @@ var listsRouter = require('./routes/lists');
 
 var app = express();
 
-const allowedOrigins = ['http://localhost:4200'];
+const allowedOrigins = ['http://localhost:4200', 'https://ton-site.netlify.app'];
 
 app.use(cors({
   origin: function (origin, callback) {

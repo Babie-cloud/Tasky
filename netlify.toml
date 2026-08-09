@@ -1,0 +1,23 @@
+[build]
+  command = "cd ng-tasky && npm ci && npm run build"
+  publish = "ng-tasky/dist/ng-tasky/browser"
+  functions = "xp-tasky/netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["mongoose", "bcryptjs", "nodemailer", "google-auth-library", "axios"]
+
+# Toutes les requêtes /api/* sont routées vers la fonction serverless Express.
+# Le "/api" est volontairement dupliqué : il est retiré par le basePath du wrapper
+# (voir netlify/functions/api.js), pour que Express reçoive bien "/api/..." comme en local.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/api/:splat"
+  status = 200
+  force = true
+
+# Fallback SPA : toute autre route inconnue renvoie index.html (routing Angular)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
