@@ -1,0 +1,50 @@
+name: Vérification de l'application (Angular + ExpressJS)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  verification-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./xp-hotel
+
+    steps:
+      - name: Récupérer le code du dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js pour Express
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installer les dépendances d'Express
+        run: npm ci
+
+      - name: Lancer les tests Express
+        run: npm test --if-present
+
+  verification-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ng-hotel
+
+    steps:
+      - name: Récupérer le code du dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js pour Angular
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Installer les dépendances d'Angular
+        run: npm ci
+
+      - name: Lancer les tests Angular
+        run: npm run test -- --no-watch --no-progress
