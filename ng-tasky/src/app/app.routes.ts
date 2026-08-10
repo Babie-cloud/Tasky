@@ -17,12 +17,18 @@ export const routes: Routes = [
     { path: 'login', component: Login},
     { path: 'signup', component: Signup},
     { path: 'resetpassword', component: Resetpassword},
-    { path:'dashboard-user', component: DashboardUser},
+    { path : 'pricing', component: Pricing },
+    { path:'dashboard-user', 
+      component: 
+      DashboardUser, 
+    children: [
     { path:'tache-card', component: TacheCard},
     { path: 'add-task', component: AddTask },
-    { path : 'pricing', component: Pricing },
     { path: 'boards/accept-invite', component: AcceptInvite, canActivate: [authGuard] },
     { path: 'profile', component: Profile},
+    ]
+    },
+    
   //  { path: 'boards/:id', component: DashboardUser },
 ];  
  
