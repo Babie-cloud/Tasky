@@ -18,19 +18,12 @@ export const routes: Routes = [
     { path: 'signup', component: Signup},
     { path: 'resetpassword', component: Resetpassword},
     { path : 'pricing', component: Pricing },
-    { path:'dashboard-user', 
-      component: 
-      DashboardUser, 
-    children: [
+    { path:'dashboard-user', component: DashboardUser, canActivate: [authGuard] },
     { path:'tache-card', component: TacheCard},
     { path: 'add-task', component: AddTask },
     { path: 'boards/accept-invite', component: AcceptInvite, canActivate: [authGuard] },
     { path: 'profile', component: Profile},
      { path: 'terms', component: Terms },
-      { path: 'policy-privacy', component: PolicyPrivacy },
-    ]
-    },
-    
+    { path: 'policy-privacy', component: PolicyPrivacy },
   //  { path: 'boards/:id', component: DashboardUser },
 ];  
- 
