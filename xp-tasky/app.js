@@ -18,7 +18,8 @@ var listsRouter = require('./routes/lists');
 
 var app = express();
 
-const allowedOrigins = ['http://localhost:4200', 'https://ton-site.netlify.app'];
+
+const allowedOrigins = ['http://localhost:4200'];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -47,14 +48,12 @@ app.use(async (req, res, next) => {
   }
 });
 
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/tasks', tasksRouter);
 app.use('/api/boards', boardsRouter);
 app.use('/api/lists', listsRouter);
-app.use('/users', usersRouter);
-
-
-app.use('/', indexRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

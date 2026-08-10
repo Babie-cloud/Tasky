@@ -8,11 +8,20 @@
   external_node_modules = ["mongoose", "bcryptjs", "nodemailer", "google-auth-library", "axios"]
 
 # Toutes les requêtes /api/* sont routées vers la fonction serverless Express.
-# Le "/api" est volontairement dupliqué : il est retiré par le basePath du wrapper
-# (voir netlify/functions/api.js), pour que Express reçoive bien "/api/..." comme en local.
+# Le "/api" est volontairement dupliqué dans "to" : il est retiré par le basePath
+# du wrapper (netlify/functions/api.js), donc Express reçoit "/api/..." exactement
+# comme en local — aucun changement nécessaire côté Express.
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/api/:splat"
+  status = 200
+  force = true
+
+# /users/* (page profil) — Express l'attend SANS préfixe /api (comme en local),
+# donc ici pas de duplication : juste "users/..." après le strip du basePath.
+[[redirects]]
+  from = "/users/*"
+  to = "/.netlify/functions/api/users/:splat"
   status = 200
   force = true
 
