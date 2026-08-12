@@ -1,5 +1,5 @@
 [build]
-  command = "cd ng-tasky && npm ci && npm run build"
+  command = "cd ng-tasky && npm ci && npm run build && cd ../xp-tasky && npm ci"
   publish = "ng-tasky/dist/ng-tasky/browser"
   functions = "xp-tasky/netlify/functions"
 
@@ -7,21 +7,18 @@
   node_bundler = "esbuild"
   external_node_modules = ["mongoose", "bcryptjs", "nodemailer", "google-auth-library", "axios"]
 
-# Redirection de toutes les routes de l'API vers la fonction serverless
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
   force = true
 
-# Redirection pour la gestion des utilisateurs si elle est hors /api
 [[redirects]]
   from = "/users/*"
   to = "/.netlify/functions/api/users/:splat"
   status = 200
   force = true
 
-# Fallback SPA Angular
 [[redirects]]
   from = "/*"
   to = "/index.html"
