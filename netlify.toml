@@ -1,6 +1,6 @@
 [build]
   command = "cd ng-tasky && npm ci && npm run build && cd ../xp-tasky && npm ci"
-  publish = "ng-tasky/dist/ng-tasky/browser"
+  publish = "ng-tasky/dist/ng-tasky"
   functions = "xp-tasky/netlify/functions"
 
 [functions]
@@ -23,5 +23,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "GOOGLE_CLIENT_ID,SMTP_HOST"
