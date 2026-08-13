@@ -1,7 +1,8 @@
 [build]
-  command = "cd ng-tasky && npm ci && npm run build && cd ../xp-tasky && npm ci"
-  publish = "ng-tasky/dist/ng-tasky"
-  functions = "xp-tasky/netlify/functions"
+  base = "ng-tasky"
+  command = "npm ci && npm run build && cd ../xp-tasky && npm ci"
+  publish = "dist/ng-tasky"
+  functions = "../xp-tasky/netlify/functions"
 
 [functions]
   node_bundler = "esbuild"
