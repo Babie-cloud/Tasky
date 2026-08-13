@@ -23,3 +23,5 @@
   from = "/*"
   to = "/index.html"
   status = 200
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "GOOGLE_CLIENT_ID,SMTP_HOST"
