@@ -64,9 +64,9 @@ router.post('/register', async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('[Register Error]:', err);
-    return res.status(500).json({ message: 'Server error.' });
-  }
+  console.error('[Register Error]:', err);
+  return res.status(500).json({ message: 'Server error.', debug: err.message });
+}
 });
 
 // CONNEXION CLASSIQUE
