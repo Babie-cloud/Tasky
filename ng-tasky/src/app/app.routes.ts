@@ -19,6 +19,7 @@ export const routes: Routes = [
   { path: 'signup', component: Signup },
   { path: 'resetpassword', component: Resetpassword },
   { path: 'pricing', component: Pricing },
+  { path: 'add-task', component: AddTask },
   { path: 'dashboard-user', component: DashboardUser, canActivate: [authGuard] },
   { path: 'board/:boardId', component: TacheCard, canActivate: [authGuard] },
   { path: 'board/:boardId/add-task', component: AddTask, canActivate: [authGuard] },
