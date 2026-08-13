@@ -21,8 +21,18 @@ export const routes: Routes = [
   { path: 'pricing', component: Pricing },
   { path: 'add-task', component: AddTask },
   { path: 'dashboard-user', component: DashboardUser, canActivate: [authGuard] },
-  { path: 'board/:boardId', component: TacheCard, canActivate: [authGuard] },
-  { path: 'board/:boardId/add-task', component: AddTask, canActivate: [authGuard] },
+  { 
+    path: 'board/:boardId', 
+    component: TacheCard, 
+    canActivate: [authGuard],
+    ...({ getPrerenderParams: () => Promise.resolve([{ boardId: 'demo' }]) } as any)
+  },
+  { 
+    path: 'board/:boardId/add-task', 
+    component: AddTask, 
+    canActivate: [authGuard],
+    ...({ getPrerenderParams: () => Promise.resolve([{ boardId: 'demo' }]) } as any)
+  },
   { path: 'boards/accept-invite', component: AcceptInvite, canActivate: [authGuard] },
   { path: 'profile', component: Profile },
   { path: 'terms', component: Terms },
