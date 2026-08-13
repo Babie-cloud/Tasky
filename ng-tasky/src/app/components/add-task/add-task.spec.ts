@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-
+import { Component } from '@angular/core';
 import { AddTask } from './add-task';
+
+@Component({ standalone: true, template: '' })
+class DummyDashboardComponent {}
 
 describe('AddTask', () => {
   let component: AddTask;
@@ -12,12 +13,16 @@ describe('AddTask', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AddTask],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
+      providers: [
+        provideRouter([
+          { path: 'dashboard-user', component: DummyDashboardComponent }
+        ])
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddTask);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
