@@ -1,6 +1,6 @@
 [build]
-  command = "cd ng-tasky && npm ci && npm run build && cd ../xp-tasky && npm ci"
-  publish = "ng-tasky/dist/ng-tasky/browser"
+  command = "cd ng-tasky && npm ci && npm run build && ls -la dist/ng-tasky"
+  publish = "ng-tasky/dist/ng-tasky"
   functions = "xp-tasky/netlify/functions"
 
 [functions]
