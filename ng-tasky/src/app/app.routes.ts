@@ -12,18 +12,18 @@ import { authGuard } from './core/guard/auth-guard';
 import { Profile } from './components/profile/profile';
 import { PolicyPrivacy } from './layout/policy-privacy/policy-privacy';
 import { Terms } from './layout/terms/terms';
+
 export const routes: Routes = [
-    { path: '', component: Homepage },
-    { path: 'login', component: Login},
-    { path: 'signup', component: Signup},
-    { path: 'resetpassword', component: Resetpassword},
-    { path : 'pricing', component: Pricing },
-    { path:'dashboard-user', component: DashboardUser, canActivate: [authGuard] },
-    { path:'tache-card', component: TacheCard},
-    { path: 'add-task', component: AddTask },
-    { path: 'boards/accept-invite', component: AcceptInvite, canActivate: [authGuard] },
-    { path: 'profile', component: Profile},
-     { path: 'terms', component: Terms },
-    { path: 'policy-privacy', component: PolicyPrivacy },
-  //  { path: 'boards/:id', component: DashboardUser },
-];  
+  { path: '', component: Homepage },
+  { path: 'login', component: Login },
+  { path: 'signup', component: Signup },
+  { path: 'resetpassword', component: Resetpassword },
+  { path: 'pricing', component: Pricing },
+  { path: 'dashboard-user', component: DashboardUser, canActivate: [authGuard] },
+  { path: 'board/:boardId', component: TacheCard, canActivate: [authGuard] },
+  { path: 'board/:boardId/add-task', component: AddTask, canActivate: [authGuard] },
+  { path: 'boards/accept-invite', component: AcceptInvite, canActivate: [authGuard] },
+  { path: 'profile', component: Profile },
+  { path: 'terms', component: Terms },
+  { path: 'policy-privacy', component: PolicyPrivacy },
+];

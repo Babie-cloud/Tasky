@@ -1,81 +1,138 @@
-<div class="dashboard pe-3 d-flex">
+<div class="dashboard d-flex bg-light">
   <!-- Sidebar -->
-  <aside class="sidebar x-lg-radius pe-3 px-3 bg-gray">
-    <div class="logo bg-gray">Paramètres de l'utilisateur</div>
-    <nav class="menu">
-      <a (click)="setTab('info')" class="text-secondary pt-2 px-1" role="button" [class.active]="activeTab() === 'info'">
-        <i class="fas fa-calendar-alt"></i> Informations personnelles
-      </a>
-      <a (click)="setTab('cards')" class="text-secondary pt-2 px-1" role="button" [class.active]="activeTab() === 'cards'">
-        <i class="fas fa-chalkboard-teacher"></i> Cartes
-      </a>
-      <a (click)="setTab('members')" class="text-secondary pt-2 px-1" role="button" [class.active]="activeTab() === 'members'">
-        <i class="fas fa-user-graduate"></i> Membres actifs
-      </a>
-      <a (click)="setTab('billing')" class="text-secondary pt-2 px-1" role="button" [class.active]="activeTab() === 'billing'">
-        <i class="fas fa-calendar-check"></i> Facturation
-      </a>
-    </nav>
-    <div class="other menu">
-      <p class="text-secondary mt-3 font-impact pt-4 px-1">OTHER</p>
-      <a class="text-secondary pt-2 px-1"><i class="fas fa-user"></i> Profile</a>
-      <a class="text-secondary pt-2 px-1"><i class="fas fa-cog"></i> Setting</a>
-      <a (click)="logout()" class="text-secondary pt-2 px-1" role="button">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </a>
-    </div>
-    <div class="app-banner lg-radius mt-4 pt-4">
-      <div class="align-items-center">
-        <p>Let's Manage<br>Your Data Better<br>in Your Hand</p>
+  <aside class="sidebar bg-white p-3 border-end d-flex flex-column justify-content-between">
+    <div>
+      <div class="logo fw-bold fs-5 mb-4 text-dark px-2">
+        Paramètres de l'utilisateur
+      </div>
+
+      <nav class="nav flex-column gap-1 mb-4">
+        <a (click)="setTab('info')" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'info'">
+          <i class="fas fa-id-card"></i> Informations personnelles
+        </a>
+        <a (click)="setTab('cards')" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'cards'">
+          <i class="fas fa-chalkboard-teacher"></i> Cartes
+        </a>
+        <a (click)="setTab('members')" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'members'">
+          <i class="fas fa-table-columns"></i> Mes tableaux
+        </a>
+        <a (click)="setTab('billing')" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'billing'">
+          <i class="fas fa-calendar-check"></i> Facturation
+        </a>
+      </nav>
+
+      <div class="nav flex-column gap-1">
+        <p class="text-uppercase text-muted fw-bold small px-3 mb-1">Other</p>
+        <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button">
+          <i class="fas fa-cog"></i> Setting
+        </a>
+        <a (click)="logout()" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
     </div>
-    <footer class="sidebar-footer">
-      <p>&copy; 2026 Tasky</p>
-    </footer>
+
+    <div>
+      <div class="app-banner rounded-4 p-3 mb-3">
+        <p class="mb-0 fw-medium lh-sm">
+          Let's Manage<br>Your Data Better<br>in Your Hand
+        </p>
+      </div>
+
+      <footer class="text-center text-muted small opacity-75">
+        <p class="mb-0">&copy; 2026 Tasky</p>
+      </footer>
+    </div>
   </aside>
 
-  <div class="content flex-fill p-4">
+  <!-- Contenu Principal -->
+  <main class="content flex-fill p-4 overflow-y-auto">
+
     @if (activeTab() === 'info') {
       <div class="d-flex align-items-center gap-3 mb-4">
-        <div
-          class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center"
-          style="width: 56px; height: 56px; font-weight: bold;"
-        >
+        <div class="profile-avatar rounded-circle text-white d-flex align-items-center justify-content-center fw-bold">
           {{ initials() }}
+          <div class="avatar-edit-hint">
+            <i class="fa-solid fa-camera text-white"></i>
+          </div>
         </div>
         <div>
-          <h4 class="mb-0">{{ user()?.first_name }} {{ user()?.last_name }}</h4>
+          <h4 class="mb-0 fw-bold">{{ user()?.first_name }} {{ user()?.last_name }}</h4>
           <p class="text-muted mb-0">{{ user()?.email }}</p>
         </div>
       </div>
 
-      @if (isCollaborator) {
-        <div class="alert alert-info" style="max-width: 500px;">
-          <p class="mb-1"><strong>Vous collaborez sur le tableau « {{ board()?.name }} »</strong></p>
-          <p class="mb-1">
-            Votre rôle : <span class="badge bg-dark">{{ roleLabel(myRole) }}</span>
-          </p>
-          <p class="mb-0">
-            Propriétaire du tableau : {{ ownerName }} <span class="badge bg-secondary">Administrateur</span>
-          </p>
-        </div>
-      }
+      <div class="card border-0 shadow-sm rounded-4" style="max-width: 560px;">
+        <div class="card-body p-4">
 
-      <div class="card mb-4" style="max-width: 500px;">
-        <div class="card-body">
-          <h6 class="fw-bold mb-3">Informations personnelles</h6>
-          <div class="mb-2">
-            <label class="form-label">Prénom</label>
-            <input type="text" class="form-control" [(ngModel)]="firstName" />
+          <div class="form-section">
+            <p class="form-section-title">Identité</p>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Prénom</label>
+                <input type="text" class="form-control" [(ngModel)]="firstName" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Nom</label>
+                <input type="text" class="form-control" [(ngModel)]="lastName" />
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-semibold">Date de naissance</label>
+                <input type="date" class="form-control" [(ngModel)]="birthDate" />
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Nom</label>
-            <input type="text" class="form-control" [(ngModel)]="lastName" />
+
+          <div class="form-section">
+            <p class="form-section-title">Contact</p>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Téléphone</label>
+                <input type="tel" class="form-control" [(ngModel)]="phone" placeholder="+33 6 12 34 56 78" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Localisation</label>
+                <input type="text" class="form-control" [(ngModel)]="location" placeholder="Toulouse, France" />
+              </div>
+            </div>
           </div>
+
+          <div class="form-section">
+            <p class="form-section-title">Professionnel</p>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Poste</label>
+              <input type="text" class="form-control" [(ngModel)]="jobTitle" placeholder="Développeuse Frontend" />
+            </div>
+            <div>
+              <label class="form-label small fw-semibold">Bio</label>
+              <textarea class="form-control" rows="3" maxlength="280" [(ngModel)]="bio"></textarea>
+              <small class="text-muted d-block text-end mt-1">{{ bio?.length || 0 }}/280</small>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <p class="form-section-title">Réseaux</p>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">LinkedIn</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="fa-brands fa-linkedin text-secondary"></i></span>
+                <input type="url" class="form-control" [(ngModel)]="linkedIn" placeholder="https://linkedin.com/in/..." />
+              </div>
+            </div>
+            <div>
+              <label class="form-label small fw-semibold">GitHub</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="fa-brands fa-github text-secondary"></i></span>
+                <input type="url" class="form-control" [(ngModel)]="github" placeholder="https://github.com/..." />
+              </div>
+            </div>
+          </div>
+
           @if (saveMessage()) {
-            <p class="small text-success">{{ saveMessage() }}</p>
+            <p class="small text-success mb-2 mt-3">{{ saveMessage() }}</p>
           }
-          <button type="button" class="btn btn-dark" [disabled]="isSaving()" (click)="saveProfile()">
+
+          <button type="button" class="btn btn-primary w-100 mt-3" [disabled]="isSaving()" (click)="saveProfile()">
             {{ isSaving() ? 'Enregistrement...' : 'Enregistrer' }}
           </button>
         </div>
@@ -83,59 +140,70 @@
     }
 
     @if (activeTab() === 'cards') {
-      <p class="text-muted">Bientôt disponible.</p>
+      <div class="empty-state">
+        <i class="fa-solid fa-tags"></i>
+        <p class="mb-0">La gestion des étiquettes arrive bientôt.</p>
+      </div>
     }
 
     @if (activeTab() === 'members') {
-      <div class="card" style="max-width: 600px;">
-        <div class="card-body">
+      <div class="card border-0 shadow-sm rounded-4" style="max-width: 700px;">
+        <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="fw-bold mb-0">Membres du tableau « {{ board()?.name }} »</h6>
-            <button type="button" class="btn btn-sm btn-light" (click)="refreshBoard()" title="Rafraîchir">
+            <h6 class="fw-bold mb-0">Mes tableaux</h6>
+            <button type="button" class="btn btn-sm btn-light" (click)="loadBoards()" title="Rafraîchir">
               <i class="fa-solid fa-rotate"></i>
             </button>
           </div>
 
-          @if (!board()) {
+          @if (isLoadingBoards()) {
             <p class="text-muted">Chargement...</p>
-          } @else if ((board()?.members?.length ?? 0) === 0) {
-            <p class="text-muted">Aucun membre invité pour l'instant.</p>
-          }
-
-          @for (member of board()?.members; track member._id) {
-            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-              <span>
-                {{ member.email }}
-                <span class="badge bg-secondary ms-1">{{ member.status === 'active' ? 'actif' : 'en attente' }}</span>
-              </span>
-
-              @if (isAdmin()) {
-                <div class="d-flex gap-2 align-items-center">
-                  <select
-                    class="form-select form-select-sm"
-                    style="width: auto;"
-                    [ngModel]="member.role"
-                    (ngModelChange)="changeRole(member._id, $event)"
-                  >
-                    <option value="admin">Administrateur</option>
-                    <option value="member">Membre</option>
-                    <option value="observer">Observateur</option>
-                  </select>
-                  <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeMember(member._id)" title="Retirer">
-                    <i class="fa-solid fa-user-minus"></i>
-                  </button>
-                </div>
-              } @else {
-                <span class="text-muted small">{{ member.role }}</span>
-              }
+          } @else if (boards().length === 0) {
+            <div class="empty-state">
+              <i class="fa-solid fa-table-columns"></i>
+              <p class="mb-0">Tu n'appartiens à aucun tableau pour l'instant.</p>
             </div>
+          } @else {
+            <table class="table boards-table align-middle">
+              <thead>
+                <tr>
+                  <th>Tableau</th>
+                  <th>Mon rôle</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (board of boards(); track board._id) {
+                  <tr (click)="openBoard(board._id)">
+                    <td>
+                      {{ board.name }}
+                      @if (isOwnerOf(board)) {
+                        <span class="badge bg-dark ms-1">Créateur</span>
+                      }
+                    </td>
+                    <td>
+                      <span class="role-badge" [class.role-admin]="roleOn(board) === 'admin'" [class.role-member]="roleOn(board) === 'member'" [class.role-observer]="roleOn(board) === 'observer'">
+                        {{ roleLabel(roleOn(board)) }}
+                      </span>
+                    </td>
+                    <td class="text-end text-muted">
+                      <i class="fa-solid fa-chevron-right"></i>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           }
         </div>
       </div>
     }
 
     @if (activeTab() === 'billing') {
-      <p class="text-muted">Bientôt disponible.</p>
+      <div class="empty-state">
+        <i class="fa-solid fa-credit-card"></i>
+        <p class="mb-0">La facturation arrive bientôt.</p>
+      </div>
     }
-  </div>
+
+  </main>
 </div>

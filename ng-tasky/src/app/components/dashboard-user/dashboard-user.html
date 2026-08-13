@@ -1,35 +1,58 @@
 <div class="container py-4">
-
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h2 class="fw-bold mb-0">Welcome back, {{ userName() }}</h2>
-      <p class="text-muted mb-0">Voici ce qui se passe sur ton tableau aujourd'hui.</p>
+      <p class="text-muted mb-0">Voici tes tableaux.</p>
     </div>
     <div class="d-flex align-items-center gap-3">
-        <button
-      type="button"
-      class="btn btn-sm btn-outline-secondary theme-toggle"
-      (click)="themeService.toggle()"
-      [attr.aria-label]="themeService.theme() === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair'"
-    >
-      <i class="fa-solid" [class.fa-moon]="themeService.theme() === 'light'" [class.fa-sun]="themeService.theme() === 'dark'"></i>
-    </button>
-
-    <button
-      type="button"
-      class="btn btn-light rounded-circle d-flex align-items-center justify-content-center"
-      routerLink="/profile"
-      title="Mon profil"
-      style="width: 40px; height: 40px;"
-    >
-      <i class="fa-solid fa-user"></i>
-    </button>
-
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary theme-toggle"
+        (click)="themeService.toggle()"
+        [attr.aria-label]="themeService.theme() === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair'"
+      >
+        <i class="fa-solid" [class.fa-moon]="themeService.theme() === 'light'" [class.fa-sun]="themeService.theme() === 'dark'"></i>
+      </button>
+      <button type="button" routerLink="/profile" title="Mon profil" class="btn btn-light rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+        <i class="fa-solid fa-user"></i>
+      </button>
     </div>
-   
-    
   </div>
 
-  <app-tache-card></app-tache-card>
+  @if (isLoading()) {
+    <p class="text-muted">Chargement de tes tableaux...</p>
+  } @else {
+    <div class="row g-3">
+      @for (board of boards(); track board._id) {
+        <div class="col-md-4">
+          <div class="board-card card h-100" role="button" (click)="openBoard(board._id)">
+            <div class="card-body">
+              <h5 class="card-title">{{ board.name }}</h5>
+              <p class="text-muted small mb-0">
+                {{ board.members.length }} membre(s)
+              </p>
+            </div>
+          </div>
+        </div>
+      }
 
+      <div class="col-md-4">
+        <div class="card h-100 border-dashed">
+          <div class="card-body d-flex flex-column justify-content-center">
+            <input
+              type="text"
+              class="form-control mb-2"
+              placeholder="Nom du nouveau tableau"
+              [(ngModel)]="newBoardName"
+              (keyup.enter)="createBoard()"
+            />
+            <button type="button" class="btn btn-dark w-100" [disabled]="isCreating()" (click)="createBoard()">
+              <i class="fa-solid fa-plus me-1"></i>
+              {{ isCreating() ? 'Création...' : 'Nouveau tableau' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 </div>

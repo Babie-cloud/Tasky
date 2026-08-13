@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import {
   CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup,
   moveItemInArray, transferArrayItem,
@@ -23,51 +23,58 @@ export class TacheCard implements OnInit {
   private listService = inject(ListService);
   private taskService = inject(TaskService);
   private platformId = inject(PLATFORM_ID);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   board = signal<Board | null>(null);
-  // Toujours exactement 3 listes fixes : À faire / En cours / Terminé (triées par 'order')
   lists = signal<TaskList[]>([]);
   tasksByList = signal<Record<string, Task[]>>({});
 
   showInviteModal = signal(false);
   newListTitle = '';
 
-  // Filtres
   filterDueStatus: 'all' | 'overdue' | 'today' | 'week' = 'all';
   filterAssignee = 'all';
   searchText = '';
 
-  // Panneau de détail
   selectedTask = signal<Task | null>(null);
+
+  private boardId = '';
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
+    this.boardId = this.route.snapshot.paramMap.get('boardId') || '';
+    if (!this.boardId) {
+      this.router.navigate(['/dashboard-user']);
+      return;
+    }
     this.loadBoard();
   }
 
   loadBoard(): void {
-    this.boardService.getMyBoard().subscribe((board) => {
-      this.board.set(board);
-      this.listService.getLists(board._id).subscribe((lists) => {
-        this.lists.set(lists);
-        this.taskService.getTasks(board._id).subscribe((tasks) => {
-          const grouped: Record<string, Task[]> = {};
-          for (const list of lists) grouped[list._id] = [];
-          for (const task of tasks) {
-            if (!grouped[task.list]) grouped[task.list] = [];
-            grouped[task.list].push(task);
-          }
-          for (const key of Object.keys(grouped)) {
-            grouped[key].sort((a, b) => a.order - b.order);
-          }
-          this.tasksByList.set(grouped);
+    this.boardService.getBoard(this.boardId).subscribe({
+      next: (board) => {
+        this.board.set(board);
+        this.listService.getLists(board._id).subscribe((lists) => {
+          this.lists.set(lists);
+          this.taskService.getTasks(board._id).subscribe((tasks) => {
+            const grouped: Record<string, Task[]> = {};
+            for (const list of lists) grouped[list._id] = [];
+            for (const task of tasks) {
+              if (!grouped[task.list]) grouped[task.list] = [];
+              grouped[task.list].push(task);
+            }
+            for (const key of Object.keys(grouped)) {
+              grouped[key].sort((a, b) => a.order - b.order);
+            }
+            this.tasksByList.set(grouped);
+          });
         });
-      });
+      },
+      error: () => this.router.navigate(['/dashboard-user']),
     });
   }
 
-  // --- Stats du header ---
-  // Convention : la liste d'index 0 = "À faire", 1 = "En cours", 2 = "Terminé"
   private listAt(index: number): TaskList | undefined {
     return this.lists()[index];
   }

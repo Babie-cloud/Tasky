@@ -20,11 +20,20 @@ export class Profile implements OnInit {
   private platformId = inject(PLATFORM_ID);
 
   user = signal<UserProfile | null>(null);
-  board = signal<Board | null>(null);
+  boards = signal<Board[]>([]);
+  isLoadingBoards = signal(false);
   activeTab = signal<'info' | 'cards' | 'members' | 'billing'>('info');
 
   firstName = '';
   lastName = '';
+  phone = '';
+  location = '';
+  birthDate = '';
+  bio = '';
+  linkedIn = '';
+  github = '';
+  jobTitle = '';
+
   isSaving = signal(false);
   saveMessage = signal<string | null>(null);
 
@@ -38,68 +47,73 @@ export class Profile implements OnInit {
       this.currentUserId = user._id;
       this.firstName = user.first_name || '';
       this.lastName = user.last_name || '';
+      this.phone = user.phone || '';
+      this.location = user.location || '';
+      this.birthDate = user.birthDate ? user.birthDate.substring(0, 10) : '';
+      this.bio = user.bio || '';
+      this.linkedIn = user.linkedIn || '';
+      this.github = user.github || '';
+      this.jobTitle = user.jobTitle || '';
     });
 
-    this.boardService.getMyBoard().subscribe((board) => this.board.set(board));
+    this.loadBoards();
   }
 
   setTab(tab: 'info' | 'cards' | 'members' | 'billing'): void {
     this.activeTab.set(tab);
     if (tab === 'members') {
-      this.refreshBoard();
+      this.loadBoards();
     }
   }
 
-  refreshBoard(): void {
-    this.boardService.getMyBoard().subscribe((board) => this.board.set(board));
+  loadBoards(): void {
+    this.isLoadingBoards.set(true);
+    this.boardService.getMyBoards().subscribe({
+      next: (boards) => {
+        this.boards.set(boards);
+        this.isLoadingBoards.set(false);
+      },
+      error: () => this.isLoadingBoards.set(false),
+    });
   }
 
   saveProfile(): void {
     this.isSaving.set(true);
     this.saveMessage.set(null);
     this.userService
-      .updateMe({ first_name: this.firstName, last_name: this.lastName })
+      .updateMe({
+        first_name: this.firstName,
+        last_name: this.lastName,
+        phone: this.phone,
+        location: this.location,
+        birthDate: this.birthDate || null,
+        bio: this.bio,
+        linkedIn: this.linkedIn,
+        github: this.github,
+        jobTitle: this.jobTitle,
+      })
       .subscribe({
         next: (user) => {
           this.user.set(user);
           this.isSaving.set(false);
           this.saveMessage.set('Profil mis à jour.');
         },
-        error: () => {
+        error: (err) => {
           this.isSaving.set(false);
-          this.saveMessage.set('Erreur lors de la mise à jour.');
+          this.saveMessage.set(err.error?.message || 'Erreur lors de la mise à jour.');
         },
       });
   }
 
-  isAdmin(): boolean {
-    const board = this.board();
-    if (!board) return false;
-    if (board.owner._id === this.currentUserId) return true;
-    const member = board.members.find((m) => m.user?._id === this.currentUserId);
-    return member?.role === 'admin';
-  }
-
-  // Vrai si l'utilisateur connecté est un collaborateur (pas le propriétaire) du tableau
-  get isCollaborator(): boolean {
-    const board = this.board();
-    return !!board && board.owner._id !== this.currentUserId && !!this.currentUserId;
-  }
-
-  // Le rôle de l'utilisateur connecté sur ce tableau
-  get myRole(): string | null {
-    const board = this.board();
-    if (!board) return null;
+  // Rôle de l'utilisateur connecté sur un board donné
+  roleOn(board: Board): string {
     if (board.owner._id === this.currentUserId) return 'admin';
     const member = board.members.find((m) => m.user?._id === this.currentUserId);
-    return member?.role ?? null;
+    return member?.role ?? 'observer';
   }
 
-  get ownerName(): string {
-    const board = this.board();
-    if (!board) return '';
-    const o = board.owner;
-    return `${o.first_name || ''} ${o.last_name || ''}`.trim() || o.email;
+  isOwnerOf(board: Board): boolean {
+    return board.owner._id === this.currentUserId;
   }
 
   roleLabel(role: string | null): string {
@@ -115,19 +129,8 @@ export class Profile implements OnInit {
     }
   }
 
-  changeRole(memberId: string, role: string): void {
-    const board = this.board();
-    if (!board) return;
-    this.boardService
-      .changeMemberRole(board._id, memberId, role)
-      .subscribe((updated) => this.board.set(updated));
-  }
-
-  removeMember(memberId: string): void {
-    const board = this.board();
-    if (!board) return;
-    if (!confirm('Retirer ce membre du tableau ?')) return;
-    this.boardService.removeMember(board._id, memberId).subscribe((updated) => this.board.set(updated));
+  openBoard(boardId: string): void {
+    this.router.navigate(['/board', boardId]);
   }
 
   logout(): void {

@@ -23,8 +23,20 @@ export class BoardService {
   private http = inject(HttpClient);
   private base = `${environment.apiUrl}/api/boards`;
 
-  getMyBoard(): Observable<Board> {
-    return this.http.get<Board>(`${this.base}/me`);
+  getMyBoards(): Observable<Board[]> {
+    return this.http.get<Board[]>(`${this.base}/mine`);
+  }
+
+  createBoard(name: string): Observable<Board> {
+    return this.http.post<Board>(this.base, { name });
+  }
+
+  getBoard(boardId: string): Observable<Board> {
+    return this.http.get<Board>(`${this.base}/${boardId}`);
+  }
+
+  deleteBoard(boardId: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.base}/${boardId}`);
   }
 
   renameBoard(boardId: string, name: string): Observable<Board> {
