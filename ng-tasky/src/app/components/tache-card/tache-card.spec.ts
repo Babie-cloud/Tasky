@@ -1,9 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Component } from '@angular/core';
 
 import { TacheCard } from './tache-card';
+
+@Component({ standalone: true, template: '' })
+class DummyDashboardComponent {}
 
 describe('TacheCard', () => {
   let component: TacheCard;
@@ -15,13 +19,15 @@ describe('TacheCard', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        // RouterLink (utilisé dans le template pour le bouton "Ajouter une tâche")
-        // a besoin d'un ActivatedRoute injectable même sans navigation réelle.
+        // Fournit la route /dashboard-user pour éviter l'erreur NG04002
+        provideRouter([
+          { path: 'dashboard-user', component: DummyDashboardComponent }
+        ]),
         {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              paramMap: convertToParamMap({}),
+              paramMap: convertToParamMap({ boardId: '12345' }), // boardId simulé pour éviter la redirection par défaut
               queryParams: {},
               queryParamMap: convertToParamMap({}),
             },
