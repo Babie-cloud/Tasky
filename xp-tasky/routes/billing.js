@@ -15,17 +15,27 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4200';
 
 router.use(requireAuth);
 
+// 1. Créer une session Checkout 
 router.post('/create-checkout-session', async (req, res) => {
   try {
-    const { plan } = req.body;
+    const rawPlan = req.body.plan;
+    const plan = rawPlan ? String(rawPlan).toLowerCase().trim() : '';
+
+    console.log('--- [BILLING CHECKOUT REQUEST] ---');
+    console.log('Plan reçu du Frontend:', rawPlan);
+    console.log('Plan normalisé:', plan);
+    console.log('Price ID Stripe correspondant:', PRICE_IDS[plan]);
+
     if (!PRICE_IDS[plan]) {
-      return res.status(400).json({ message: 'Plan invalide.' });
+      console.error(`[Billing Error] Plan invalide ou Price ID non configuré pour: "${plan}"`);
+      return res.status(400).json({ 
+        message: `Plan invalide. Valeurs acceptées: 'pro' ou 'enterprise'. Reçu: '${rawPlan}'` 
+      });
     }
 
     const user = await User.findById(req.userId);
     if (!user) return res.status(404).json({ message: 'Utilisateur introuvable.' });
 
-    // Réutilise le Customer Stripe existant, ou en crée un nouveau
     let customerId = user.stripeCustomerId;
     if (!customerId) {
       const customer = await stripe.customers.create({
@@ -58,32 +68,48 @@ router.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// Crée une session vers le Customer Portal Stripe (gérer / annuler l'abonnement)
+// 2. Créer une session Customer Portal (Page /profile "Gérer mon abonnement")
 router.post('/create-portal-session', async (req, res) => {
   try {
     const user = await User.findById(req.userId);
-    if (!user || !user.stripeCustomerId) {
-      return res.status(400).json({ message: 'Aucun abonnement actif.' });
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur introuvable.' });
+    }
+
+    let customerId = user.stripeCustomerId;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: `${user.first_name || ''} ${user.last_name || ''}`.trim() || undefined,
+        metadata: { userId: user._id.toString() },
+      });
+      customerId = customer.id;
+      user.stripeCustomerId = customerId;
+      await user.save();
     }
 
     const session = await stripe.billingPortal.sessions.create({
-      customer: user.stripeCustomerId,
+      customer: customerId,
       return_url: `${FRONTEND_URL}/profile?tab=billing`,
     });
 
     res.json({ url: session.url });
   } catch (err) {
     console.error('[Create Portal Session Error]:', err);
-    res.status(500).json({ message: 'Erreur lors de la création de la session.' });
+    res.status(500).json({ message: 'Erreur lors de la création de la session du portail.' });
   }
 });
 
+// 3. Récupérer le statut actuel
 router.get('/status', async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('subscriptionPlan subscriptionStatus');
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur introuvable.' });
+    }
     res.json({
       plan: user.subscriptionPlan || 'free',
-      status: user.subscriptionStatus,
+      status: user.subscriptionStatus || null,
     });
   } catch (err) {
     console.error('[Billing Status Error]:', err);

@@ -35,13 +35,16 @@ app.use(cors({
 
 app.use(logger('dev'));
 
-app.use('/api/billing/webhook', stripeWebhookRouter);
+// 1. Webhook Stripe : Doit impérativement être AVANT express.json()
+app.use('/api/stripe-webhook', stripeWebhookRouter);
 
+// 2. Parsers d'analyse du corps des requêtes
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 3. Middleware de connexion BDD
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -52,6 +55,7 @@ app.use(async (req, res, next) => {
   }
 });
 
+// 4. Routes de l'application
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/auth', authRouter);
@@ -60,10 +64,12 @@ app.use('/api/boards', boardsRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api/billing', billingRouter);
 
+// 5. Gestion des erreurs 404
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
+// 6. Gestionnaire d'erreurs global
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.json({
