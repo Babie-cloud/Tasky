@@ -7,6 +7,7 @@ const path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+const bodyParser = require('body-parser');
 const connectDB = require('./db');
 
 var indexRouter = require('./routes/index');
@@ -20,7 +21,10 @@ var stripeWebhookRouter = require('./routes/stripe-webhook');
 
 var app = express();
 
-const allowedOrigins = ['http://localhost:4200', 'https://peppy-sunburst-59adb5.netlify.app'];
+const allowedOrigins = [
+  'http://localhost:4200', 
+  'https://peppy-sunburst-59adb5.netlify.app'
+];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -35,16 +39,14 @@ app.use(cors({
 
 app.use(logger('dev'));
 
-// 1. Webhook Stripe : Doit impérativement être AVANT express.json()
-app.use('/api/stripe-webhook', stripeWebhookRouter);
+app.use('/api/stripe-webhook', bodyParser.raw({ type: 'application/json' }), stripeWebhookRouter);
 
-// 2. Parsers d'analyse du corps des requêtes
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 3. Middleware de connexion BDD
+// Middleware de connexion à la BDD
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -55,27 +57,30 @@ app.use(async (req, res, next) => {
   }
 });
 
-// 4. Routes de l'application
+// Déclaration des routes API
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/tasks', tasksRouter);
 app.use('/api/boards', boardsRouter);
 app.use('/api/lists', listsRouter);
-app.use('/api/billing', billingRouter);
-
-// 5. Gestion des erreurs 404
+app.use('/api/billing', billingRouter); 
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// 6. Gestionnaire d'erreurs global
+// Gestionnaire d'erreurs global
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.json({
     message: err.message,
     error: req.app.get('env') === 'development' ? err : {},
   });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`\n Serveur Express démarré avec succès sur : http://localhost:${PORT}\n`);
 });
 
 module.exports = app;
