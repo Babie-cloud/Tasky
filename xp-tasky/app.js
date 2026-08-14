@@ -15,9 +15,10 @@ var authRouter = require('./components/auth');
 var tasksRouter = require('./routes/tasks');
 var boardsRouter = require('./routes/boards');
 var listsRouter = require('./routes/lists');
+var billingRouter = require('./routes/billing');
+var stripeWebhookRouter = require('./routes/stripe-webhook');
 
 var app = express();
-
 
 const allowedOrigins = ['http://localhost:4200', 'https://peppy-sunburst-59adb5.netlify.app'];
 
@@ -33,6 +34,9 @@ app.use(cors({
 }));
 
 app.use(logger('dev'));
+
+app.use('/api/billing/webhook', stripeWebhookRouter);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -54,6 +58,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/tasks', tasksRouter);
 app.use('/api/boards', boardsRouter);
 app.use('/api/lists', listsRouter);
+app.use('/api/billing', billingRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

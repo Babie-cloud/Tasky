@@ -199,11 +199,49 @@
     }
 
     @if (activeTab() === 'billing') {
-      <div class="empty-state">
-        <i class="fa-solid fa-credit-card"></i>
-        <p class="mb-0">La facturation arrive bientôt.</p>
-      </div>
-    }
+  <div class="card border-0 shadow-sm rounded-4" style="max-width: 500px;">
+    <div class="card-body p-4">
+
+      @if (showPaymentSuccess()) {
+        <div class="alert alert-success border-0 mb-3">
+          <i class="fa-solid fa-circle-check me-1"></i>
+          Paiement confirmé ! Ton plan sera mis à jour dans quelques instants.
+        </div>
+      }
+
+      @if (isLoadingBilling()) {
+        <p class="text-muted">Chargement...</p>
+      } @else {
+        <p class="form-section-title">Plan actuel</p>
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <h4 class="fw-bold mb-0">{{ planLabel(billingStatus()?.plan) }}</h4>
+          @if (billingStatus()?.plan !== 'free') {
+            <span class="role-badge role-admin">Actif</span>
+          }
+        </div>
+
+        @if (billingStatus()?.plan === 'free') {
+          <p class="text-muted small mb-3">
+            Passe au plan Pro ou Enterprise pour débloquer plus de fonctionnalités.
+          </p>
+          <a routerLink="/pricing" class="btn btn-primary w-100">Voir les plans</a>
+        } @else {
+          <p class="text-muted small mb-3">
+            Gère ton abonnement, ta méthode de paiement ou annule-le à tout moment.
+          </p>
+          <button
+            type="button"
+            class="btn btn-primary w-100"
+            [disabled]="isOpeningPortal()"
+            (click)="openBillingPortal()"
+          >
+            {{ isOpeningPortal() ? 'Ouverture...' : 'Gérer mon abonnement' }}
+          </button>
+        }
+      }
+    </div>
+  </div>
+}
 
   </main>
 </div>

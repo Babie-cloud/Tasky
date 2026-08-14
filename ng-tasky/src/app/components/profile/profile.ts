@@ -1,14 +1,15 @@
 import { Component, OnInit, inject, signal, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService, UserProfile } from '../../core/services/user-service';
 import { AuthService } from '../../core/services/auth-service';
 import { BoardService, Board } from '../../core/services/board-service';
+import { BillingService, BillingStatus } from '../../core/services/billing-service';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
@@ -16,13 +17,20 @@ export class Profile implements OnInit {
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private boardService = inject(BoardService);
+  private billingService = inject(BillingService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private platformId = inject(PLATFORM_ID);
 
   user = signal<UserProfile | null>(null);
   boards = signal<Board[]>([]);
   isLoadingBoards = signal(false);
   activeTab = signal<'info' | 'cards' | 'members' | 'billing'>('info');
+
+  billingStatus = signal<BillingStatus | null>(null);
+  isLoadingBilling = signal(false);
+  isOpeningPortal = signal(false);
+  showPaymentSuccess = signal(false);
 
   firstName = '';
   lastName = '';
@@ -57,12 +65,54 @@ export class Profile implements OnInit {
     });
 
     this.loadBoards();
+
+    const params = this.route.snapshot.queryParams;
+    if (params['tab'] === 'billing') {
+      this.activeTab.set('billing');
+      this.loadBillingStatus();
+      if (params['success'] === 'true') {
+        this.showPaymentSuccess.set(true);
+      }
+    }
   }
 
   setTab(tab: 'info' | 'cards' | 'members' | 'billing'): void {
     this.activeTab.set(tab);
     if (tab === 'members') {
       this.loadBoards();
+    }
+    if (tab === 'billing') {
+      this.loadBillingStatus();
+    }
+  }
+
+  loadBillingStatus(): void {
+    this.isLoadingBilling.set(true);
+    this.billingService.getStatus().subscribe({
+      next: (status) => {
+        this.billingStatus.set(status);
+        this.isLoadingBilling.set(false);
+      },
+      error: () => this.isLoadingBilling.set(false),
+    });
+  }
+
+  openBillingPortal(): void {
+    this.isOpeningPortal.set(true);
+    this.billingService.createPortalSession().subscribe({
+      next: (res) => (window.location.href = res.url),
+      error: () => this.isOpeningPortal.set(false),
+    });
+  }
+
+  planLabel(plan: string | undefined): string {
+    switch (plan) {
+      case 'pro':
+        return 'Pro';
+      case 'enterprise':
+        return 'Enterprise';
+      default:
+        return 'Free';
     }
   }
 
@@ -105,7 +155,6 @@ export class Profile implements OnInit {
       });
   }
 
-  // Rôle de l'utilisateur connecté sur un board donné
   roleOn(board: Board): string {
     if (board.owner._id === this.currentUserId) return 'admin';
     const member = board.members.find((m) => m.user?._id === this.currentUserId);

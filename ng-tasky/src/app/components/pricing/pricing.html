@@ -42,9 +42,9 @@
             <li><i class="fa-solid fa-check text-success me-2"></i>Email support</li>
             <li><i class="fa-solid fa-check text-success me-2"></i>Help center access</li>
           </ul>
-          <button type="button" class="w-100 btn btn-lg btn-outline-primary">
-            Sign up for free
-          </button>
+          <button type="button" class="w-100 btn btn-lg btn-outline-primary" routerLink="/signup">
+  Sign up for free
+</button>
         </div>
       </div>
     </div>
@@ -65,9 +65,18 @@
             <li><i class="fa-solid fa-check text-success me-2"></i>Priority email support</li>
             <li><i class="fa-solid fa-check text-success me-2"></i>Help center access</li>
           </ul>
-          <button type="button" class="w-100 btn btn-lg btn-primary">
-            Get started
-          </button>
+          <!-- Card Pro -->
+@if (errorMessage()) {
+  <p class="small text-danger mb-2">{{ errorMessage() }}</p>
+}
+<button
+  type="button"
+  class="w-100 btn btn-lg btn-primary"
+  [disabled]="loadingPlan() === 'pro'"
+  (click)="subscribe('pro')"
+>
+  {{ loadingPlan() === 'pro' ? 'Redirection...' : 'Get started' }}
+</button>
         </div>
       </div>
     </div>
@@ -87,9 +96,15 @@
             <li><i class="fa-solid fa-check text-success me-2"></i>Phone and email support</li>
             <li><i class="fa-solid fa-check text-success me-2"></i>Help center access</li>
           </ul>
-          <button type="button" class="w-100 btn btn-lg btn-outline-primary">
-            Contact us
-          </button>
+          <!-- Card Enterprise -->
+<button
+  type="button"
+  class="w-100 btn btn-lg btn-outline-primary"
+  [disabled]="loadingPlan() === 'enterprise'"
+  (click)="subscribe('enterprise')"
+>
+  {{ loadingPlan() === 'enterprise' ? 'Redirection...' : 'Contact us' }}
+</button>
         </div>
       </div>
     </div>

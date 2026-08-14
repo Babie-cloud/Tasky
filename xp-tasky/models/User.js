@@ -18,7 +18,16 @@ const userSchema = new mongoose.Schema({
   github: { type: String, default: '' },
   jobTitle: { type: String, default: '' },
 
-  isSuperAdmin: { type: Boolean, default: false }, 
+  isSuperAdmin: { type: Boolean, default: false },
+
+  stripeCustomerId: { type: String, default: null },
+  stripeSubscriptionId: { type: String, default: null },
+  subscriptionPlan: { type: String, enum: ['free', 'pro', 'enterprise'], default: 'free' },
+  subscriptionStatus: {
+    type: String,
+    enum: ['active', 'past_due', 'canceled', 'incomplete', null],
+    default: null,
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
