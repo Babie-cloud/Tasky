@@ -6,7 +6,6 @@ const boardAccess = require('../middlewares/board-access');
 
 router.use(requireAuth);
 
-// Voir les catégories d'un board (tout le monde, même observateur)
 router.get('/', boardAccess('observer'), async (req, res) => {
   try {
     const categories = await Category.find({ board: req.board._id }).sort({ createdAt: 1 });
@@ -17,7 +16,7 @@ router.get('/', boardAccess('observer'), async (req, res) => {
   }
 });
 
-// Créer une catégorie — réservé aux admins du board
+
 router.post('/', boardAccess('admin'), async (req, res) => {
   try {
     const { name, color } = req.body;
@@ -61,7 +60,7 @@ router.delete('/:id', boardAccess('admin'), async (req, res) => {
     const category = await Category.findOneAndDelete({ _id: req.params.id, board: req.board._id });
     if (!category) return res.status(404).json({ message: 'Catégorie introuvable.' });
 
-    // Retire cette catégorie de toutes les tâches qui l'utilisaient
+ 
     const Task = require('../models/Task');
     await Task.updateMany({ board: req.board._id }, { $pull: { categories: category._id } });
 

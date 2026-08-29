@@ -5,7 +5,7 @@ const List = require('../models/List');
 const Category = require('../models/Category');
 const requireAuth = require('../middlewares/auth');
 const boardAccess = require('../middlewares/board-access');
-var categoriesRouter = require('./routes/categories');
+
 router.use(requireAuth);
 
 router.get('/', boardAccess('observer'), async (req, res) => {

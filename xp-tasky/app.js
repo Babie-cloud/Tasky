@@ -17,6 +17,7 @@ var boardsRouter = require('./routes/boards');
 var listsRouter = require('./routes/lists');
 var billingRouter = require('./routes/billing');
 var stripeWebhookRouter = require('./routes/stripe-webhook');
+var categoriesRouter = require('./routes/categories');
 
 const app = express();
 
@@ -38,7 +39,6 @@ app.use(cors({
 
 app.use(logger('dev'));
 
-// Webhook Stripe : express.raw() (pas besoin de body-parser, déjà inclus dans Express 4.16+)
 app.use('/api/billing/webhook', express.raw({ type: 'application/json' }), stripeWebhookRouter);
 
 app.use(express.json());
