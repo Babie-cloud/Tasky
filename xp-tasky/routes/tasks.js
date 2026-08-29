@@ -5,6 +5,7 @@ const List = require('../models/List');
 const Category = require('../models/Category');
 const requireAuth = require('../middlewares/auth');
 const boardAccess = require('../middlewares/board-access');
+var categoriesRouter = require('./categories');
 
 router.use(requireAuth);
 
