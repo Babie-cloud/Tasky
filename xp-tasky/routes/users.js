@@ -31,7 +31,6 @@ router.get('/me', async (req, res) => {
   }
 });
 
-// Modifier le profil
 router.put('/me', async (req, res) => {
   try {
     const updates = {};

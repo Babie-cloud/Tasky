@@ -11,10 +11,10 @@ import { ListService, TaskList } from '../../core/services/list.service';
 import { TaskService, Task } from '../../core/services/task.service';
 import { InviteMembers } from '../invite-members/invite-members';
 import { TaskDetail } from '../task-detail/task-detail';
-
+import { CategoryManager } from '../category-manager/category-manager';
 @Component({
   selector: 'app-tache-card',
-  imports: [CommonModule, FormsModule, RouterLink, CdkDropListGroup, CdkDropList, CdkDrag, InviteMembers, TaskDetail],
+  imports: [CommonModule, FormsModule, RouterLink, CdkDropListGroup, CdkDropList, CdkDrag, InviteMembers, TaskDetail, CategoryManager],
   templateUrl: './tache-card.html',
   styleUrl: './tache-card.scss',
 })
@@ -29,7 +29,7 @@ export class TacheCard implements OnInit {
   board = signal<Board | null>(null);
   lists = signal<TaskList[]>([]);
   tasksByList = signal<Record<string, Task[]>>({});
-
+  showCategoryModal = signal(false);
   showInviteModal = signal(false);
   newListTitle = '';
 

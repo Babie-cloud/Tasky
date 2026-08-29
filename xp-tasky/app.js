@@ -63,6 +63,7 @@ app.use('/api/tasks', tasksRouter);
 app.use('/api/boards', boardsRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api/billing', billingRouter);
+app.use('/api/categories', categoriesRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

@@ -73,4 +73,35 @@
     --bs-table-bg: transparent;
     --bs-table-border-color: rgba($tasky-green-700, 0.35);
   }
+
+    // --- Homepage ---
+  .hero-section,
+  .footer-tasky {
+    background-color: #242526 !important;
+  }
+
+  .eyebrow-badge {
+    background: rgba($tasky-green-500, 0.15);
+    color: $tasky-green-300;
+  }
+
+  .footer-tasky {
+    border-top-color: rgba($tasky-green-700, 0.4);
+  }
+
+  .board-preview-header {
+    border-bottom-color: rgba(#fff, 0.08);
+  }
+
+  .board-preview-col-title {
+    color: rgba(#e6f4ea, 0.65);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #e6f4ea;
+  }
+
+  .text-muted {
+    color: rgba(#e6f4ea, 0.6) !important;
+  }
 }

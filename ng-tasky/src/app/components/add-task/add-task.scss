@@ -1,0 +1,13 @@
+.category-chip {
+  border: 2px solid var(--chip-color);
+  color: var(--chip-color);
+  background: transparent;
+  padding: 0.4em 0.9em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &.selected {
+    background: var(--chip-color);
+    color: #fff;
+  }
+}

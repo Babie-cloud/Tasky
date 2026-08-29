@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../core/services/task.service';
-import { ListService, TaskList } from '../../core/services/list.service';
+import { CategoryService, Category } from '../../core/services/category-service';
 
 @Component({
   selector: 'app-add-task',
@@ -14,20 +14,20 @@ import { ListService, TaskList } from '../../core/services/list.service';
 export class AddTask implements OnInit {
   private fb = inject(FormBuilder);
   private taskService = inject(TaskService);
-  private listService = inject(ListService);
+  private categoryService = inject(CategoryService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
 
   form: FormGroup = this.fb.group({
     title: ['', Validators.required],
-    list: ['', Validators.required],
     dueDate: [''],
   });
 
-  lists = signal<TaskList[]>([]);
+  categories = signal<Category[]>([]);
+  selectedCategoryIds = signal<Set<string>>(new Set());
   isSubmitting = signal(false);
-  private boardId = '';
+  boardId = '';
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -38,17 +38,32 @@ export class AddTask implements OnInit {
       return;
     }
 
-    this.listService.getLists(this.boardId).subscribe((lists) => {
-      this.lists.set(lists);
-      if (lists.length) this.form.patchValue({ list: lists[0]._id });
+    this.categoryService.getCategories(this.boardId).subscribe((categories) => {
+      this.categories.set(categories);
     });
+  }
+
+  toggleCategory(categoryId: string): void {
+    const current = new Set(this.selectedCategoryIds());
+    if (current.has(categoryId)) {
+      current.delete(categoryId);
+    } else {
+      current.add(categoryId);
+    }
+    this.selectedCategoryIds.set(current);
+  }
+
+  isSelected(categoryId: string): boolean {
+    return this.selectedCategoryIds().has(categoryId);
   }
 
   onSubmit(): void {
     if (this.form.invalid || !this.boardId) return;
     this.isSubmitting.set(true);
-    const { title, list, dueDate } = this.form.value;
-    this.taskService.createTask(this.boardId, list, title, dueDate || null).subscribe({
+    const { title, dueDate } = this.form.value;
+    const categoryIds = Array.from(this.selectedCategoryIds());
+
+    this.taskService.createTask(this.boardId, title, dueDate || null, categoryIds).subscribe({
       next: () => this.router.navigate(['/board', this.boardId]),
       error: () => this.isSubmitting.set(false),
     });

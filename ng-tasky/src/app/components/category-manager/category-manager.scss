@@ -1,0 +1,19 @@
+.category-pill {
+  border: 2px solid var(--chip-color);
+  color: var(--chip-color);
+  background: transparent;
+  padding: 0.4em 0.8em;
+
+  i {
+    opacity: 0.7;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.edit-row {
+  background: #f8faf9;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+}

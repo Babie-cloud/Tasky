@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
+const List = require('../models/List');
+const Category = require('../models/Category');
 const requireAuth = require('../middlewares/auth');
 const boardAccess = require('../middlewares/board-access');
-
+var categoriesRouter = require('./routes/categories');
 router.use(requireAuth);
 
 router.get('/', boardAccess('observer'), async (req, res) => {
@@ -12,20 +14,40 @@ router.get('/', boardAccess('observer'), async (req, res) => {
 });
 
 router.post('/', boardAccess('member'), async (req, res) => {
-  const { title, list, dueDate, description } = req.body;
-  if (!title || !list) return res.status(400).json({ message: 'Titre et liste requis.' });
+  try {
+    const { title, dueDate, description, categories } = req.body;
+    if (!title || !title.trim()) {
+      return res.status(400).json({ message: 'Titre requis.' });
+    }
 
-  const count = await Task.countDocuments({ list });
-  const task = await Task.create({
-    title,
-    description: description || '',
-    dueDate: dueDate || null,
-    board: req.board._id,
-    list,
-    order: count,
-    createdBy: req.userId,
-  });
-  res.status(201).json(task);
+    const firstList = await List.findOne({ board: req.board._id }).sort({ order: 1 });
+    if (!firstList) {
+      return res.status(400).json({ message: 'Aucune liste disponible sur ce tableau.' });
+    }
+
+    let validCategoryIds = [];
+    if (Array.isArray(categories) && categories.length > 0) {
+      const found = await Category.find({ _id: { $in: categories }, board: req.board._id });
+      validCategoryIds = found.map((c) => c._id);
+    }
+
+    const count = await Task.countDocuments({ list: firstList._id });
+    const task = await Task.create({
+      title: title.trim(),
+      description: description || '',
+      dueDate: dueDate || null,
+      board: req.board._id,
+      list: firstList._id,
+      order: count,
+      createdBy: req.userId,
+      categories: validCategoryIds,
+    });
+
+    res.status(201).json(task);
+  } catch (err) {
+    console.error('[Create Task Error]:', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
 });
 
 router.put('/:id', boardAccess('member'), async (req, res) => {

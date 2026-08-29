@@ -7,18 +7,35 @@
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Liste</label>
-      <select class="form-select" formControlName="list">
-        @for (list of lists(); track list._id) {
-          <option [value]="list._id">{{ list.title }}</option>
-        }
-      </select>
-    </div>
-
-    <div class="mb-3">
       <label class="form-label">Date limite (optionnel)</label>
       <input type="date" class="form-control" formControlName="dueDate">
     </div>
+
+    @if (categories().length > 0) {
+      <div class="mb-3">
+        <label class="form-label">Catégories (optionnel)</label>
+        <div class="d-flex flex-wrap gap-2">
+          @for (category of categories(); track category._id) {
+            <span
+              class="badge rounded-pill category-chip"
+              [class.selected]="isSelected(category._id)"
+              [style.--chip-color]="category.color"
+              (click)="toggleCategory(category._id)"
+              role="button"
+            >
+              @if (isSelected(category._id)) {
+                <i class="fa-solid fa-check me-1"></i>
+              }
+              {{ category.name }}
+            </span>
+          }
+        </div>
+      </div>
+    } @else {
+      <p class="text-muted small mb-3">
+        Aucune catégorie sur ce tableau pour l'instant. Tu peux en créer depuis la page du tableau.
+      </p>
+    }
 
     <button type="submit" class="btn btn-dark w-100" [disabled]="form.invalid || isSubmitting()">
       {{ isSubmitting() ? 'Ajout...' : 'Ajouter' }}

@@ -12,7 +12,7 @@ import { authGuard } from './core/guard/auth-guard';
 import { Profile } from './components/profile/profile';
 import { PolicyPrivacy } from './layout/policy-privacy/policy-privacy';
 import { Terms } from './layout/terms/terms';
-
+import { CategoryManager } from './components/category-manager/category-manager';
 export const routes: Routes = [
   { path: '', component: Homepage },
   { path: 'login', component: Login },
@@ -20,6 +20,7 @@ export const routes: Routes = [
   { path: 'resetpassword', component: Resetpassword },
   { path: 'pricing', component: Pricing },
   { path: 'add-task', component: AddTask },
+  { path: 'category-manager', component: CategoryManager },
   { path: 'dashboard-user', component: DashboardUser, canActivate: [authGuard] },
   { path: 'board/:boardId', component: TacheCard, canActivate: [authGuard] },
   { path: 'board/:boardId/add-task', component: AddTask, canActivate: [authGuard] },

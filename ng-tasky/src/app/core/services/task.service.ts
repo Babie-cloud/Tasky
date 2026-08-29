@@ -13,6 +13,7 @@ export interface Task {
   dueDate?: string | null;
   createdBy: string;
   assignedTo?: string | null;
+  categories?: string[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,8 +25,18 @@ export class TaskService {
     return this.http.get<Task[]>(this.base, { params: { board: boardId } });
   }
 
-  createTask(boardId: string, listId: string, title: string, dueDate: string | null = null): Observable<Task> {
-    return this.http.post<Task>(this.base, { board: boardId, list: listId, title, dueDate });
+  createTask(
+    boardId: string,
+    title: string,
+    dueDate: string | null = null,
+    categoryIds: string[] = []
+  ): Observable<Task> {
+    return this.http.post<Task>(this.base, {
+      board: boardId,
+      title,
+      dueDate,
+      categories: categoryIds,
+    });
   }
 
   updateTask(boardId: string, taskId: string, data: Partial<Task>): Observable<Task> {
