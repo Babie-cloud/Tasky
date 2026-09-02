@@ -2,16 +2,14 @@
   <div class="auth-card card shadow-lg max-w-auth w-100">
     <div class="card-body p-4 p-md-5">
 
-      <!-- Header -->
       <div class="text-center mb-4">
         <h4 class="fw-bold text-brand mb-1">Welcome back</h4>
         <p class="text-muted small mb-0">Please enter your details to sign in</p>
       </div>
 
-      <!-- Form -->
       <form class="contact-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-        <!-- Email Field -->
+
         <div class="mb-3">
           <label for="login-email" class="form-label fw-semibold">Email or username</label>
           <input
@@ -19,14 +17,13 @@
             type="text"
             class="form-control"
             formControlName="email"
-            placeholder="e.g. babie@gmail.com"
+            placeholder="babie@gmail.com"
           />
           @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
             <div class="text-danger small mt-1">Please enter a valid email.</div>
           }
         </div>
 
-        <!-- Password Field -->
         <div class="mb-3">
           <div class="d-flex justify-content-between align-items-center mb-1">
             <label for="login-password" class="form-label fw-semibold mb-0">Password</label>
@@ -63,15 +60,11 @@
 
       </form>
 
-      <!-- Divider -->
       <div class="divider-or my-4 text-center text-muted small" role="separator">
         <span>or</span>
       </div>
 
-      <!-- Social Logins -->
-     <!-- Social Logins -->
 <div class="d-grid gap-2">
-  <!-- Le SDK Google injecte son propre bouton ici -->
   <div #googleBtn></div>
 
   <button type="button" class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2" (click)="loginWithFacebook()">
@@ -80,7 +73,6 @@
   </button>
 </div>
 
-      <!-- Sign Up Footer Link -->
       <p class="text-center text-muted small mt-4 mb-0">
         Don’t have an account?
         <a [routerLink]="['/signup']" class="text-brand fw-bold text-decoration-none ms-1">Create an account</a>

@@ -74,7 +74,6 @@
     --bs-table-border-color: rgba($tasky-green-700, 0.35);
   }
 
-    // --- Homepage ---
   .hero-section,
   .footer-tasky {
     background-color: #242526 !important;
@@ -103,5 +102,45 @@
 
   .text-muted {
     color: rgba(#e6f4ea, 0.6) !important;
+  }
+                      ---
+  .logic-strip,
+  .features-section {
+    background-color: #242526 !important;
+    border-color: rgba($tasky-green-700, 0.4);
+  }
+
+  .how-section,
+  .plans-section {
+    background-color: #1b1c1d !important;
+  }
+
+  .axis-demo,
+  .plan-card {
+    background-color: #2f3031;
+    border-color: rgba($tasky-green-700, 0.4);
+  }
+
+  .board-preview-mini-card {
+    background-color: #2f3031;
+  }
+
+  .plan-card-highlight {
+    border-color: $tasky-green-500;
+  }
+
+  .pill-todo,
+  .pill-doing {
+    color: #1b1c1d;
+  }
+
+  .cta-band {
+    background: $tasky-green-900;
+  }
+
+  .footer-link {
+    color: rgba(#e6f4ea, 0.75);
+
+    &:hover { color: $tasky-green-300; }
   }
 }

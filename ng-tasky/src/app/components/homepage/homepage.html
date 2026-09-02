@@ -1,10 +1,13 @@
 <nav class="navbar-tasky d-flex align-items-center justify-content-between px-4 py-3">
   <div class="d-flex align-items-center gap-2">
-    <img src="/logo.png" alt="Logo" class="logo" width="28" height="28">
-    <h4 class="fw-bold mb-0">Tasky</h4>
+    <img src="/logo.png" alt="Logo" class="logo" width="26" height="26">
+    <h4 class="fw-bold mb-0 brand-name">Tasky</h4>
   </div>
   <div class="d-flex align-items-center gap-3">
-  <button
+    <a href="#how-it-works" class="nav-link-quiet d-none d-md-inline">How it works</a>
+    <a href="#features" class="nav-link-quiet d-none d-md-inline">Features</a>
+    <a href="#plans" class="nav-link-quiet d-none d-md-inline">Pricing</a>
+    <button
       type="button"
       class="btn btn-sm btn-outline-secondary theme-toggle"
       (click)="themeService.toggle()"
@@ -12,45 +15,42 @@
     >
       <i class="fa-solid" [class.fa-moon]="themeService.theme() === 'light'" [class.fa-sun]="themeService.theme() === 'dark'"></i>
     </button>
-      <a routerLink="/login" class="btn btn-outline-dark btn-sm">Log in</a>
-      <a routerLink="/signup" class="btn btn-dark btn-sm">Sign up</a>
-    
+    <a routerLink="/login" class="btn btn-outline-dark btn-sm">Log in</a>
+    <a routerLink="/signup" class="btn btn-dark btn-sm">Sign up</a>
   </div>
 </nav>
 
-<div class="hero-section">
+<div class="hero-section bg-gradient-landing">
   <div class="container">
     <div class="row align-items-center gy-5">
 
-      <!-- Colonne texte -->
       <div class="col-lg-6">
-        <span class="eyebrow-badge">
+        <span class="eyebrow-badge bg-brand-subtle text-brand">
           <i class="fa-sharp fa-regular fa-star me-1"></i> Trusted by thousands of users
         </span>
         <h1 class="hero-title mt-3">
-          Organize your work with <br>
-          <span class="text-brand">Tasky</span>
+          Organize your work with <span class="text-brand">Tasky</span>
         </h1>
         <p class="text-muted hero-subtitle">
-          Tasky is a task management application that helps you organize your work
-          and increase productivity. Create, manage, and track your tasks in one place.
+          Tasky is a collaborative task manager: boards for every project, roles for every
+          teammate, and a Kanban flow that keeps status and priority separate — so nothing
+          gets lost between "started" and "done."
         </p>
         <div class="d-flex gap-2 mt-4">
-          <button type="button" class="btn btn-dark btn-lg px-4" (click)="OpenSignup()">
+          <button type="button" class="btn btn-primary btn-lg px-4 shadow-brand" (click)="OpenSignup()">
             Get Started Free
           </button>
-          <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="Openpricing()">
+          <button type="button" class="btn btn-outline-brand btn-lg px-4" (click)="Openpricing()">
             View Pricing
           </button>
         </div>
         <div class="hero-checks mt-4">
-          <p><i class="fa-solid fa-check text-success me-2"></i>Free forever</p>
-          <p><i class="fa-solid fa-check text-success me-2"></i>No credit card required</p>
-          <p><i class="fa-solid fa-check text-success me-2"></i>Setup in minutes</p>
+          <p><i class="fa-solid fa-check text-brand me-2"></i>Free forever</p>
+          <p><i class="fa-solid fa-check text-brand me-2"></i>No credit card required</p>
+          <p><i class="fa-solid fa-check text-brand me-2"></i>Setup in minutes</p>
         </div>
       </div>
 
-      <!-- Colonne preview du board -->
       <div class="col-lg-6">
         <div class="board-preview-card">
           <div class="board-preview-header">
@@ -85,13 +85,219 @@
   </div>
 </div>
 
-<footer class="footer-tasky">
-  <div class="container text-center">
-    <h2 class="fw-bold">Everything you need to stay organized</h2>
-    <p class="text-muted mb-2">&copy; 2026 Tasky. All rights reserved.</p>
-    <div class="footer-links">
-      <a routerLink="/policy-privacy" class="text-muted">Privacy Policy</a>
-      <a routerLink="/terms" class="text-muted ms-3">Terms of Service</a>
+<div class="logic-strip">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-5">
+        <h2 class="section-title">Two axes, not one big list</h2>
+        <p class="text-muted section-copy">
+          Most task apps mix status and type into a single tag. Tasky keeps them apart:
+          a <strong>list</strong> tells you where a task stands, a <strong>category</strong>
+          tells you what kind of work it is. A task can move columns without losing its labels.
+        </p>
+      </div>
+      <div class="col-lg-7">
+        <div class="axis-demo">
+          <div class="axis-row">
+            <span class="axis-label">Progress</span>
+            <span class="pill pill-todo">To Do</span>
+            <span class="pill pill-doing">In Progress</span>
+            <span class="pill bg-brand">Done</span>
+          </div>
+          <div class="axis-row">
+            <span class="axis-label">Category</span>
+            <span class="pill pill-tag" style="--tag-color:#E7A33D">Design</span>
+            <span class="pill pill-tag" style="--tag-color:#DC5B5B">Urgent</span>
+            <span class="pill pill-tag" style="--tag-color:#4C6FE7">Bug</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<div class="how-section" id="how-it-works">
+  <div class="container">
+    <h2 class="section-title text-center">How it works</h2>
+    <p class="text-muted section-copy text-center mx-auto">
+      From a blank board to a moving Kanban in three steps.
+    </p>
+
+    <div class="row gy-4 mt-4">
+      <div class="col-md-4">
+        <div class="step-block">
+          <span class="step-number text-brand">01</span>
+          <h3 class="step-title">Create a board</h3>
+          <p class="text-muted step-copy">
+            Spin up a workspace for a project in seconds. Default lists — To Do, In Progress,
+            Done — are ready immediately, and you stay the owner.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-block">
+          <span class="step-number text-brand">02</span>
+          <h3 class="step-title">Invite your team</h3>
+          <p class="text-muted step-copy">
+            Send an email invitation and pick a role: admin, member, or observer. Access
+            is scoped per board, so no one sees work they weren't invited to.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-block">
+          <span class="step-number text-brand">03</span>
+          <h3 class="step-title">Drag, drop, done</h3>
+          <p class="text-muted step-copy">
+            Move cards across columns as work progresses. The order and status are saved
+            instantly, for every collaborator, every time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="features-section" id="features">
+  <div class="container">
+    <h2 class="section-title text-center">Everything a small team actually needs</h2>
+
+    <div class="feature-list mt-5">
+
+      <div class="feature-row">
+        <div class="feature-icon bg-brand-subtle text-brand"><i class="fa-solid fa-diagram-project"></i></div>
+        <div>
+          <h3 class="feature-title">Boards with real permissions</h3>
+          <p class="text-muted feature-copy">
+            Owners, admins, members, and observers each see and do exactly what their role
+            allows. Deleting a board stays reserved for its owner, even if an admin has
+            every other privilege.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row feature-row-reverse">
+        <div class="feature-icon bg-brand-subtle text-brand"><i class="fa-solid fa-arrows-up-down-left-right"></i></div>
+        <div>
+          <h3 class="feature-title">Kanban drag & drop</h3>
+          <p class="text-muted feature-copy">
+            Reorder tasks inside a column or move them to another with a single gesture.
+            Built on Angular CDK, so it feels instant on every screen size.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <div class="feature-icon bg-brand-subtle text-brand"><i class="fa-solid fa-envelope-open-text"></i></div>
+        <div>
+          <h3 class="feature-title">Invitations that just work</h3>
+          <p class="text-muted feature-copy">
+            Add a teammate by email and they get a secure invite link. No shared passwords,
+            no guessing who has access to what.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row feature-row-reverse">
+        <div class="feature-icon bg-brand-subtle text-brand"><i class="fa-solid fa-lock"></i></div>
+        <div>
+          <h3 class="feature-title">Sign in your way</h3>
+          <p class="text-muted feature-copy">
+            Email and password, Google, or Facebook — every session is backed by a signed
+            token, checked on every protected request.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <div class="feature-icon bg-brand-subtle text-brand"><i class="fa-solid fa-circle-half-stroke"></i></div>
+        <div>
+          <h3 class="feature-title">Light or dark, your call</h3>
+          <p class="text-muted feature-copy">
+            Switch themes from the navbar at any time. The whole app follows, not just
+            this page.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="plans-section" id="plans">
+  <div class="container">
+    <h2 class="section-title text-center">A plan for every stage</h2>
+    <p class="text-muted section-copy text-center mx-auto">
+      Start free. Upgrade the day you actually need more room.
+    </p>
+
+    <div class="row gy-4 mt-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="plan-card">
+          <p class="plan-name">Free</p>
+          <p class="plan-price">$0</p>
+          <p class="text-muted plan-copy">Unlimited personal boards and the full Kanban flow.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="plan-card plan-card-highlight border-brand shadow-brand">
+          <p class="plan-name">Pro</p>
+          <p class="plan-price">For growing teams</p>
+          <p class="text-muted plan-copy">More collaborators per board and priority support.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="plan-card">
+          <p class="plan-name">Enterprise</p>
+          <p class="plan-price">Custom</p>
+          <p class="text-muted plan-copy">Advanced roles and controls across every board.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <button type="button" class="btn btn-outline-brand px-4" (click)="Openpricing()">
+        Compare plans in detail
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="container text-center">
+    <h2 class="cta-title">Bring order to your work today</h2>
+    <p class="cta-copy">Free forever on the essentials. No card required to start.</p>
+    <button type="button" class="btn btn-light btn-lg px-4" (click)="OpenSignup()">
+      Get Started Free
+    </button>
+  </div>
+</div>
+
+<footer class="footer-tasky">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-md-4">
+        <h4 class="fw-bold mb-2 brand-name">Tasky</h4>
+        <p class="text-muted footer-tagline">Boards, roles, and a Kanban that keeps status and category apart.</p>
+      </div>
+      <div class="col-6 col-md-2">
+        <p class="footer-heading">Product</p>
+        <a href="#how-it-works" class="footer-link">How it works</a>
+        <a href="#features" class="footer-link">Features</a>
+        <a href="#plans" class="footer-link">Pricing</a>
+      </div>
+      <div class="col-6 col-md-2">
+        <p class="footer-heading">Account</p>
+        <a routerLink="/login" class="footer-link">Log in</a>
+        <a routerLink="/signup" class="footer-link">Sign up</a>
+      </div>
+      <div class="col-6 col-md-2">
+        <p class="footer-heading">Legal</p>
+        <a routerLink="/policy-privacy" class="footer-link">Privacy Policy</a>
+        <a routerLink="/terms" class="footer-link">Terms of Service</a>
+      </div>
+    </div>
+    <hr class="footer-rule">
+    <p class="text-muted text-center footer-copyright mb-0">&copy; 2026 Tasky. All rights reserved.</p>
   </div>
 </footer>

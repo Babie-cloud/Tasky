@@ -1,43 +1,67 @@
+@use '../../../../public/styles/variables' as *;
+@use '../../../../public/styles/colors' as *;
+
+$stage-todo:  $tasky-text-muted;
+$stage-doing: #f0a202;
+
+.navbar-tasky {
+  border-bottom: 1px solid rgba($tasky-green-200, 0.5);
+  background: $tasky-surface;
+}
+
+.brand-name { font-size: 1.15rem; letter-spacing: -0.01em; }
+
+.nav-link-quiet {
+  font-size: 0.9rem;
+  color: $tasky-text;
+  opacity: 0.65;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+
+  &:hover { opacity: 1; }
+}
+
 .hero-section {
-  padding: 5rem 0;
-  background: #fff;
+  padding: 4rem 0 5rem;
 }
 
 .hero-title {
-  font-size: 2.75rem;
-  font-weight: 800;
-  line-height: 1.15;
+  font-size: clamp(2rem, 3.4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: $tasky-text;
 }
 
 .hero-subtitle {
-  max-width: 480px;
-  margin-top: 1rem;
+  max-width: 460px;
+  margin-top: 0.85rem;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .eyebrow-badge {
   display: inline-flex;
   align-items: center;
-  font-size: 0.8rem;
-  background: rgba(13, 110, 253, 0.08);
-  color: var(--bs-primary, #0d6efd);
+  font-size: 0.78rem;
   padding: 0.35rem 0.75rem;
-  border-radius: 999px;
+  border-radius: $border-radius-pill;
   font-weight: 600;
 }
 
 .hero-checks p {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   margin-bottom: 0.4rem;
+  opacity: 0.85;
 }
 
-/* Preview du board, flottant, comme sur l'image 2 */
 .board-preview-card {
   position: relative;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  background: $tasky-surface;
+  border-radius: $border-radius-lg;
+  box-shadow: $box-shadow-lg;
   padding: 1.25rem;
-  max-width: 460px;
+  max-width: 440px;
   margin-left: auto;
 }
 
@@ -46,13 +70,14 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
 .board-dots { display: flex; gap: 6px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .dot-red { background: #ff5f57; }
 .dot-yellow { background: #febc2e; }
-.dot-green { background: #28c840; }
+.dot-green { background: $tasky-primary; }
 
 .board-preview-columns {
   display: grid;
@@ -61,19 +86,19 @@
 }
 
 .board-preview-col-title {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  color: #6c757d;
+  color: $tasky-text-muted;
   margin-bottom: 0.5rem;
 }
 
 .board-preview-mini-card {
-  background: #f8f9fa;
-  border-radius: 8px;
+  background: $tasky-surface-alt;
+  border-radius: $border-radius-sm;
   padding: 0.5rem 0.6rem;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   margin-bottom: 0.5rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .board-preview-fab {
@@ -82,11 +107,165 @@
   right: -18px;
   width: 42px;
   height: 42px;
-  background: #28c840;
+  background: $tasky-primary;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  box-shadow: 0 6px 16px rgba(40, 200, 64, 0.4);
+  color: $tasky-surface;
+  box-shadow: 0 6px 16px rgba($tasky-primary, 0.4);
 }
+
+.section-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: $tasky-text;
+}
+
+.section-copy {
+  font-size: 0.98rem;
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+.logic-strip {
+  padding: 3.5rem 0;
+  background: $tasky-surface;
+  border-top: 1px solid rgba($tasky-green-200, 0.5);
+  border-bottom: 1px solid rgba($tasky-green-200, 0.5);
+}
+
+.axis-demo {
+  background: $tasky-surface-alt;
+  border-radius: $border-radius-lg;
+  padding: 1.5rem;
+}
+
+.axis-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.axis-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: $tasky-text-muted;
+  width: 74px;
+  flex-shrink: 0;
+}
+
+.pill {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: $border-radius-pill;
+  color: $tasky-surface;
+}
+
+.pill-todo { background: $stage-todo; }
+.pill-doing { background: $stage-doing; }
+
+.pill-tag {
+  color: var(--tag-color);
+  background: color-mix(in srgb, var(--tag-color) 14%, transparent);
+}
+
+.how-section { padding: 4.5rem 0; background: $tasky-surface-alt; }
+
+.step-block { padding: 0 0.5rem; }
+
+.step-number {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.step-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; color: $tasky-text; }
+.step-copy { font-size: 0.92rem; line-height: 1.6; }
+
+.features-section { padding: 4.5rem 0; background: $tasky-surface; }
+
+.feature-list { display: flex; flex-direction: column; gap: 2rem; }
+
+.feature-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  max-width: 640px;
+}
+
+.feature-row-reverse { margin-left: auto; flex-direction: row-reverse; text-align: right; }
+
+.feature-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: $border-radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.feature-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; color: $tasky-text; }
+.feature-copy { font-size: 0.92rem; line-height: 1.6; margin-bottom: 0; }
+
+
+.plans-section { padding: 4.5rem 0; background: $tasky-surface-alt; }
+
+.plan-card {
+  background: $tasky-surface;
+  border-radius: $border-radius-lg;
+  padding: 1.75rem;
+  height: 100%;
+  border: 1px solid rgba($tasky-green-200, 0.5);
+}
+
+.plan-name { font-size: 0.85rem; font-weight: 600; color: $tasky-primary; margin-bottom: 0.4rem; }
+.plan-price { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; color: $tasky-text; }
+.plan-copy { font-size: 0.88rem; margin-bottom: 0; }
+
+.cta-band {
+  padding: 4rem 0;
+  background: $tasky-green-900;
+  color: $tasky-surface;
+}
+
+.cta-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; }
+.cta-copy { font-size: 0.95rem; opacity: 0.75; margin-bottom: 1.5rem; }
+
+.footer-tasky {
+  padding: 3.5rem 0 2rem;
+  background: $tasky-surface;
+  border-top: 1px solid rgba($tasky-green-200, 0.5);
+}
+
+.footer-tagline { font-size: 0.88rem; max-width: 260px; }
+
+.footer-heading {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $tasky-text-muted;
+  margin-bottom: 0.6rem;
+}
+
+.footer-link {
+  display: block;
+  font-size: 0.88rem;
+  color: $tasky-text;
+  opacity: 0.75;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+
+  &:hover { opacity: 1; color: $tasky-primary; }
+}
+
+.footer-rule { margin: 2.5rem 0 1.5rem; opacity: 0.1; }
+.footer-copyright { font-size: 0.82rem; }

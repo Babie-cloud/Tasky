@@ -4,3 +4,20 @@
 @use '../public/styles/components';
 @use '../public/styles/utilities';
 @use '../public/styles/dark-mode';
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+
+$font-family-sans-serif: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+
+$h1-font-size: 2.25rem; 
+$h2-font-size: 1.75rem; 
+$h3-font-size: 1.35rem;
+$h4-font-size: 1.15rem;
+
+@import 'variables';
+@import 'colors';
+@import 'utilities';
+@import 'components';
+@import 'dark-mode';
