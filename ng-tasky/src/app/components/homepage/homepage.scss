@@ -1,5 +1,5 @@
-@use '../../../../public/styles/variables' as *;
-@use '../../../../public/styles/colors' as *;
+@use '../../styles/variables' as *;
+@use '../../styles/colors' as *;
 
 $stage-todo:  $tasky-text-muted;
 $stage-doing: #f0a202;
@@ -30,7 +30,6 @@ $stage-doing: #f0a202;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.01em;
-  color: $tasky-text;
 }
 
 .hero-subtitle {
@@ -47,6 +46,9 @@ $stage-doing: #f0a202;
   padding: 0.35rem 0.75rem;
   border-radius: $border-radius-pill;
   font-weight: 600;
+  background: $tasky-primary-light;
+  color: $tasky-primary-dark;
+
 }
 
 .hero-checks p {
@@ -55,6 +57,7 @@ $stage-doing: #f0a202;
   opacity: 0.85;
 }
 
+/* Board preview */
 .board-preview-card {
   position: relative;
   background: $tasky-surface;
@@ -120,7 +123,6 @@ $stage-doing: #f0a202;
   font-size: 1.7rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: $tasky-text;
 }
 
 .section-copy {
@@ -187,7 +189,7 @@ $stage-doing: #f0a202;
   margin-bottom: 0.5rem;
 }
 
-.step-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; color: $tasky-text; }
+.step-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
 .step-copy { font-size: 0.92rem; line-height: 1.6; }
 
 .features-section { padding: 4.5rem 0; background: $tasky-surface; }
@@ -212,11 +214,12 @@ $stage-doing: #f0a202;
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
+  background: $tasky-primary-light;
+  color: $tasky-primary;
 }
 
-.feature-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; color: $tasky-text; }
+.feature-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; }
 .feature-copy { font-size: 0.92rem; line-height: 1.6; margin-bottom: 0; }
-
 
 .plans-section { padding: 4.5rem 0; background: $tasky-surface-alt; }
 
@@ -229,7 +232,7 @@ $stage-doing: #f0a202;
 }
 
 .plan-name { font-size: 0.85rem; font-weight: 600; color: $tasky-primary; margin-bottom: 0.4rem; }
-.plan-price { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; color: $tasky-text; }
+.plan-price { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
 .plan-copy { font-size: 0.88rem; margin-bottom: 0; }
 
 .cta-band {

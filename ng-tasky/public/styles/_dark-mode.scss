@@ -31,13 +31,8 @@
   }
 
   .board-preview-card {
-    background: #242526;
+    background: #242526 !important;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-  }
-
-  .board-preview-mini-card {
-    background: #242526;
-    color: #e6f4ea;
   }
 
   .example-box {
@@ -79,9 +74,13 @@
     background-color: #242526 !important;
   }
 
+  .nav-link-quiet {
+    color: #e6f4ea !important;
+  }
+
   .eyebrow-badge {
-    background: rgba($tasky-green-500, 0.15);
-    color: $tasky-green-300;
+    background: rgba($tasky-green-500, 0.15) !important;
+    color: $tasky-green-300 !important;
   }
 
   .footer-tasky {
@@ -93,7 +92,7 @@
   }
 
   .board-preview-col-title {
-    color: rgba(#e6f4ea, 0.65);
+    color: rgba(#e6f4ea, 0.65) !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -103,7 +102,7 @@
   .text-muted {
     color: rgba(#e6f4ea, 0.6) !important;
   }
-                      ---
+
   .logic-strip,
   .features-section {
     background-color: #242526 !important;
@@ -117,30 +116,40 @@
 
   .axis-demo,
   .plan-card {
-    background-color: #2f3031;
+    background-color: #2f3031 !important;
     border-color: rgba($tasky-green-700, 0.4);
   }
 
   .board-preview-mini-card {
-    background-color: #2f3031;
+    background-color: #2f3031 !important;
+    color: #e6f4ea !important;
+  }
+
+  .feature-icon {
+    background: rgba($tasky-green-500, 0.15) !important;
+    color: $tasky-green-300 !important;
+  }
+
+  .plan-name {
+    color: $tasky-green-300 !important;
   }
 
   .plan-card-highlight {
-    border-color: $tasky-green-500;
+    border-color: $tasky-green-500 !important;
   }
 
   .pill-todo,
   .pill-doing {
-    color: #1b1c1d;
+    color: #1b1c1d !important;
   }
 
   .cta-band {
-    background: $tasky-green-900;
+    background: $tasky-green-900 !important;
   }
 
   .footer-link {
-    color: rgba(#e6f4ea, 0.75);
+    color: rgba(#e6f4ea, 0.75) !important;
 
-    &:hover { color: $tasky-green-300; }
+    &:hover { color: $tasky-green-300 !important; }
   }
 }
