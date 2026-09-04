@@ -23,10 +23,19 @@ export class AcceptInvite implements OnInit {
       this.errorMessage.set('Lien invalide.');
       return;
     }
+
     this.boardService.acceptInvite(token).subscribe({
-      next: () => {
+      next: (res: any) => {
         this.status.set('success');
-        setTimeout(() => this.router.navigate(['/dashboard-user']), 1500);
+        
+        const targetBoardId = res?.boardId;
+        setTimeout(() => {
+          if (targetBoardId) {
+            this.router.navigate(['/board', targetBoardId]);
+          } else {
+            this.router.navigate(['/dashboard-user']);
+          }
+        }, 1500);
       },
       error: (err) => {
         this.status.set('error');

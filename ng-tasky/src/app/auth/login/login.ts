@@ -1,4 +1,4 @@
-import { Component, inject, signal, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, inject, signal, AfterViewInit, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ declare const FB: any;
   imports: [RouterLink, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.html',
 })
-export class Login implements AfterViewInit {
+export class Login implements OnInit, AfterViewInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -29,9 +29,15 @@ export class Login implements AfterViewInit {
 
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
+  
+  // Propriété déclarée pour éviter l'erreur TS2339
+  returnUrl: string = '/dashboard-user';
+
+  ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard-user';
+  }
 
   ngAfterViewInit(): void {
-    // Google
     if (typeof google !== 'undefined') {
       google.accounts.id.initialize({
         client_id: environment.googleClientId,
@@ -44,7 +50,6 @@ export class Login implements AfterViewInit {
       });
     }
 
-    // Facebook
     if (typeof FB !== 'undefined') {
       FB.init({ appId: environment.facebookAppId, version: 'v19.0', xfbml: false });
     }
@@ -64,8 +69,7 @@ export class Login implements AfterViewInit {
     this.authService.login({ email, password }).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard-user';
-        this.router.navigateByUrl(returnUrl);
+        this.onLoginSuccess();
       },
       error: (err) => {
         this.isSubmitting.set(false);
@@ -76,27 +80,30 @@ export class Login implements AfterViewInit {
     });
   }
 
+  handleGoogleResponse(response: any): void {
+    this.authService.loginWithGoogle(response.credential).subscribe({
+      next: () => {
+        this.onLoginSuccess();
+      },
+      error: () => this.errorMessage.set('Google authentication failed.'),
+    });
+  }
 
-handleGoogleResponse(response: any): void {
-  this.authService.loginWithGoogle(response.credential).subscribe({
-    next: () => {
-      this.router.navigateByUrl('/dashboard-user');
-    },
-    error: () => this.errorMessage.set('Google authentication failed.'),
-  });
-}
+  loginWithFacebook(): void {
+    FB.login((response: any) => {
+      if (response.authResponse) {
+        const { accessToken, userID } = response.authResponse;
+        this.authService.loginWithFacebook(accessToken, userID).subscribe({
+          next: () => {
+            this.onLoginSuccess();
+          },
+          error: () => this.errorMessage.set('Facebook authentication failed.'),
+        });
+      }
+    }, { scope: 'email' });
+  }
 
-loginWithFacebook(): void {
-  FB.login((response: any) => {
-    if (response.authResponse) {
-      const { accessToken, userID } = response.authResponse;
-      this.authService.loginWithFacebook(accessToken, userID).subscribe({
-        next: () => {
-          this.router.navigateByUrl('/dashboard-user');
-        },
-        error: () => this.errorMessage.set('Facebook authentication failed.'),
-      });
-    }
-  }, { scope: 'email' });
-}
+  onLoginSuccess(): void {
+    this.router.navigateByUrl(this.returnUrl);
+  }
 }

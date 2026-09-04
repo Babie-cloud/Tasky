@@ -74,9 +74,9 @@
 </div>
 
       <p class="text-center text-muted small mt-4 mb-0">
-        Don’t have an account?
-        <a [routerLink]="['/signup']" class="text-brand fw-bold text-decoration-none ms-1">Create an account</a>
-      </p>
+  Don’t have an account?
+  <a [routerLink]="['/signup']" [queryParams]="{ returnUrl: returnUrl }" class="text-brand fw-bold text-decoration-none ms-1">Create an account</a>
+</p>
 
     </div>
   </div>

@@ -1,5 +1,5 @@
 import { Component, inject, signal, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -25,6 +25,8 @@ export class Signup implements AfterViewInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  // Injecté pour résoudre l'erreur TS2551
+  private route = inject(ActivatedRoute);
 
   @ViewChild('googleBtn') googleBtn!: ElementRef;
 
@@ -82,7 +84,7 @@ export class Signup implements AfterViewInit {
       .subscribe({
         next: () => {
           this.isSubmitting.set(false);
-          this.router.navigate(['/dashboard-user']);
+          this.onSignupSuccess();
         },
         error: (err) => {
           this.isSubmitting.set(false);
@@ -99,7 +101,7 @@ export class Signup implements AfterViewInit {
     this.authService.loginWithGoogle(response.credential).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('/dashboard-user');
+        this.onSignupSuccess();
       },
       error: () => this.errorMessage.set('Google authentication failed.'),
     });
@@ -112,11 +114,16 @@ export class Signup implements AfterViewInit {
         this.authService.loginWithFacebook(accessToken, userID).subscribe({
           next: (res: any) => {
             localStorage.setItem('token', res.token);
-            this.router.navigateByUrl('/dashboard-user');
+            this.onSignupSuccess();
           },
           error: () => this.errorMessage.set('Facebook authentication failed.'),
         });
       }
     }, { scope: 'email' });
+  }
+
+  onSignupSuccess(): void {
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard-user';
+    this.router.navigateByUrl(returnUrl);
   }
 }
