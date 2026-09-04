@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/colors' as *;
+@use '../../../../public/styles/variables' as *;
+@use '../../../../public/styles/colors' as *;
 
 $stage-todo:  $tasky-text-muted;
 $stage-doing: #f0a202;
@@ -48,7 +48,6 @@ $stage-doing: #f0a202;
   font-weight: 600;
   background: $tasky-primary-light;
   color: $tasky-primary-dark;
-
 }
 
 .hero-checks p {
@@ -130,7 +129,6 @@ $stage-doing: #f0a202;
   max-width: 560px;
   line-height: 1.6;
 }
-
 .logic-strip {
   padding: 3.5rem 0;
   background: $tasky-surface;
