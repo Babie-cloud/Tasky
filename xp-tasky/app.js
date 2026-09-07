@@ -18,7 +18,6 @@ var listsRouter = require('./routes/lists');
 var billingRouter = require('./routes/billing');
 var stripeWebhookRouter = require('./routes/stripe-webhook');
 var categoriesRouter = require('./routes/categories');
-
 const app = express();
 
 const allowedOrigins = [
