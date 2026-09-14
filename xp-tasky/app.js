@@ -2,7 +2,6 @@ require('dotenv').config();
 
 var createError = require('http-errors');
 var express = require('express');
-const serverless = require('serverless-http');
 const path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -20,17 +19,43 @@ var stripeWebhookRouter = require('./routes/stripe-webhook');
 var categoriesRouter = require('./routes/categories');
 const app = express();
 
-const allowedOrigins = [
+function parseOriginList(value) {
+  if (!value) return [];
+  return value.split(',').map((entry) => entry.trim()).filter(Boolean);
+}
+
+const allowedOrigins = new Set([
   'http://localhost:4200',
-  'https://peppy-sunburst-59adb5.netlify.app'
-];
+  'https://peppy-sunburst-59adb5.netlify.app',
+  ...parseOriginList(process.env.FRONTEND_URL),
+  ...parseOriginList(process.env.ALLOWED_ORIGINS),
+]);
+
+if (process.env.URL) allowedOrigins.add(process.env.URL.replace(/\/$/, ''));
+if (process.env.DEPLOY_PRIME_URL) {
+  allowedOrigins.add(process.env.DEPLOY_PRIME_URL.replace(/\/$/, ''));
+}
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (allowedOrigins.has(origin)) return true;
+  try {
+    const { hostname, protocol } = new URL(origin);
+    if (protocol !== 'http:' && protocol !== 'https:') return false;
+    if (hostname === 'localhost' || hostname.endsWith('.netlify.app')) return true;
+  } catch {
+    return false;
+  }
+  return false;
+}
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (isAllowedOrigin(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Origine non autorisée par CORS'));
+      console.warn('[CORS] Origine refusée:', origin);
+      callback(null, false);
     }
   },
   credentials: true,
@@ -77,4 +102,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-module.exports.handler = serverless(app);

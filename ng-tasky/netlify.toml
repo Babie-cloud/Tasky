@@ -1,7 +1,10 @@
 [build]
-  command = "cd ng-tasky && npm ci && npm run build && cd ../xp-tasky && npm ci"
+  command = "cd ng-tasky && npm ci && npm run build && test -f dist/ng-tasky/browser/index.html && cd ../xp-tasky && npm ci"
   publish = "ng-tasky/dist/ng-tasky/browser"
   functions = "xp-tasky/netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
 
 [functions]
   node_bundler = "esbuild"

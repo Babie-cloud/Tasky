@@ -12,6 +12,10 @@ const User = require('../models/User');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const JWT_SECRET = process.env.JWT_SECRET;
 
+if (!JWT_SECRET) {
+  console.error('[Auth] JWT_SECRET est manquant : connexion et inscription impossibles.');
+}
+
 // Configuration unique du transporteur Email (Nodemailer)
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
@@ -65,7 +69,7 @@ router.post('/register', async (req, res) => {
     });
 } catch (err) {
   console.error('[Register Error]:', err);
-  return res.status(500).json({ message: 'Server error.', debug: err.message, stack: err.stack });
+  return res.status(500).json({ message: 'Server error.' });
 }
 });
 
