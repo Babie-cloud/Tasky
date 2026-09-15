@@ -40,9 +40,9 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  background-color: rgba($tasky-surface, 0.92);
+  background-color: rgba(var(--tasky-surface-rgb), 0.92);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba($tasky-green-200, 0.6);
+  border: 1px solid var(--tasky-border);
   border-radius: 1.25rem;
 }
 
@@ -74,7 +74,7 @@
   &::after {
     content: '';
     flex: 1;
-    border-top: 1px solid rgba($tasky-green-300, 0.45);
+    border-top: 1px solid var(--tasky-border);
   }
 
   span {
@@ -82,7 +82,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: $tasky-text-muted;
+    color: var(--tasky-text-muted);
   }
 }
 
@@ -120,8 +120,8 @@
   max-width: 32rem;
   margin: 0 auto;
   padding: clamp(1.25rem, 4vw, 2rem);
-  background-color: rgba($tasky-surface, 0.92);
-  border: 1px solid rgba($tasky-green-200, 0.6);
+  background-color: rgba(var(--tasky-surface-rgb), 0.92);
+  border: 1px solid var(--tasky-border);
   border-radius: 1.25rem;
   box-shadow: 0 10px 25px rgba($tasky-primary, 0.1);
 }
@@ -144,16 +144,16 @@
 }
 
 .Form-group label {
-  color: $tasky-text;
+  color: var(--tasky-text);
   font-size: 0.9rem;
   font-weight: 600;
 }
 
 .Form-group input,
 .contact-form input {
-  background-color: $tasky-surface-alt;
-  color: $tasky-text;
-  border: 1px solid rgba($tasky-green-300, 0.55);
+  background-color: var(--tasky-surface-alt);
+  color: var(--tasky-text);
+  border: 1px solid var(--tasky-border);
   border-radius: 0.75rem;
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
@@ -161,14 +161,14 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &::placeholder {
-    color: rgba($tasky-text-muted, 0.75);
+    color: var(--tasky-text-muted);
   }
 
   &:focus {
     border-color: $tasky-primary;
     outline: none;
     box-shadow: 0 0 0 0.2rem rgba($tasky-primary, 0.15);
-    background-color: $tasky-surface;
+    background-color: var(--tasky-surface);
   }
 }
 
@@ -176,7 +176,7 @@
   text-align: center;
   margin-top: 0.75rem;
   font-size: 0.9rem;
-  color: $tasky-text-muted;
+  color: var(--tasky-text-muted);
 
   a {
     color: $tasky-primary;

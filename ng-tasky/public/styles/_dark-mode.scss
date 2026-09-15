@@ -1,28 +1,22 @@
 @use './colors' as *;
 
 [data-bs-theme='dark'] {
-  --bs-body-bg: #242526 !important;
-  --bs-body-color: #e6f4ea;
+  --tasky-surface:       #242526;
+  --tasky-surface-rgb:   36, 37, 38;
+  --tasky-surface-alt:   #2f3031;
+
+  --tasky-text:          #e6f4ea;
+  --tasky-text-muted:    #{rgba(#e6f4ea, 0.6)};
+
+  --tasky-border:        #{rgba($tasky-green-700, 0.45)};
+
+  --tasky-primary-light: #{rgba($tasky-green-500, 0.15)};
+
+  --bs-body-bg: var(--tasky-surface) !important;
+  --bs-body-color: var(--tasky-text);
 
   .auth-wrapper {
-    background: #242526 !important;
-  }
-
-  .auth-card,
-  .contact-form-container {
-    background-color: #242526 !important;
-    border-color: rgba($tasky-green-700, 0.5);
-  }
-
-  .Form-group input,
-  .contact-form input {
-    background-color: #242526;
-    color: #e6f4ea;
-    border-color: rgba($tasky-green-700, 0.6);
-
-    &::placeholder {
-      color: rgba(#e6f4ea, 0.55);
-    }
+    background: var(--tasky-surface) !important;
   }
 
   .stat-card {
@@ -40,12 +34,7 @@
     color: #e6f4ea;
   }
 
-  .divider-or {
-    &::before, &::after {
-      border-top-color: rgba($tasky-green-700, 0.45);
-    }
-  }
-   .navbar-tasky {
+  .navbar-tasky {
     background-color: #242526 !important;
     border-bottom-color: rgba($tasky-green-700, 0.4);
   }

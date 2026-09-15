@@ -47,14 +47,14 @@
 .btn-outline-brand {
   color: $tasky-primary;
   border: 1.5px solid rgba($tasky-primary, 0.45);
-  background-color: rgba($tasky-surface, 0.85);
+  background-color: rgba(var(--tasky-surface-rgb), 0.85);
   font-weight: 600;
   border-radius: 0.75rem;
   padding-block: 0.65rem;
 
   &:hover,
   &:focus {
-    color: $tasky-surface;
+    color: var(--tasky-surface);
     background-color: $tasky-primary;
     border-color: $tasky-primary;
   }

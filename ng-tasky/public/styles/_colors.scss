@@ -1,4 +1,3 @@
-// Verts Tasky
 $tasky-green-50:  #ecfdf3;
 $tasky-green-100: #d1fae0;
 $tasky-green-200: #a7f3c8;
@@ -26,3 +25,20 @@ $tasky-gradient-landing: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
 
 $tasky-bubble-1: rgba($tasky-green-400, 0.25);
 $tasky-bubble-2: rgba($tasky-green-300, 0.20);
+
+
+:root {
+  --tasky-surface:       #{$tasky-surface};
+  --tasky-surface-rgb:   255, 255, 255; 
+  --tasky-surface-alt:   #{$tasky-surface-alt};
+
+  --tasky-text:          #{$tasky-text};
+  --tasky-text-muted:    #{$tasky-text-muted};
+
+  --tasky-border:        #{rgba($tasky-green-300, 0.55)};
+
+  --tasky-primary:       #{$tasky-primary};
+  --tasky-primary-hover: #{$tasky-primary-hover};
+  --tasky-primary-light: #{$tasky-primary-light};
+  --tasky-primary-dark:  #{$tasky-primary-dark};
+}
