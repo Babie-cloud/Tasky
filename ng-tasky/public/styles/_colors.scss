@@ -19,13 +19,11 @@ $tasky-text-muted:  #6b7280;
 $tasky-surface:     #ffffff;
 $tasky-surface-alt: #f9fafb;
 
-// Dégradés doux harmonisés avec la charte verte
 $tasky-gradient-auth:    linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
 $tasky-gradient-landing: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
 
 $tasky-bubble-1: rgba($tasky-green-400, 0.25);
 $tasky-bubble-2: rgba($tasky-green-300, 0.20);
-
 
 :root {
   --tasky-surface:       #{$tasky-surface};

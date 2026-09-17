@@ -1,5 +1,9 @@
 @use './colors' as *;
 
+.pricing {
+  background: $tasky-gradient-landing;
+}
+
 .auth-wrapper {
   min-height: 100vh;
   display: flex;
