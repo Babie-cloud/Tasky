@@ -4,16 +4,15 @@
     <p class="text-muted small mb-0">Glissez-déposez les tâches pour changer leur statut.</p>
   </div>
   <div class="d-flex gap-2">
-    <button type="button" class="btn btn-dark btn-sm" [routerLink]="['/board', board()?._id, 'add-task']">
-  <i class="fa-solid fa-plus me-1"></i> Ajouter une tâche
-</button>
-<button type="button" class="btn btn-outline-dark btn-sm" (click)="showCategoryModal.set(true)">
-  <i class="fa-solid fa-tags me-1"></i> Catégories
-</button>
-    <button type="button" class="btn btn-outline-dark btn-sm" (click)="showInviteModal.set(true)">
+    <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/board', board()?._id, 'add-task']">
+      <i class="fa-solid fa-plus me-1"></i> Ajouter une tâche
+    </button>
+    <button type="button" class="btn btn-outline-brand btn-sm" (click)="showCategoryModal.set(true)">
+      <i class="fa-solid fa-tags me-1"></i> Catégories
+    </button>
+    <button type="button" class="btn btn-outline-brand btn-sm" (click)="showInviteModal.set(true)">
       <i class="fa-solid fa-user-plus me-1"></i> Inviter
     </button>
-    
   </div>
 </div>
 
@@ -49,7 +48,7 @@
 </div>
 
 <!-- Filtres -->
-<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+<div class="board-toolbar d-flex flex-wrap gap-2 align-items-center mb-3">
   <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="filterDueStatus">
     <option value="all">Toutes les échéances</option>
     <option value="overdue">En retard</option>
@@ -64,7 +63,6 @@
         <option [value]="member.user._id">{{ member.user.first_name || member.email }}</option>
       }
     }
-    
   </select>
 
   <div class="input-group input-group-sm" style="width: 220px;">
@@ -84,12 +82,12 @@
           cdkDropList
           [cdkDropListData]="tasksOf(list._id)"
           [cdkDropListConnectedTo]="connectedLists()"
-          class="example-list"
+          class="task-list"
           (cdkDropListDropped)="drop($event, list._id)"
         >
           @for (task of tasksOf(list._id); track task._id) {
             @if (taskVisible(task)) {
-              <div class="example-box d-flex flex-column gap-1" cdkDrag (click)="openTask(task)">
+              <div class="task-card d-flex flex-column gap-1" cdkDrag (click)="openTask(task)">
                 <div class="d-flex justify-content-between align-items-start">
                   <span>{{ task.title }}</span>
                   <button
@@ -106,11 +104,13 @@
                     <span></span>
                   }
                   @if (assigneeInitials(task); as initials) {
-                    <span class="badge rounded-circle bg-dark" title="Assignée">{{ initials }}</span>
+                    <span class="avatar-chip" title="Assignée">{{ initials }}</span>
                   }
                 </div>
               </div>
             }
+          } @empty {
+            <p class="task-list-empty">Dépose une tâche ici</p>
           }
         </div>
 
@@ -119,7 +119,7 @@
   }
 
   <div class="col-md-4">
-    <div class="board-column h-100">
+    <div class="board-column board-column-new h-100">
       <p class="fw-bold mb-2">+ Nouvelle liste</p>
       <input
         type="text"
@@ -128,7 +128,7 @@
         [(ngModel)]="newListTitle"
         (keyup.enter)="addList()"
       />
-      <button type="button" class="btn btn-sm btn-outline-dark w-100" (click)="addList()">
+      <button type="button" class="btn btn-sm btn-outline-brand w-100" (click)="addList()">
         <i class="fa-solid fa-plus me-1"></i> Ajouter une liste
       </button>
     </div>
@@ -144,7 +144,7 @@
     <div class="modal-content-custom" (click)="$event.stopPropagation()">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h6 class="fw-bold mb-0">Catégories du tableau</h6>
-        <button class="btn btn-sm btn-light" (click)="showCategoryModal.set(false)">
+        <button class="btn btn-sm btn-icon-ghost" (click)="showCategoryModal.set(false)">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -161,4 +161,3 @@
   (updated)="onTaskUpdated($event)"
   (deleted)="onTaskDeleted($event)"
 ></app-task-detail>
-

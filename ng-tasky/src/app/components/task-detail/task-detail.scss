@@ -1,0 +1,22 @@
+.task-detail-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1055;
+}
+
+.task-detail-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 380px;
+  max-width: 90vw;
+  z-index: 1060;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: var(--tasky-surface);
+  color: var(--tasky-text);
+  border-left: 1px solid var(--tasky-border);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+}

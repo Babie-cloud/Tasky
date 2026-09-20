@@ -1,5 +1,15 @@
 @use '../public/styles/colors' as *;
 
+// ------------------------------------------------------------------
+// Configuration de Bootstrap.
+// ⚠️ On n'utilise PLUS _bootstrap.scss / _variables.scss : chaîner
+// les partials Bootstrap un par un via @use n'est pas fiable (chaque
+// fichier a son propre scope isolé, ce qui casse des mixins internes
+// à Bootstrap comme _assert-ascending). La méthode officiellement
+// supportée est de configurer bootstrap/scss/bootstrap directement
+// avec with(...). Toutes les variables ci-dessous remplacent
+// l'ancien _variables.scss.
+// ------------------------------------------------------------------
 @use 'bootstrap/scss/bootstrap' with (
   $primary:    $tasky-primary,
   $success:    $tasky-green-500,
@@ -42,6 +52,8 @@
   $box-shadow-lg: 0 15px 35px rgba($tasky-primary, 0.12)
 );
 
+// Classes utilitaires et composants Tasky (ne touchent pas à la
+// config Bootstrap, donc peuvent être chargés après sans problème).
 @use '../public/styles/utilities';
 @use '../public/styles/components';
 @use '../public/styles/dark-mode';

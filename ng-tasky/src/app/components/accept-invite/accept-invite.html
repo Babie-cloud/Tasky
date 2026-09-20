@@ -1,11 +1,25 @@
-<div class="container py-5 text-center">
-  @if (status() === 'loading') {
-    <p>Validation de l'invitation...</p>
-  }
-  @if (status() === 'success') {
-    <p class="text-success">Invitation acceptée ! Redirection...</p>
-  }
-  @if (status() === 'error') {
-    <p class="text-danger">{{ errorMessage() }}</p>
-  }
+<div class="auth-wrapper">
+  <div class="auth-bubble auth-bubble-1"></div>
+  <div class="auth-bubble auth-bubble-2"></div>
+
+  <div class="auth-card p-4 p-md-5 text-center" style="max-width: 26rem;">
+    @if (status() === 'loading') {
+      <div class="spinner-border text-brand mb-3" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p class="mb-0">Validation de l'invitation...</p>
+    }
+    @if (status() === 'success') {
+      <div class="icon-circle mx-auto mb-3">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <p class="text-brand fw-semibold mb-0">Invitation acceptée ! Redirection...</p>
+    }
+    @if (status() === 'error') {
+      <div class="icon-circle icon-circle-danger mx-auto mb-3">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+      <p class="text-danger mb-0">{{ errorMessage() }}</p>
+    }
+  </div>
 </div>

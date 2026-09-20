@@ -1,35 +1,131 @@
-.stat-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1.25rem;
-  border: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+@use '../../public/styles/colors' as *;
+.dashboard-header h2 {
+  color: var(--tasky-text);
 }
 
-.stat-label { font-size: 0.85rem; color: #6c757d; margin-bottom: 0.25rem; }
-.stat-value { font-size: 1.5rem; font-weight: 700; margin: 0; }
-
-.stat-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  display: flex;
+.theme-toggle {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--tasky-border);
+  color: var(--tasky-text-muted);
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    color: $tasky-primary;
+    border-color: $tasky-primary;
+  }
+}
+
+.avatar-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tasky-surface-alt);
+  border: 1px solid var(--tasky-border);
+  color: var(--tasky-text);
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    border-color: $tasky-primary;
+    color: $tasky-primary;
+  }
+}
+
+.empty-hint {
+  max-width: 32rem;
+  line-height: 1.5;
 }
 
 .board-card {
   cursor: pointer;
-  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  background: var(--tasky-surface);
+  border: 1px solid var(--tasky-border);
+  border-radius: 1rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     transform: translateY(-3px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 0.75rem 1.5rem rgba($tasky-primary, 0.15) !important;
+    border-color: rgba($tasky-primary, 0.4);
+    outline: none;
   }
 }
 
-.border-dashed {
-  border-style: dashed !important;
+.board-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.85rem;
+  background: $tasky-green-100;
+  color: $tasky-primary-dark;
+}
+
+.col-md-4:nth-of-type(4n+2) .board-avatar { background: $tasky-green-200; }
+.col-md-4:nth-of-type(4n+3) .board-avatar { background: #fde68a; color: #78350f; }
+.col-md-4:nth-of-type(4n+4) .board-avatar { background: $tasky-primary-light; }
+
+.card-title {
+  color: var(--tasky-text);
+  font-weight: 700;
+}
+
+.board-meta {
+  display: flex;
+  align-items: center;
+}
+
+.board-card-new {
+  background: transparent;
+  border: 1.5px dashed var(--tasky-border);
+  border-radius: 1rem;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: $tasky-primary;
+  }
+}
+
+.board-avatar-ghost {
+  background: transparent;
+  border: 1.5px dashed var(--tasky-border);
+  color: var(--tasky-text-muted);
+}
+
+.board-card-skeleton {
+  height: 6.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(
+    90deg,
+    var(--tasky-surface-alt) 25%,
+    var(--tasky-border) 50%,
+    var(--tasky-surface-alt) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-card-skeleton {
+    animation: none;
+  }
 }

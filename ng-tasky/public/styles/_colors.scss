@@ -24,11 +24,12 @@ $tasky-gradient-landing: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
 
 $tasky-bubble-1: rgba($tasky-green-400, 0.25);
 $tasky-bubble-2: rgba($tasky-green-300, 0.20);
-
 :root {
-  --tasky-surface:       #{$tasky-surface};
-  --tasky-surface-rgb:   255, 255, 255; 
-  --tasky-surface-alt:   #{$tasky-surface-alt};
+  --tasky-surface:         #{$tasky-surface};
+  --tasky-surface-rgb:     255, 255, 255;
+  --tasky-surface-alt:     #{$tasky-surface-alt};
+  --tasky-surface-sunken:  #f3f4f6; 
+  --tasky-surface-raised:  #{$tasky-surface}; 
 
   --tasky-text:          #{$tasky-text};
   --tasky-text-muted:    #{$tasky-text-muted};
