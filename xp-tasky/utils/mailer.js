@@ -27,4 +27,18 @@ async function sendBoardInviteEmail({ to, boardName, inviterName, token }) {
   });
 }
 
-module.exports = { transporter, sendBoardInviteEmail };
+async function sendMemberRemovedEmail({ to, boardName, removedByName }) {
+  await transporter.sendMail({
+    from: `"Tasky" <${process.env.SMTP_USER}>`,
+    to,
+    subject: `Tu ne fais plus partie du tableau "${boardName}" sur Tasky`,
+    html: `
+      <p>Bonjour,</p>
+      <p><strong>${removedByName}</strong> t'a retiré du tableau <strong>${boardName}</strong> sur Tasky.
+      Tu n'y as donc plus accès.</p>
+      <p>Si tu penses qu'il s'agit d'une erreur, contacte directement ${removedByName}.</p>
+    `,
+  });
+}
+
+module.exports = { transporter, sendBoardInviteEmail, sendMemberRemovedEmail };

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService, UserProfile } from '../../core/services/user-service';
 import { AuthService } from '../../core/services/auth-service';
-import { BoardService, Board } from '../../core/services/board-service';
+import { BoardService, Board, BoardMember } from '../../core/services/board-service';
 import { BillingService, BillingStatus } from '../../core/services/billing-service';
 
 @Component({
@@ -25,7 +25,8 @@ export class Profile implements OnInit {
   user = signal<UserProfile | null>(null);
   boards = signal<Board[]>([]);
   isLoadingBoards = signal(false);
-  activeTab = signal<'info' | 'cards' | 'members' | 'billing'>('info');
+  activeTab = signal<'info' | 'cards' | 'myBoards' | 'team' | 'billing'>('info');
+  isRemovingMember = signal<string | null>(null);
 
   billingStatus = signal<BillingStatus | null>(null);
   isLoadingBilling = signal(false);
@@ -76,9 +77,9 @@ export class Profile implements OnInit {
     }
   }
 
-  setTab(tab: 'info' | 'cards' | 'members' | 'billing'): void {
+  setTab(tab: 'info' | 'cards' | 'myBoards' | 'team' | 'billing'): void {
     this.activeTab.set(tab);
-    if (tab === 'members') {
+    if (tab === 'myBoards' || tab === 'team') {
       this.loadBoards();
     }
     if (tab === 'billing') {
@@ -125,6 +126,10 @@ export class Profile implements OnInit {
       },
       error: () => this.isLoadingBoards.set(false),
     });
+  }
+
+  ownedBoards(): Board[] {
+    return this.boards().filter((b) => this.isOwnerOf(b));
   }
 
   saveProfile(): void {
@@ -176,6 +181,37 @@ export class Profile implements OnInit {
       default:
         return '';
     }
+  }
+
+  memberInitials(member: BoardMember): string {
+    const first = member.user?.first_name?.[0] || member.email?.[0] || '?';
+    const last = member.user?.last_name?.[0] || '';
+    return (first + last).toUpperCase();
+  }
+  deactivateMember(board: Board, member: BoardMember): void {
+    const label = member.user?.first_name || member.email;
+    const confirmed = window.confirm(
+      `Retirer ${label} du tableau "${board.name}" ? Un email lui sera envoyé pour l'en informer.`
+    );
+    if (!confirmed) return;
+
+    this.isRemovingMember.set(member._id);
+    this.boardService.removeMember(board._id, member._id).subscribe({
+      next: () => {
+        this.boards.update((boards) =>
+          boards.map((b) =>
+            b._id === board._id
+              ? { ...b, members: b.members.filter((m) => m._id !== member._id) }
+              : b
+          )
+        );
+        this.isRemovingMember.set(null);
+      },
+      error: () => {
+        this.isRemovingMember.set(null);
+        window.alert("Impossible de retirer ce membre pour l'instant.");
+      },
+    });
   }
 
   openBoard(boardId: string): void {

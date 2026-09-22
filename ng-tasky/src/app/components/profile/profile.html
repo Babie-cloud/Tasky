@@ -1,32 +1,35 @@
-<div class="dashboard d-flex bg-light">
+<div class="dashboard d-flex">
   <!-- Sidebar -->
-  <aside class="sidebar bg-white p-3 border-end d-flex flex-column justify-content-between">
+  <aside class="sidebar p-3 border-end d-flex flex-column justify-content-between">
     <div>
-      <div class="logo fw-bold fs-5 mb-4 text-dark px-2">
+      <div class="logo fw-bold fs-5 mb-4 px-2">
         Paramètres de l'utilisateur
       </div>
 
       <nav class="nav flex-column gap-1 mb-4">
-        <a (click)="setTab('info')" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'info'">
+        <a (click)="setTab('info')" class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'info'">
           <i class="fas fa-id-card"></i> Informations personnelles
         </a>
-        <a (click)="setTab('cards')" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'cards'">
+        <a (click)="setTab('cards')" class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'cards'">
           <i class="fas fa-chalkboard-teacher"></i> Cartes
         </a>
-        <a (click)="setTab('members')" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'members'">
+        <a (click)="setTab('myBoards')" class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'myBoards'">
           <i class="fas fa-table-columns"></i> Mes tableaux
         </a>
-        <a (click)="setTab('billing')" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'billing'">
+        <a (click)="setTab('team')" class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'team'">
+          <i class="fas fa-users"></i> Membres
+        </a>
+        <a (click)="setTab('billing')" class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'billing'">
           <i class="fas fa-calendar-check"></i> Facturation
         </a>
       </nav>
 
       <div class="nav flex-column gap-1">
         <p class="text-uppercase text-muted fw-bold small px-3 mb-1">Other</p>
-        <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button">
+        <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button">
           <i class="fas fa-cog"></i> Setting
         </a>
-        <a (click)="logout()" class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button">
+        <a (click)="logout()" class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button">
           <i class="fas fa-sign-out-alt"></i> Logout
         </a>
       </div>
@@ -115,14 +118,14 @@
             <div class="mb-3">
               <label class="form-label small fw-semibold">LinkedIn</label>
               <div class="input-group">
-                <span class="input-group-text bg-light"><i class="fa-brands fa-linkedin text-secondary"></i></span>
+                <span class="input-group-text"><i class="fa-brands fa-linkedin text-secondary"></i></span>
                 <input type="url" class="form-control" [(ngModel)]="linkedIn" placeholder="https://linkedin.com/in/..." />
               </div>
             </div>
             <div>
               <label class="form-label small fw-semibold">GitHub</label>
               <div class="input-group">
-                <span class="input-group-text bg-light"><i class="fa-brands fa-github text-secondary"></i></span>
+                <span class="input-group-text"><i class="fa-brands fa-github text-secondary"></i></span>
                 <input type="url" class="form-control" [(ngModel)]="github" placeholder="https://github.com/..." />
               </div>
             </div>
@@ -146,12 +149,12 @@
       </div>
     }
 
-    @if (activeTab() === 'members') {
+    @if (activeTab() === 'myBoards') {
       <div class="card border-0 shadow-sm rounded-4" style="max-width: 700px;">
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-bold mb-0">Mes tableaux</h6>
-            <button type="button" class="btn btn-sm btn-light" (click)="loadBoards()" title="Rafraîchir">
+            <button type="button" class="btn btn-sm btn-icon-ghost" (click)="loadBoards()" title="Rafraîchir">
               <i class="fa-solid fa-rotate"></i>
             </button>
           </div>
@@ -178,7 +181,7 @@
                     <td>
                       {{ board.name }}
                       @if (isOwnerOf(board)) {
-                        <span class="badge bg-dark ms-1">Créateur</span>
+                        <span class="badge bg-brand ms-1">Créateur</span>
                       }
                     </td>
                     <td>
@@ -198,50 +201,108 @@
       </div>
     }
 
-    @if (activeTab() === 'billing') {
-  <div class="card border-0 shadow-sm rounded-4" style="max-width: 500px;">
-    <div class="card-body p-4">
+    @if (activeTab() === 'team') {
+      <div class="card border-0 shadow-sm rounded-4" style="max-width: 700px;">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0">Membres de mes tableaux</h6>
+            <button type="button" class="btn btn-sm btn-icon-ghost" (click)="loadBoards()" title="Rafraîchir">
+              <i class="fa-solid fa-rotate"></i>
+            </button>
+          </div>
 
-      @if (showPaymentSuccess()) {
-        <div class="alert alert-success border-0 mb-3">
-          <i class="fa-solid fa-circle-check me-1"></i>
-          Paiement confirmé ! Ton plan sera mis à jour dans quelques instants.
-        </div>
-      }
+          @if (isLoadingBoards()) {
+            <p class="text-muted">Chargement...</p>
+          } @else if (ownedBoards().length === 0) {
+            <div class="empty-state">
+              <i class="fa-solid fa-users"></i>
+              <p class="mb-0">Tu n'es créateur d'aucun tableau pour l'instant.</p>
+            </div>
+          } @else {
+            @for (board of ownedBoards(); track board._id) {
+              <div class="team-board-group">
+                <p class="team-board-name mb-2">{{ board.name }}</p>
 
-      @if (isLoadingBilling()) {
-        <p class="text-muted">Chargement...</p>
-      } @else {
-        <p class="form-section-title">Plan actuel</p>
-        <div class="d-flex align-items-center justify-content-between mb-4">
-          <h4 class="fw-bold mb-0">{{ planLabel(billingStatus()?.plan) }}</h4>
-          @if (billingStatus()?.plan !== 'free') {
-            <span class="role-badge role-admin">Actif</span>
+                @if (board.members.length === 0) {
+                  <p class="text-muted small mb-0">Aucun membre invité sur ce tableau pour l'instant.</p>
+                } @else {
+                  @for (member of board.members; track member._id) {
+                    <div class="team-member-row">
+                      <div class="team-member-identity">
+                        <div class="team-member-avatar">{{ memberInitials(member) }}</div>
+                        <div>
+                          <p class="team-member-name mb-0">{{ member.user?.first_name || member.email }} {{ member.user?.last_name }}</p>
+                          <p class="team-member-email mb-0">{{ member.email }}</p>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="role-badge" [class.role-admin]="member.role === 'admin'" [class.role-member]="member.role === 'member'" [class.role-observer]="member.role === 'observer'">
+                          {{ roleLabel(member.role) }}
+                        </span>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          [disabled]="isRemovingMember() === member._id"
+                          (click)="deactivateMember(board, member)"
+                          title="Retirer ce membre du tableau"
+                        >
+                          {{ isRemovingMember() === member._id ? '...' : 'Retirer' }}
+                        </button>
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            }
           }
         </div>
+      </div>
+    }
 
-        @if (billingStatus()?.plan === 'free') {
-          <p class="text-muted small mb-3">
-            Passe au plan Pro ou Enterprise pour débloquer plus de fonctionnalités.
-          </p>
-          <a routerLink="/pricing" class="btn btn-primary w-100">Voir les plans</a>
-        } @else {
-          <p class="text-muted small mb-3">
-            Gère ton abonnement, ta méthode de paiement ou annule-le à tout moment.
-          </p>
-          <button
-            type="button"
-            class="btn btn-primary w-100"
-            [disabled]="isOpeningPortal()"
-            (click)="openBillingPortal()"
-          >
-            {{ isOpeningPortal() ? 'Ouverture...' : 'Gérer mon abonnement' }}
-          </button>
-        }
-      }
-    </div>
-  </div>
-}
+    @if (activeTab() === 'billing') {
+      <div class="card border-0 shadow-sm rounded-4" style="max-width: 500px;">
+        <div class="card-body p-4">
+
+          @if (showPaymentSuccess()) {
+            <div class="alert alert-success border-0 mb-3">
+              <i class="fa-solid fa-circle-check me-1"></i>
+              Paiement confirmé ! Ton plan sera mis à jour dans quelques instants.
+            </div>
+          }
+
+          @if (isLoadingBilling()) {
+            <p class="text-muted">Chargement...</p>
+          } @else {
+            <p class="form-section-title">Plan actuel</p>
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <h4 class="fw-bold mb-0">{{ planLabel(billingStatus()?.plan) }}</h4>
+              @if (billingStatus()?.plan !== 'free') {
+                <span class="role-badge role-admin">Actif</span>
+              }
+            </div>
+
+            @if (billingStatus()?.plan === 'free') {
+              <p class="text-muted small mb-3">
+                Passe au plan Pro ou Enterprise pour débloquer plus de fonctionnalités.
+              </p>
+              <a routerLink="/pricing" class="btn btn-primary w-100">Voir les plans</a>
+            } @else {
+              <p class="text-muted small mb-3">
+                Gère ton abonnement, ta méthode de paiement ou annule-le à tout moment.
+              </p>
+              <button
+                type="button"
+                class="btn btn-primary w-100"
+                [disabled]="isOpeningPortal()"
+                (click)="openBillingPortal()"
+              >
+                {{ isOpeningPortal() ? 'Ouverture...' : 'Gérer mon abonnement' }}
+              </button>
+            }
+          }
+        </div>
+      </div>
+    }
 
   </main>
 </div>

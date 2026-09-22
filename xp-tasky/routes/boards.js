@@ -7,7 +7,7 @@ const Task = require('../models/Task');
 const User = require('../models/User');
 const requireAuth = require('../middlewares/auth');
 const boardAccess = require('../middlewares/board-access');
-const { sendBoardInviteEmail } = require('../utils/mailer');
+const { sendBoardInviteEmail, sendMemberRemovedEmail } = require('../utils/mailer');
 
 router.use(requireAuth);
 
@@ -185,10 +185,26 @@ router.put('/:boardId/members/:memberId', boardAccess('admin'), async (req, res)
 
 router.delete('/:boardId/members/:memberId', boardAccess('admin'), async (req, res) => {
   try {
+    if (req.board.owner.toString() !== req.userId) {
+      return res.status(403).json({
+        message: 'Seul le créateur du tableau peut retirer un membre.',
+      });
+    }
+
     const member = req.board.members.id(req.params.memberId);
     if (!member) return res.status(404).json({ message: 'Membre introuvable.' });
+
+    const removedEmail = member.email;
     member.deleteOne();
     await req.board.save();
+
+    const owner = await User.findById(req.userId);
+    sendMemberRemovedEmail({
+      to: removedEmail,
+      boardName: req.board.name,
+      removedByName: `${owner.first_name || ''} ${owner.last_name || ''}`.trim() || owner.email,
+    }).catch((err) => console.error('[Member Removed Email Error]:', err));
+
     res.json(req.board);
   } catch (err) {
     console.error('[Remove Member Error]:', err);

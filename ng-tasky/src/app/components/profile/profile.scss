@@ -1,14 +1,23 @@
-@use './colors' as *;
+@use '../../public/styles/colors' as *;
 
 .dashboard {
   min-height: 100vh;
+  background: var(--tasky-surface-sunken);
+
   .sidebar {
     width: 260px;
     flex-shrink: 0;
+    background: var(--tasky-surface) !important;
+    border-color: var(--tasky-border) !important;
   }
 }
 
+.logo {
+  color: var(--tasky-text) !important;
+}
+
 .sidebar nav a {
+  color: var(--tasky-text-muted) !important;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
@@ -23,6 +32,10 @@
   background: linear-gradient(135deg, $tasky-green-700 0%, $tasky-green-500 100%);
   color: white;
   box-shadow: 0 4px 14px rgba($tasky-green-500, 0.25);
+}
+
+.content {
+  color: var(--tasky-text);
 }
 
 .profile-avatar {
@@ -56,30 +69,53 @@
   }
 }
 
+.card {
+  background: var(--tasky-surface);
+  color: var(--tasky-text);
+}
+
 .form-section-title {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: $tasky-text-muted;
+  color: var(--tasky-text-muted);
   margin-bottom: 0.75rem;
 }
 
 .form-section + .form-section {
   margin-top: 1.75rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba($tasky-green-300, 0.35);
+  border-top: 1px solid var(--tasky-border);
 }
 
-.boards-table tbody tr {
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+.boards-table {
+  color: var(--tasky-text);
+
+  tbody tr {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--tasky-surface-alt);
+    }
+  }
+
+  th {
+    color: var(--tasky-text-muted);
+    border-bottom-color: var(--tasky-border);
+  }
+
+  td {
+    border-bottom-color: var(--tasky-border);
+  }
 }
 
 .role-badge {
   font-weight: 600;
   padding: 0.35em 0.7em;
-  //border-radius: $border-radius-pill;
+  border-radius: 50rem;
+  font-size: 0.8rem;
 
   &.role-admin {
     background-color: $tasky-primary;
@@ -90,15 +126,15 @@
     color: $tasky-green-800;
   }
   &.role-observer {
-    background-color: #eef0f2;
-    color: $tasky-text-muted;
+    background-color: var(--tasky-surface-alt);
+    color: var(--tasky-text-muted);
   }
 }
 
 .empty-state {
   padding: 2.5rem 1rem;
   text-align: center;
-  color: $tasky-text-muted;
+  color: var(--tasky-text-muted);
 
   i {
     font-size: 1.8rem;
@@ -106,4 +142,57 @@
     margin-bottom: 0.75rem;
     display: block;
   }
+}
+
+.team-board-group + .team-board-group {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--tasky-border);
+}
+
+.team-board-name {
+  color: var(--tasky-text);
+  font-weight: 700;
+}
+
+.team-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+
+  & + .team-member-row {
+    border-top: 1px solid var(--tasky-border);
+  }
+}
+
+.team-member-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.team-member-avatar {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tasky-surface-alt);
+  color: var(--tasky-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.team-member-name {
+  color: var(--tasky-text);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.team-member-email {
+  color: var(--tasky-text-muted);
+  font-size: 0.8rem;
 }
