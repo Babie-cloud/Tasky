@@ -15,6 +15,8 @@ export interface UserProfile {
   linkedIn?: string;
   github?: string;
   jobTitle?: string;
+  notifyOnInvite?: boolean;
+  notifyOnRemoval?: boolean;
 }
 
 export interface UpdateProfileData {
@@ -29,6 +31,11 @@ export interface UpdateProfileData {
   jobTitle?: string;
 }
 
+export interface NotificationPrefs {
+  notifyOnInvite: boolean;
+  notifyOnRemoval: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private http = inject(HttpClient);
@@ -40,5 +47,20 @@ export class UserService {
 
   updateMe(data: UpdateProfileData): Observable<UserProfile> {
     return this.http.put<UserProfile>(`${this.base}/me`, data);
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(`${this.base}/me/password`, {
+      currentPassword,
+      newPassword,
+    });
+  }
+
+  updateNotificationPrefs(prefs: NotificationPrefs): Observable<UserProfile> {
+    return this.http.put<UserProfile>(`${this.base}/me`, prefs);
+  }
+
+  deleteAccount(): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.base}/me`);
   }
 }

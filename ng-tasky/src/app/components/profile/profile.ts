@@ -6,6 +6,7 @@ import { UserService, UserProfile } from '../../core/services/user-service';
 import { AuthService } from '../../core/services/auth-service';
 import { BoardService, Board, BoardMember } from '../../core/services/board-service';
 import { BillingService, BillingStatus } from '../../core/services/billing-service';
+import { ThemeService } from '../../core/services/theme-service';
 
 @Component({
   selector: 'app-profile',
@@ -21,12 +22,33 @@ export class Profile implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private platformId = inject(PLATFORM_ID);
+  themeService = inject(ThemeService);
 
   user = signal<UserProfile | null>(null);
   boards = signal<Board[]>([]);
   isLoadingBoards = signal(false);
-  activeTab = signal<'info' | 'cards' | 'myBoards' | 'team' | 'billing'>('info');
+  activeTab = signal<'info' | 'cards' | 'myBoards' | 'team' | 'billing' | 'settings'>('info');
+
   isRemovingMember = signal<string | null>(null);
+
+  // Onglet "Settings" — sécurité
+  currentPassword = '';
+  newPassword = '';
+  confirmPassword = '';
+  isChangingPassword = signal(false);
+  passwordMessage = signal<string | null>(null);
+  passwordError = signal<string | null>(null);
+
+  // Onglet "Settings" — préférences de notification email
+  notifyOnInvite = true;
+  notifyOnRemoval = true;
+  isSavingNotifications = signal(false);
+  notificationsMessage = signal<string | null>(null);
+
+  // Onglet "Settings" — zone dangereuse
+  deleteConfirmText = '';
+  isDeletingAccount = signal(false);
+  deleteError = signal<string | null>(null);
 
   billingStatus = signal<BillingStatus | null>(null);
   isLoadingBilling = signal(false);
@@ -63,6 +85,9 @@ export class Profile implements OnInit {
       this.linkedIn = user.linkedIn || '';
       this.github = user.github || '';
       this.jobTitle = user.jobTitle || '';
+ 
+      this.notifyOnInvite = (user as any).notifyOnInvite ?? true;
+      this.notifyOnRemoval = (user as any).notifyOnRemoval ?? true;
     });
 
     this.loadBoards();
@@ -77,7 +102,7 @@ export class Profile implements OnInit {
     }
   }
 
-  setTab(tab: 'info' | 'cards' | 'myBoards' | 'team' | 'billing'): void {
+  setTab(tab: 'info' | 'cards' | 'myBoards' | 'team' | 'billing' | 'settings'): void {
     this.activeTab.set(tab);
     if (tab === 'myBoards' || tab === 'team') {
       this.loadBoards();
@@ -188,6 +213,7 @@ export class Profile implements OnInit {
     const last = member.user?.last_name?.[0] || '';
     return (first + last).toUpperCase();
   }
+
   deactivateMember(board: Board, member: BoardMember): void {
     const label = member.user?.first_name || member.email;
     const confirmed = window.confirm(
@@ -210,6 +236,81 @@ export class Profile implements OnInit {
       error: () => {
         this.isRemovingMember.set(null);
         window.alert("Impossible de retirer ce membre pour l'instant.");
+      },
+    });
+  }
+
+
+  changePassword(): void {
+    this.passwordError.set(null);
+    this.passwordMessage.set(null);
+
+    if (!this.currentPassword || !this.newPassword) {
+      this.passwordError.set('Renseigne ton mot de passe actuel et le nouveau.');
+      return;
+    }
+    if (this.newPassword.length < 8) {
+      this.passwordError.set('Le nouveau mot de passe doit faire au moins 8 caractères.');
+      return;
+    }
+    if (this.newPassword !== this.confirmPassword) {
+      this.passwordError.set('La confirmation ne correspond pas au nouveau mot de passe.');
+      return;
+    }
+
+    this.isChangingPassword.set(true);
+    this.userService.changePassword(this.currentPassword, this.newPassword).subscribe({
+      next: () => {
+        this.isChangingPassword.set(false);
+        this.passwordMessage.set('Mot de passe mis à jour.');
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.confirmPassword = '';
+      },
+      error: (err) => {
+        this.isChangingPassword.set(false);
+        this.passwordError.set(err.error?.message || 'Mot de passe actuel incorrect.');
+      },
+    });
+  }
+
+  saveNotificationPrefs(): void {
+    this.isSavingNotifications.set(true);
+    this.notificationsMessage.set(null);
+    this.userService
+      .updateNotificationPrefs({
+        notifyOnInvite: this.notifyOnInvite,
+        notifyOnRemoval: this.notifyOnRemoval,
+      })
+      .subscribe({
+        next: () => {
+          this.isSavingNotifications.set(false);
+          this.notificationsMessage.set('Préférences enregistrées.');
+        },
+        error: () => {
+          this.isSavingNotifications.set(false);
+          this.notificationsMessage.set("Erreur lors de l'enregistrement.");
+        },
+      });
+  }
+
+  get canDeleteAccount(): boolean {
+    return this.deleteConfirmText.trim().toUpperCase() === 'SUPPRIMER';
+  }
+
+  deleteAccount(): void {
+    if (!this.canDeleteAccount) return;
+    this.deleteError.set(null);
+    this.isDeletingAccount.set(true);
+
+    this.userService.deleteAccount().subscribe({
+      next: () => {
+        this.authService.logout();
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.isDeletingAccount.set(false);
+        this.deleteError.set(err.error?.message || 'Erreur lors de la suppression du compte.');
       },
     });
   }

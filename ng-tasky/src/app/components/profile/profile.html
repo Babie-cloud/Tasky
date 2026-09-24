@@ -26,8 +26,8 @@
 
       <div class="nav flex-column gap-1">
         <p class="text-uppercase text-muted fw-bold small px-3 mb-1">Other</p>
-        <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button">
-          <i class="fas fa-cog"></i> Setting
+        <a (click)="setTab('settings')" class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button" [class.active]="activeTab() === 'settings'">
+          <i class="fas fa-cog"></i> Paramètres
         </a>
         <a (click)="logout()" class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-2" role="button">
           <i class="fas fa-sign-out-alt"></i> Logout
@@ -301,6 +301,135 @@
             }
           }
         </div>
+      </div>
+    }
+
+    @if (activeTab() === 'settings') {
+      <div class="d-flex flex-column gap-3" style="max-width: 560px;">
+
+        <!-- Apparence -->
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <p class="form-section-title">Apparence</p>
+            <div class="d-flex gap-2">
+              <button
+                type="button"
+                class="btn btn-sm flex-fill"
+                [class.btn-primary]="themeService.theme() === 'light'"
+                [class.btn-outline-brand]="themeService.theme() !== 'light'"
+                (click)="themeService.theme() === 'dark' && themeService.toggle()"
+              >
+                <i class="fa-solid fa-sun me-1"></i> Clair
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm flex-fill"
+                [class.btn-primary]="themeService.theme() === 'dark'"
+                [class.btn-outline-brand]="themeService.theme() !== 'dark'"
+                (click)="themeService.theme() === 'light' && themeService.toggle()"
+              >
+                <i class="fa-solid fa-moon me-1"></i> Sombre
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sécurité -->
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <p class="form-section-title">Sécurité</p>
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label small fw-semibold">Mot de passe actuel</label>
+                <input type="password" class="form-control" [(ngModel)]="currentPassword" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Nouveau mot de passe</label>
+                <input type="password" class="form-control" [(ngModel)]="newPassword" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Confirmer</label>
+                <input type="password" class="form-control" [(ngModel)]="confirmPassword" (keyup.enter)="changePassword()" />
+              </div>
+            </div>
+
+            @if (passwordMessage()) {
+              <p class="small text-success mb-0 mt-3">{{ passwordMessage() }}</p>
+            }
+            @if (passwordError()) {
+              <p class="small text-danger mb-0 mt-3">{{ passwordError() }}</p>
+            }
+
+            <button type="button" class="btn btn-primary mt-3" [disabled]="isChangingPassword()" (click)="changePassword()">
+              {{ isChangingPassword() ? 'Modification...' : 'Modifier le mot de passe' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <p class="form-section-title">Notifications par email</p>
+
+            <div class="settings-toggle-row">
+              <div>
+                <p class="mb-0 fw-semibold">Invitations à un tableau</p>
+                <p class="text-muted small mb-0">Reçois un email quand on t'invite à collaborer sur un tableau.</p>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" [(ngModel)]="notifyOnInvite" />
+              </div>
+            </div>
+
+            <div class="settings-toggle-row">
+              <div>
+                <p class="mb-0 fw-semibold">Retrait d'un tableau</p>
+                <p class="text-muted small mb-0">Reçois un email si un créateur te retire de son tableau.</p>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" [(ngModel)]="notifyOnRemoval" />
+              </div>
+            </div>
+
+            @if (notificationsMessage()) {
+              <p class="small text-success mb-0 mt-2">{{ notificationsMessage() }}</p>
+            }
+
+            <button type="button" class="btn btn-outline-brand mt-3" [disabled]="isSavingNotifications()" (click)="saveNotificationPrefs()">
+              {{ isSavingNotifications() ? 'Enregistrement...' : 'Enregistrer les préférences' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Zone dangereuse -->
+        <div class="card border-0 shadow-sm rounded-4 danger-zone">
+          <div class="card-body p-4">
+            <p class="form-section-title text-danger">Zone dangereuse</p>
+            <p class="text-muted small">
+              La suppression de ton compte est définitive : tes tableaux personnels, tes tâches
+              et tes informations de profil seront perdus. Les tableaux dont tu es créateur et
+              qui ont d'autres membres actifs ne sont pas automatiquement supprimés.
+            </p>
+            <label class="form-label small fw-semibold">
+              Tape <strong>SUPPRIMER</strong> pour confirmer
+            </label>
+            <input type="text" class="form-control mb-2" [(ngModel)]="deleteConfirmText" placeholder="SUPPRIMER" />
+
+            @if (deleteError()) {
+              <p class="small text-danger mb-2">{{ deleteError() }}</p>
+            }
+
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              [disabled]="!canDeleteAccount || isDeletingAccount()"
+              (click)="deleteAccount()"
+            >
+              {{ isDeletingAccount() ? 'Suppression...' : 'Supprimer mon compte' }}
+            </button>
+          </div>
+        </div>
+
       </div>
     }
 
