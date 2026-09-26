@@ -24,9 +24,16 @@ export class ThemeService {
     this.theme.set(this.theme() === 'light' ? 'dark' : 'light');
   }
 
-  private getInitialTheme(): Theme {
-    const saved = localStorage.getItem(this.storageKey) as Theme | null;
-    if (saved === 'light' || saved === 'dark') return saved;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+ private getInitialTheme(): 'light' | 'dark' {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (saved) return saved;
+
+    // Vérifie si matchMedia existe avant d'appeler la fonction
+    if (typeof window.matchMedia === 'function') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
   }
+  return 'light';
+}
 }
