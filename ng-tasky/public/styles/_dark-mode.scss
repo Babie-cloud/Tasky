@@ -16,6 +16,35 @@
 
   --bs-body-bg: var(--tasky-surface) !important;
   --bs-body-color: var(--tasky-text);
+
+  // Fix pour les formulaires / inputs en Dark Mode
+  .form-control,
+  .form-select {
+    background-color: var(--tasky-surface-alt) !important;
+    color: var(--tasky-text) !important;
+    border-color: var(--tasky-border) !important;
+
+    &::placeholder {
+      color: var(--tasky-text-muted) !important;
+      opacity: 0.8;
+    }
+
+    &:focus {
+      background-color: var(--tasky-surface) !important;
+      color: var(--tasky-text) !important;
+      border-color: $tasky-green-400 !important;
+      box-shadow: 0 0 0 0.2rem rgba($tasky-green-400, 0.25) !important;
+    }
+  }
+
+  .card,
+  .sidebar,
+  .input-group-text {
+    background-color: var(--tasky-surface) !important;
+    color: var(--tasky-text) !important;
+    border-color: var(--tasky-border) !important;
+  }
+
   .auth-wrapper {
     background: var(--tasky-surface) !important;
   }
@@ -42,14 +71,11 @@
     border-color: $tasky-green-500 !important;
   }
 
-  .stat-card {
-    background: #242526;
-    border-color: rgba(#fff, 0.08);
-  }
-
+  .stat-card,
   .example-box {
     background: #242526;
     color: #e6f4ea;
+    border-color: rgba(#fff, 0.08);
   }
 
   .pricing-card {
@@ -61,6 +87,7 @@
       border-bottom-color: rgba($tasky-green-700, 0.4);
     }
   }
+
   .pricing-card-featured .card-header {
     background: linear-gradient(135deg, $tasky-green-700, $tasky-green-900);
   }

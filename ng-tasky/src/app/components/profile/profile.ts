@@ -39,6 +39,16 @@ export class Profile implements OnInit {
   passwordMessage = signal<string | null>(null);
   passwordError = signal<string | null>(null);
 
+showCurrentPassword = signal(false);
+showNewPassword = signal(false);
+
+toggleCurrentPassword(): void {
+  this.showCurrentPassword.update((val) => !val);
+}
+
+toggleNewPassword(): void {
+  this.showNewPassword.update((val) => !val);
+} 
   // Onglet "Settings" — préférences de notification email
   notifyOnInvite = true;
   notifyOnRemoval = true;

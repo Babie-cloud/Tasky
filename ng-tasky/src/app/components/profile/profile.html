@@ -410,37 +410,68 @@
           </div>
         </div>
 
-        <!-- Sécurité -->
-        <div class="card border-0 shadow-sm rounded-4">
-          <div class="card-body p-4">
-            <p class="form-section-title">Sécurité</p>
-            <div class="row g-3">
-              <div class="col-12">
-                <label class="form-label small fw-semibold">Mot de passe actuel</label>
-                <input type="password" class="form-control" [(ngModel)]="currentPassword" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label small fw-semibold">Nouveau mot de passe</label>
-                <input type="password" class="form-control" [(ngModel)]="newPassword" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label small fw-semibold">Confirmer</label>
-                <input type="password" class="form-control" [(ngModel)]="confirmPassword" (keyup.enter)="changePassword()" />
-              </div>
-            </div>
-
-            @if (passwordMessage()) {
-              <p class="small text-success mb-0 mt-3">{{ passwordMessage() }}</p>
-            }
-            @if (passwordError()) {
-              <p class="small text-danger mb-0 mt-3">{{ passwordError() }}</p>
-            }
-
-            <button type="button" class="btn btn-primary mt-3" [disabled]="isChangingPassword()" (click)="changePassword()">
-              {{ isChangingPassword() ? 'Modification...' : 'Modifier le mot de passe' }}
-            </button>
-          </div>
+       <!-- Sécurité -->
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <p class="form-section-title">Sécurité</p>
+    <div class="row g-3">
+      <!-- Mot de passe actuel -->
+      <div class="col-12">
+        <label class="form-label small fw-semibold">Mot de passe actuel</label>
+        <div class="input-group">
+          <input
+            [type]="showCurrentPassword() ? 'text' : 'password'"
+            class="form-control"
+            [(ngModel)]="currentPassword"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="toggleCurrentPassword()"
+          >
+            <i class="fa-solid" [class.fa-eye]="!showCurrentPassword()" [class.fa-eye-slash]="showCurrentPassword()"></i>
+          </button>
         </div>
+      </div>
+
+      <!-- Nouveau mot de passe -->
+      <div class="col-md-6">
+        <label class="form-label small fw-semibold">Nouveau mot de passe</label>
+        <div class="input-group">
+          <input
+            [type]="showNewPassword() ? 'text' : 'password'"
+            class="form-control"
+            [(ngModel)]="newPassword"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="toggleNewPassword()"
+          >
+            <i class="fa-solid" [class.fa-eye]="!showNewPassword()" [class.fa-eye-slash]="showNewPassword()"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Confirmation -->
+      <div class="col-md-6">
+        <label class="form-label small fw-semibold">Confirmer</label>
+        <input type="password" class="form-control" [(ngModel)]="confirmPassword" (keyup.enter)="changePassword()" />
+      </div>
+    </div>
+
+    @if (passwordMessage()) {
+      <p class="small text-success mb-0 mt-3">{{ passwordMessage() }}</p>
+    }
+    @if (passwordError()) {
+      <p class="small text-danger mb-0 mt-3">{{ passwordError() }}</p>
+    }
+
+    <button type="button" class="btn btn-primary mt-3" [disabled]="isChangingPassword()" (click)="changePassword()">
+      {{ isChangingPassword() ? 'Modification...' : 'Modifier le mot de passe' }}
+    </button>
+  </div>
+</div>
 
         <!-- Notifications -->
         <div class="card border-0 shadow-sm rounded-4">
