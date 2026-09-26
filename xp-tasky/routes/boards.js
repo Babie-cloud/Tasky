@@ -79,8 +79,7 @@ router.put('/:boardId', boardAccess('admin'), async (req, res) => {
   }
 });
 
-// Suppression complète du tableau — réservée strictement au owner (créateur),
-// pas aux membres au rôle "admin". Cascade sur les listes et les tâches.
+// Suppression complète du tableau — réservée strictement au owner
 router.delete('/:boardId', boardAccess('observer'), async (req, res) => {
   try {
     if (req.board.owner.toString() !== req.userId) {
@@ -185,9 +184,15 @@ router.put('/:boardId/members/:memberId', boardAccess('admin'), async (req, res)
 
 router.delete('/:boardId/members/:memberId', boardAccess('admin'), async (req, res) => {
   try {
-    if (req.board.owner.toString() !== req.userId) {
+    const currentMember = req.board.members.find(
+      (m) => m.user && m.user.toString() === req.userId
+    );
+    const isOwner = req.board.owner.toString() === req.userId;
+    const isAdmin = isOwner || (currentMember && currentMember.role === 'admin');
+
+    if (!isAdmin) {
       return res.status(403).json({
-        message: 'Seul le créateur du tableau peut retirer un membre.',
+        message: 'Seul un administrateur ou le créateur du tableau peut retirer un membre.',
       });
     }
 

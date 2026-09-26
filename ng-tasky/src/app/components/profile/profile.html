@@ -211,6 +211,7 @@
             </button>
           </div>
 
+
           @if (isLoadingBoards()) {
             <p class="text-muted">Chargement...</p>
           } @else if (ownedBoards().length === 0) {
@@ -258,7 +259,82 @@
         </div>
       </div>
     }
+  
+@if (activeTab() === 'team') {
+  <div class="card border-0 shadow-sm rounded-4" style="max-width: 700px;">
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0">Membres de mes tableaux</h6>
+        <button type="button" class="btn btn-sm btn-icon-ghost" (click)="loadBoards()" title="Rafraîchir">
+          <i class="fa-solid fa-rotate"></i>
+        </button>
+      </div>
 
+      @if (isLoadingBoards()) {
+        <p class="text-muted">Chargement...</p>
+      } @else if (boards().length === 0) {
+        <div class="empty-state">
+          <i class="fa-solid fa-users"></i>
+          <p class="mb-0">Tu n'appartiens à aucun tableau pour l'instant.</p>
+        </div>
+      } @else {
+        @for (board of boards(); track board._id) {
+          <div class="team-board-group mb-4">
+            <p class="team-board-name mb-2 fw-bold">{{ board.name }}</p>
+
+            <!-- Affichage du créateur / Owner du tableau -->
+            <div class="team-member-row d-flex align-items-center justify-content-between py-2 border-bottom">
+              <div class="team-member-identity d-flex align-items-center gap-2">
+                <div class="team-member-avatar">{{ board.owner.first_name?.[0] || board.owner.email[0] }}</div>
+                <div>
+                  <p class="team-member-name mb-0">{{ board.owner.first_name }} {{ board.owner.last_name }} (Créateur)</p>
+                  <p class="team-member-email mb-0 text-muted small">{{ board.owner.email }}</p>
+                </div>
+              </div>
+              <div>
+                <span class="role-badge role-admin">Administrateur</span>
+              </div>
+            </div>
+
+            <!-- Liste des membres invités -->
+            @for (member of board.members; track member._id) {
+              <div class="team-member-row d-flex align-items-center justify-content-between py-2 border-bottom">
+                <div class="team-member-identity d-flex align-items-center gap-2">
+                  <div class="team-member-avatar">{{ memberInitials(member) }}</div>
+                  <div>
+                    <p class="team-member-name mb-0">
+                      {{ member.user?.first_name || member.email }} {{ member.user?.last_name }}
+                    </p>
+                    <p class="team-member-email mb-0 text-muted small">{{ member.email }}</p>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="role-badge" [class.role-admin]="member.role === 'admin'" [class.role-member]="member.role === 'member'" [class.role-observer]="member.role === 'observer'">
+                    {{ roleLabel(member.role) }}
+                  </span>
+
+                  <!-- Bouton Retirer : affiché seulement si l'utilisateur courant est Admin -->
+                  @if (isAdminOf(board)) {
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-danger"
+                      [disabled]="isRemovingMember() === member._id"
+                      (click)="deactivateMember(board, member)"
+                      title="Retirer ce membre du tableau"
+                    >
+                      {{ isRemovingMember() === member._id ? '...' : 'Retirer' }}
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+  </div>
+}
+    
     @if (activeTab() === 'billing') {
       <div class="card border-0 shadow-sm rounded-4" style="max-width: 500px;">
         <div class="card-body p-4">

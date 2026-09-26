@@ -195,6 +195,12 @@ export class Profile implements OnInit {
     return board.owner._id === this.currentUserId;
   }
 
+  isAdminOf(board: Board): boolean {
+    if (board.owner._id === this.currentUserId) return true;
+    const member = board.members.find((m) => m.user?._id === this.currentUserId);
+    return member?.role === 'admin';
+  }
+
   roleLabel(role: string | null): string {
     switch (role) {
       case 'admin':
@@ -239,7 +245,6 @@ export class Profile implements OnInit {
       },
     });
   }
-
 
   changePassword(): void {
     this.passwordError.set(null);
