@@ -19,17 +19,23 @@ router.use(requireAuth);
 router.post('/create-checkout-session', async (req, res) => {
   try {
     const rawPlan = req.body.plan;
-    const plan = rawPlan ? String(rawPlan).toLowerCase().trim() : '';
+    let plan = rawPlan ? String(rawPlan).toLowerCase().trim() : '';
 
     console.log('--- [BILLING CHECKOUT REQUEST] ---');
     console.log('Plan reçu du Frontend:', rawPlan);
-    console.log('Plan normalisé:', plan);
-    console.log('Price ID Stripe correspondant:', PRICE_IDS[plan]);
 
-    if (!PRICE_IDS[plan]) {
-      console.error(`[Billing Error] Plan invalide ou Price ID non configuré pour: "${plan}"`);
+    // Détermination du Price ID Stripe
+    let priceId = PRICE_IDS[plan];
+
+    // Si la chaîne envoyée est déjà un Price ID Stripe valide 
+    if (!priceId && typeof rawPlan === 'string' && rawPlan.startsWith('price_')) {
+      priceId = rawPlan;
+    }
+
+    if (!priceId) {
+      console.error(`[Billing Error] Price ID introuvable. Assure-toi que STRIPE_PRICE_${plan.toUpperCase()} est configuré dans les variables d'environnement.`);
       return res.status(400).json({ 
-        message: `Plan invalide. Valeurs acceptées: 'pro' ou 'enterprise'. Reçu: '${rawPlan}'` 
+        message: `Plan ou Price ID invalide. Reçu: '${rawPlan}'. Vérifie tes variables d'environnement (STRIPE_PRICE_PRO / STRIPE_PRICE_ENTERPRISE).` 
       });
     }
 
@@ -52,7 +58,7 @@ router.post('/create-checkout-session', async (req, res) => {
       customer: customerId,
       mode: 'subscription',
       payment_method_types: ['card'],
-      line_items: [{ price: PRICE_IDS[plan], quantity: 1 }],
+      line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${FRONTEND_URL}/profile?tab=billing&success=true`,
       cancel_url: `${FRONTEND_URL}/pricing?canceled=true`,
       metadata: { userId: user._id.toString(), plan },
@@ -64,11 +70,11 @@ router.post('/create-checkout-session', async (req, res) => {
     res.json({ url: session.url });
   } catch (err) {
     console.error('[Create Checkout Session Error]:', err);
-    res.status(500).json({ message: 'Erreur lors de la création de la session de paiement.' });
+    res.status(500).json({ message: err.message || 'Erreur lors de la création de la session de paiement.' });
   }
 });
 
-// 2. Créer une session Customer Portal (Page /profile "Gérer mon abonnement")
+// 2. Créer une session Customer Portal 
 router.post('/create-portal-session', async (req, res) => {
   try {
     const user = await User.findById(req.userId);
