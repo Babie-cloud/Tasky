@@ -24,6 +24,9 @@ export class TaskService {
   getTasks(boardId: string): Observable<Task[]> {
     return this.http.get<Task[]>(this.base, { params: { board: boardId } });
   }
+  getMyTasks(): Observable<Task[]> {
+  return this.http.get<Task[]>(`${this.base}/mine`);
+}
 
   createTask(
     boardId: string,

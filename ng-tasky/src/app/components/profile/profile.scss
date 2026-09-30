@@ -218,3 +218,25 @@
 .danger-zone {
   border: 1px solid rgba(220, 53, 69, 0.35) !important;
 }
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--tasky-border);
+    padding-bottom: 0.5rem !important;
+  }
+
+  /* Défilement horizontal des onglets */
+  .nav.overflow-x-auto {
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      padding: 0.4rem 0.75rem !important;
+    }
+  }
+}

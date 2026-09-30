@@ -7,10 +7,12 @@ import { AuthService } from '../../core/services/auth-service';
 import { BoardService, Board, BoardMember } from '../../core/services/board-service';
 import { BillingService, BillingStatus } from '../../core/services/billing-service';
 import { ThemeService } from '../../core/services/theme-service';
+import { TaskService, Task } from '../../core/services/task.service';
+import { CategoryManager } from '../category-manager/category-manager';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, CategoryManager],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
@@ -19,6 +21,7 @@ export class Profile implements OnInit {
   private authService = inject(AuthService);
   private boardService = inject(BoardService);
   private billingService = inject(BillingService);
+  private taskService = inject(TaskService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private platformId = inject(PLATFORM_ID);
@@ -26,12 +29,19 @@ export class Profile implements OnInit {
 
   user = signal<UserProfile | null>(null);
   boards = signal<Board[]>([]);
+  myTasks = signal<Task[]>([]);
   isLoadingBoards = signal(false);
+  isLoadingTasks = signal(false);
+
   activeTab = signal<'info' | 'cards' | 'myBoards' | 'team' | 'billing' | 'settings'>('info');
+  cardsSubTab = signal<'tasks' | 'categories'>('tasks');
+  selectedBoardForCategories = signal<string>('');
 
   isRemovingMember = signal<string | null>(null);
 
-  // Onglet "Settings" — sécurité
+  // Sécurité — Afficher / Masquer mot de passe
+  showCurrentPassword = signal(false);
+  showNewPassword = signal(false);
   currentPassword = '';
   newPassword = '';
   confirmPassword = '';
@@ -39,32 +49,24 @@ export class Profile implements OnInit {
   passwordMessage = signal<string | null>(null);
   passwordError = signal<string | null>(null);
 
-showCurrentPassword = signal(false);
-showNewPassword = signal(false);
-
-toggleCurrentPassword(): void {
-  this.showCurrentPassword.update((val) => !val);
-}
-
-toggleNewPassword(): void {
-  this.showNewPassword.update((val) => !val);
-} 
-  // Onglet "Settings" — préférences de notification email
+  // Préférences de notification email
   notifyOnInvite = true;
   notifyOnRemoval = true;
   isSavingNotifications = signal(false);
   notificationsMessage = signal<string | null>(null);
 
-  // Onglet "Settings" — zone dangereuse
+  // Zone dangereuse
   deleteConfirmText = '';
   isDeletingAccount = signal(false);
   deleteError = signal<string | null>(null);
 
+  // Facturation
   billingStatus = signal<BillingStatus | null>(null);
   isLoadingBilling = signal(false);
   isOpeningPortal = signal(false);
   showPaymentSuccess = signal(false);
 
+  // Formulaire d'information
   firstName = '';
   lastName = '';
   phone = '';
@@ -95,7 +97,7 @@ toggleNewPassword(): void {
       this.linkedIn = user.linkedIn || '';
       this.github = user.github || '';
       this.jobTitle = user.jobTitle || '';
- 
+
       this.notifyOnInvite = (user as any).notifyOnInvite ?? true;
       this.notifyOnRemoval = (user as any).notifyOnRemoval ?? true;
     });
@@ -117,9 +119,35 @@ toggleNewPassword(): void {
     if (tab === 'myBoards' || tab === 'team') {
       this.loadBoards();
     }
+    if (tab === 'cards') {
+      this.loadBoards();
+      this.loadMyTasks();
+    }
     if (tab === 'billing') {
       this.loadBillingStatus();
     }
+  }
+
+  loadMyTasks(): void {
+    this.isLoadingTasks.set(true);
+    this.taskService.getMyTasks().subscribe({
+      next: (tasks) => {
+        this.myTasks.set(tasks);
+        this.isLoadingTasks.set(false);
+      },
+      error: () => this.isLoadingTasks.set(false),
+    });
+  }
+
+  dueBadge(task: Task): { label: string; class: string } | null {
+    if (!task.dueDate) return null;
+    const due = new Date(task.dueDate);
+    const now = new Date();
+    const diffDays = Math.ceil((due.getTime() - now.getTime()) / (1000 * 3600 * 24));
+
+    if (diffDays < 0) return { label: 'En retard', class: 'bg-danger-subtle text-danger' };
+    if (diffDays === 0) return { label: "Aujourd'hui", class: 'bg-warning-subtle text-warning' };
+    return { label: `J-${diffDays}`, class: 'bg-info-subtle text-info' };
   }
 
   loadBillingStatus(): void {
@@ -254,6 +282,14 @@ toggleNewPassword(): void {
         window.alert("Impossible de retirer ce membre pour l'instant.");
       },
     });
+  }
+
+  toggleCurrentPassword(): void {
+    this.showCurrentPassword.update((val) => !val);
+  }
+
+  toggleNewPassword(): void {
+    this.showNewPassword.update((val) => !val);
   }
 
   changePassword(): void {
