@@ -52,7 +52,11 @@
   h1, h2, h3, h4, h5, h6 {
     color: var(--tasky-text);
   }
-
+  .invite-card {
+    background-color: var(--tasky-surface) !important;
+    color: var(--tasky-text) !important;
+    border-color: var(--tasky-border) !important;
+  }
   .text-muted {
     color: var(--tasky-text-muted) !important;
   }
