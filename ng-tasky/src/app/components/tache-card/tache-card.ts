@@ -123,7 +123,7 @@ export class TacheCard implements OnInit {
     return true;
   }
 
-  drop(event: CdkDragDrop<Task[]>, targetListId: string): void {
+ drop(event: CdkDragDrop<Task[]>, targetListId: string): void {
     const task = event.previousContainer.data[event.previousIndex];
     const board = this.board();
     if (!board) return;
@@ -139,8 +139,17 @@ export class TacheCard implements OnInit {
       );
     }
 
+    // Mise à jour de la propriété list sur la tâche déplacée
+    task.list = targetListId;
+
+    // Mise à jour des ordres locaux dans la liste cible
     event.container.data.forEach((t, index) => (t.order = index));
-    this.taskService.moveTask(board._id, task._id, targetListId, event.currentIndex).subscribe();
+
+    this.tasksByList.set({ ...this.tasksByList() });
+
+    this.taskService.moveTask(board._id, task._id, targetListId, event.currentIndex).subscribe({
+      error: (err) => console.error('Erreur déplacement tâche:', err)
+    });
   }
 
   deleteTask(taskId: string, listId: string): void {

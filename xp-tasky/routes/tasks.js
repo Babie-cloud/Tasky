@@ -51,14 +51,21 @@ router.post('/', boardAccess('member'), async (req, res) => {
   }
 });
 
-router.put('/:id', boardAccess('member'), async (req, res) => {
-  const task = await Task.findOneAndUpdate(
-    { _id: req.params.id, board: req.board._id },
-    req.body,
-    { new: true }
-  );
-  if (!task) return res.status(404).json({ message: 'Tâche introuvable.' });
-  res.json(task);
+router.put('/boards/:boardId/tasks/:taskId/move', requireAuth, async (req, res) => {
+  try {
+    const { targetListId, newOrder } = req.body;
+    const { taskId } = req.params;
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      taskId,
+      { list: targetListId, order: newOrder },
+      { new: true }
+    );
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 router.put('/:id/move', boardAccess('member'), async (req, res) => {
