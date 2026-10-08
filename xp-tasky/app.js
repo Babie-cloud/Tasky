@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 var createError = require('http-errors');
 var express = require('express');
 const path = require('path');
@@ -7,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 const connectDB = require('./db');
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -17,6 +19,7 @@ var listsRouter = require('./routes/lists');
 var billingRouter = require('./routes/billing');
 var stripeWebhookRouter = require('./routes/stripe-webhook');
 var categoriesRouter = require('./routes/categories');
+
 const app = express();
 
 function parseOriginList(value) {
@@ -70,15 +73,31 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (err) {
-    console.error('[DB] Erreur de connexion', err);
-    res.status(500).json({ message: 'Erreur de connexion à la base de données.' });
-  }
-});
+connectDB().catch(err => console.error('[DB] Erreur critique de connexion', err));
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Tasky API',
+      version: '1.0.0',
+      description: 'Documentation de l\'API open source pour Tasky (Gestion de tâches Kanban)',
+      contact: {
+        name: 'Équipe Tasky'
+      }
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Serveur de développement'
+      }
+    ],
+  },
+  apis: ['./routes/*.js', './components/*.js'], 
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -13,7 +13,20 @@ router.use(requireAuth);
 
 const DEFAULT_LISTS = ['À faire', 'En cours', 'Terminé'];
 
-// Tous les tableaux de l'utilisateur (owner OU membre actif)
+/**
+ * @swagger
+ * /api/boards/mine:
+ *   get:
+ *     summary: Récupérer tous les tableaux de l'utilisateur
+ *     description: Retourne la liste des tableaux dont l'utilisateur connecté est propriétaire ou membre actif.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des tableaux récupérée avec succès.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.get('/mine', async (req, res) => {
   try {
     const boards = await Board.find({
@@ -33,7 +46,30 @@ router.get('/mine', async (req, res) => {
   }
 });
 
-// Créer un nouveau tableau
+/**
+ * @swagger
+ * /api/boards:
+ *   post:
+ *     summary: Créer un nouveau tableau
+ *     description: Crée un tableau avec les listes par défaut (À faire, En cours, Terminé).
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Projet SaaS Tasky
+ *     responses:
+ *       201:
+ *         description: Tableau créé avec succès.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.post('/', async (req, res) => {
   try {
     const name = (req.body.name || '').trim() || 'Nouveau tableau';
@@ -54,7 +90,31 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Charger un tableau précis
+/**
+ * @swagger
+ * /api/boards/{boardId}:
+ *   get:
+ *     summary: Charger un tableau précis
+ *     description: Retourne les détails d'un tableau spécifique si l'utilisateur y a accès (rôle minimum observateur).
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: boardId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID du tableau
+ *     responses:
+ *       200:
+ *         description: Détails du tableau récupérés avec succès.
+ *       403:
+ *         description: Permissions insuffisantes ou accès refusé.
+ *       404:
+ *         description: Tableau introuvable.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.get('/:boardId', boardAccess('observer'), async (req, res) => {
   try {
     const board = await Board.findById(req.board._id)
@@ -67,6 +127,40 @@ router.get('/:boardId', boardAccess('observer'), async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/boards/{boardId}:
+ *   put:
+ *     summary: Renommer un tableau
+ *     description: Permet à un administrateur ou au propriétaire de modifier le nom d'un tableau.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: boardId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Nouveau nom du projet
+ *     responses:
+ *       200:
+ *         description: Tableau mis à jour avec succès.
+ *       403:
+ *         description: Permissions insuffisantes.
+ *       404:
+ *         description: Tableau introuvable.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.put('/:boardId', boardAccess('admin'), async (req, res) => {
   try {
     const { name } = req.body;
@@ -79,7 +173,30 @@ router.put('/:boardId', boardAccess('admin'), async (req, res) => {
   }
 });
 
-// Suppression complète du tableau — réservée strictement au owner
+/**
+ * @swagger
+ * /api/boards/{boardId}:
+ *   delete:
+ *     summary: Supprimer un tableau
+ *     description: Suppression complète du tableau et de ses listes/tâches. Réservée strictement au créateur (owner).
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: boardId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Tableau supprimé avec succès.
+ *       403:
+ *         description: Seul le créateur du tableau peut le supprimer.
+ *       404:
+ *         description: Tableau introuvable.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.delete('/:boardId', boardAccess('observer'), async (req, res) => {
   try {
     if (req.board.owner.toString() !== req.userId) {
@@ -99,6 +216,44 @@ router.delete('/:boardId', boardAccess('observer'), async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/boards/{boardId}/invite:
+ *   post:
+ *     summary: Inviter un membre sur le tableau
+ *     description: Envoie un lien d'invitation par e-mail à un utilisateur avec un rôle spécifique (admin, member, observer).
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: boardId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: collaborateur@example.com
+ *               role:
+ *                 type: string
+ *                 enum: [admin, member, observer]
+ *                 example: member
+ *     responses:
+ *       201:
+ *         description: Invitation envoyée.
+ *       400:
+ *         description: Email requis ou rôle invalide.
+ *       409:
+ *         description: Personne déjà invitée ou membre.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.post('/:boardId/invite', boardAccess('admin'), async (req, res) => {
   try {
     const { email, role } = req.body;
@@ -141,6 +296,30 @@ router.post('/:boardId/invite', boardAccess('admin'), async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/boards/invite/accept/{token}:
+ *   post:
+ *     summary: Accepter une invitation à un tableau
+ *     description: Valide le jeton d'invitation et ajoute l'utilisateur comme membre actif du tableau.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Invitation acceptée.
+ *       403:
+ *         description: L'invitation ne correspond pas au compte connecté.
+ *       404:
+ *         description: Invitation invalide ou expirée.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.post('/invite/accept/:token', async (req, res) => {
   try {
     const board = await Board.findOne({ 'members.inviteToken': req.params.token });
@@ -165,6 +344,45 @@ router.post('/invite/accept/:token', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/boards/{boardId}/members/{memberId}:
+ *   put:
+ *     summary: Modifier le rôle d'un membre
+ *     description: Permet à un administrateur de changer le rôle d'un membre du tableau.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: boardId
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: memberId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 enum: [admin, member, observer]
+ *     responses:
+ *       200:
+ *         description: Rôle modifié avec succès.
+ *       400:
+ *         description: Rôle invalide.
+ *       404:
+ *         description: Membre introuvable.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.put('/:boardId/members/:memberId', boardAccess('admin'), async (req, res) => {
   try {
     const { role } = req.body;
@@ -182,6 +400,35 @@ router.put('/:boardId/members/:memberId', boardAccess('admin'), async (req, res)
   }
 });
 
+/**
+ * @swagger
+ * /api/boards/{boardId}/members/{memberId}:
+ *   delete:
+ *     summary: Retirer un membre du tableau
+ *     description: Permet à un administrateur ou au propriétaire de retirer un collaborateur du tableau.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: boardId
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: memberId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Membre retiré avec succès.
+ *       403:
+ *         description: Permissions insuffisantes.
+ *       404:
+ *         description: Membre introuvable.
+ *       500:
+ *         description: Erreur serveur.
+ */
 router.delete('/:boardId/members/:memberId', boardAccess('admin'), async (req, res) => {
   try {
     const currentMember = req.board.members.find(
