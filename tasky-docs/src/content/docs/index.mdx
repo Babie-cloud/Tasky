@@ -1,40 +1,35 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: Introduction à Tasky
+description: Documentation officielle de Tasky, le gestionnaire de tâches Kanban open-source.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: Reprenez le contrôle de vos projets avec un flux Kanban intelligent qui sépare le statut de la catégorie.
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Démarrer l'installation
+      link: /guides/installation
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+      variant: primary
+    - text: Explorer l'API (Redoc)
+      link: http://localhost:3000/docs
       icon: external
-      variant: minimal
+      target: _blank
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+## Pourquoi Tasky ?
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+  <Card title="Architecture à Double Axe" icon="seti:config">
+    Fini les compromis. Les listes gèrent l'avancement (**À faire**, **En cours**, **Terminé**) tandis que les catégories gèrent la nature de la tâche (Bug, Design, Feature).
+  </Card>
+  <Card title="Sécurité et Rôles" icon="approve-check">
+    Un système granulaire basé sur des rôles stricts (**Propriétaire**, **Administrateur**, **Membre**, **Observateur**) pour sécuriser chaque espace de travail.
+  </Card>
+  <Card title="API Prête pour les Devs" icon="laptop">
+    Une documentation interactive moderne de type 3 colonnes pour tester et intégrer les endpoints en un clin d'œil.
+  </Card>
+  <Card title="Open Source & Moderne" icon="open-book">
+    Un stack performant bâti sur Angular pour le front-end et Node.js/Express pour le back-end.
+  </Card>
 </CardGrid>
