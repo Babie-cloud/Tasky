@@ -1,6 +1,6 @@
 <nav class="navbar-tasky d-flex align-items-center justify-content-between px-4 py-3">
   <div class="d-flex align-items-center gap-2">
-    <img src="/logo.png" alt="Logo" class="logo" width="26" height="26">
+    <img src="/favicon (Copie).png" alt="Logo" class="logo" width="26" height="26">
     <h4 class="fw-bold mb-0 brand-name">Tasky</h4>
   </div>
   <div class="d-flex align-items-center gap-3">
@@ -15,8 +15,9 @@
     >
       <i class="fa-solid" [class.fa-moon]="themeService.theme() === 'light'" [class.fa-sun]="themeService.theme() === 'dark'"></i>
     </button>
-    <a routerLink="/login" class="btn btn-outline-dark btn-sm">Log in</a>
-    <a routerLink="/signup" class="btn btn-dark btn-sm">Sign up</a>
+    <!-- Remplacement de btn-outline-dark par btn-login-outline -->
+    <a routerLink="/login" class="btn btn-login-outline btn-sm px-3">Log in</a>
+    <a routerLink="/signup" class="btn btn-dark btn-sm px-3">Sign up</a>
   </div>
 </nav>
 
@@ -44,10 +45,21 @@
             View Pricing
           </button>
         </div>
-        <div class="hero-checks mt-4">
-          <p><i class="fa-solid fa-check text-brand me-2"></i>Free forever</p>
-          <p><i class="fa-solid fa-check text-brand me-2"></i>No credit card required</p>
-          <p><i class="fa-solid fa-check text-brand me-2"></i>Setup in minutes</p>
+        
+        <!-- Liste verticale sans survol -->
+        <div class="hero-checks mt-5 d-flex flex-column gap-3">
+          <div class="check-item-simple">
+            <p class="mb-0 fw-medium"><i class="fa-solid fa-check text-brand me-3"></i>Free forever</p>
+            <span class="text-muted small ms-4 ps-2 d-block">No time limits, enjoy the basics at no cost.</span>
+          </div>
+          <div class="check-item-simple">
+            <p class="mb-0 fw-medium"><i class="fa-solid fa-check text-brand me-3"></i>No credit card</p>
+            <span class="text-muted small ms-4 ps-2 d-block">Sign up in 2 clicks without commitment.</span>
+          </div>
+          <div class="check-item-simple">
+            <p class="mb-0 fw-medium"><i class="fa-solid fa-check text-brand me-3"></i>Setup in minutes</p>
+            <span class="text-muted small ms-4 ps-2 d-block">Your first board is ready instantly.</span>
+          </div>
         </div>
       </div>
 
@@ -65,11 +77,11 @@
               <div class="board-preview-mini-card">Design new logo</div>
               <div class="board-preview-mini-card">Update website</div>
             </div>
-            <div class="board-preview-col">
+            <div class="board-preview-col col-in-progress">
               <p class="board-preview-col-title">In Progress</p>
               <div class="board-preview-mini-card">Write documentation</div>
             </div>
-            <div class="board-preview-col">
+            <div class="board-preview-col col-done">
               <p class="board-preview-col-title">Done</p>
               <div class="board-preview-mini-card">Setup project</div>
               <div class="board-preview-mini-card">Team meeting</div>
@@ -102,7 +114,7 @@
             <span class="axis-label">Progress</span>
             <span class="pill pill-todo">To Do</span>
             <span class="pill pill-doing">In Progress</span>
-            <span class="pill bg-brand">Done</span>
+            <span class="pill bg-brand text-white">Done</span>
           </div>
           <div class="axis-row">
             <span class="axis-label">Category</span>
@@ -118,24 +130,21 @@
 
 <div class="how-section" id="how-it-works">
   <div class="container">
-    <h2 class="section-title text-center">How it works</h2>
-    <p class="text-muted section-copy text-center mx-auto">
-      From a blank board to a moving Kanban in three steps.
-    </p>
-
-    <div class="row gy-4 mt-4">
-      <div class="col-md-4">
-        <div class="step-block">
+    <div class="row gy-4">
+      <!-- Colonne de gauche : Les étapes -->
+      <div class="col-lg-6 pe-lg-5">
+        <h2 class="section-title mb-5">How it works</h2>
+        
+        <div class="step-block mb-5 pb-5">
           <span class="step-number text-brand">01</span>
           <h3 class="step-title">Create a board</h3>
           <p class="text-muted step-copy">
-            Spin up a workspace for a project in seconds. Default lists — To Do, In Progress,
-            Done — are ready immediately, and you stay the owner.
+            Spin up a workspace for a project in seconds. Default lists : To Do, In Progress,
+            Done are ready immediately, and you stay the owner.
           </p>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="step-block">
+        
+        <div class="step-block mb-5 pb-5">
           <span class="step-number text-brand">02</span>
           <h3 class="step-title">Invite your team</h3>
           <p class="text-muted step-copy">
@@ -143,9 +152,8 @@
             is scoped per board, so no one sees work they weren't invited to.
           </p>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="step-block">
+        
+        <div class="step-block mb-5 pb-5">
           <span class="step-number text-brand">03</span>
           <h3 class="step-title">Drag, drop, done</h3>
           <p class="text-muted step-copy">
@@ -154,72 +162,95 @@
           </p>
         </div>
       </div>
+
+      <!-- Colonne de droite : L'image sticky -->
+      <div class="col-lg-6 d-none d-lg-block">
+        <div class="sticky-image-container">
+          <div class="mockup-placeholder text-center">
+            <i class="fa-solid fa-layer-group fs-1 text-muted mb-3 d-block"></i>
+            <h4 class="text-muted">Illustration dynamique</h4>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="features-section" id="features">
   <div class="container">
-    <h2 class="section-title text-center">Everything a small team actually needs</h2>
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <h2 class="section-title mb-5">Everything a small team actually needs</h2>
+        <div class="feature-list">
+          
+          <div class="feature-row-interactive">
+            <div class="feature-icon"><i class="fa-solid fa-diagram-project"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Boards with real permissions</h3>
+              <div class="feature-copy-wrapper">
+                <div class="feature-copy-inner">
+                  <p class="text-muted feature-copy">Owners, admins, members, and observers each see and do exactly what their role allows. Deleting a board stays reserved for its owner.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <div class="feature-list mt-5">
+          <div class="feature-row-interactive">
+            <div class="feature-icon"><i class="fa-solid fa-arrows-up-down-left-right"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Kanban drag & drop</h3>
+              <div class="feature-copy-wrapper">
+                <div class="feature-copy-inner">
+                  <p class="text-muted feature-copy">Reorder tasks inside a column or move them to another with a single gesture. Built on Angular CDK, so it feels instant.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-      <div class="feature-row">
-        <div class="feature-icon"><i class="fa-solid fa-diagram-project"></i></div>
-        <div>
-          <h3 class="feature-title">Boards with real permissions</h3>
-          <p class="text-muted feature-copy">
-            Owners, admins, members, and observers each see and do exactly what their role
-            allows. Deleting a board stays reserved for its owner, even if an admin has
-            every other privilege.
-          </p>
+          <div class="feature-row-interactive">
+            <div class="feature-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Invitations that just work</h3>
+              <div class="feature-copy-wrapper">
+                <div class="feature-copy-inner">
+                  <p class="text-muted feature-copy">Add a teammate by email and they get a secure invite link. No shared passwords, no guessing who has access.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-row-interactive">
+            <div class="feature-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Sign in your way</h3>
+              <div class="feature-copy-wrapper">
+                <div class="feature-copy-inner">
+                  <p class="text-muted feature-copy">Email and password, Google, or Facebook, every session is backed by a signed token, checked on every protected request.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-row-interactive">
+            <div class="feature-icon"><i class="fa-solid fa-circle-half-stroke"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Light or dark, your call</h3>
+              <div class="feature-copy-wrapper">
+                <div class="feature-copy-inner">
+                  <p class="text-muted feature-copy">Switch themes from the navbar at any time. The whole app follows, not just this page.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <div class="feature-row feature-row-reverse">
-        <div class="feature-icon"><i class="fa-solid fa-arrows-up-down-left-right"></i></div>
-        <div>
-          <h3 class="feature-title">Kanban drag & drop</h3>
-          <p class="text-muted feature-copy">
-            Reorder tasks inside a column or move them to another with a single gesture.
-            Built on Angular CDK, so it feels instant on every screen size.
-          </p>
+      <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+        <div class="feature-giant-logo">
+          <img src="/favicon (Copie).png" alt="Tasky Logo" style="width: 280px; opacity: 0.08; filter: grayscale(100%); transition: opacity 0.3s;">
         </div>
       </div>
-
-      <div class="feature-row">
-        <div class="feature-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
-        <div>
-          <h3 class="feature-title">Invitations that just work</h3>
-          <p class="text-muted feature-copy">
-            Add a teammate by email and they get a secure invite link. No shared passwords,
-            no guessing who has access to what.
-          </p>
-        </div>
-      </div>
-
-      <div class="feature-row feature-row-reverse">
-        <div class="feature-icon"><i class="fa-solid fa-lock"></i></div>
-        <div>
-          <h3 class="feature-title">Sign in your way</h3>
-          <p class="text-muted feature-copy">
-            Email and password, Google, or Facebook — every session is backed by a signed
-            token, checked on every protected request.
-          </p>
-        </div>
-      </div>
-
-      <div class="feature-row">
-        <div class="feature-icon"><i class="fa-solid fa-circle-half-stroke"></i></div>
-        <div>
-          <h3 class="feature-title">Light or dark, your call</h3>
-          <p class="text-muted feature-copy">
-            Switch themes from the navbar at any time. The whole app follows, not just
-            this page.
-          </p>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>
@@ -232,69 +263,101 @@
     </p>
 
     <div class="row gy-4 mt-4 justify-content-center">
+      <!-- Plan Free -->
       <div class="col-md-4">
-        <div class="plan-card">
+        <div class="plan-card d-flex flex-column text-start">
           <p class="plan-name">Free</p>
-          <p class="plan-price">$0</p>
-          <p class="text-muted plan-copy">Unlimited personal boards and the full Kanban flow.</p>
+          <p class="plan-price">$0 <span class="fs-6 text-muted fw-normal">/month</span></p>
+          <p class="text-muted plan-copy mb-4">Unlimited personal boards and the full Kanban flow. Perfect for individuals getting started.</p>
+          <ul class="list-unstyled mb-4 flex-grow-1">
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> 3 Shared Boards</li>
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> Basic Categories</li>
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> Standard Support</li>
+          </ul>
+          <button class="btn btn-outline-brand w-100" (click)="OpenSignup()">Get started free</button>
         </div>
       </div>
+      <!-- Plan Pro -->
       <div class="col-md-4">
-        <div class="plan-card plan-card-highlight border-brand shadow-brand">
+        <div class="plan-card plan-card-highlight border-brand shadow-brand d-flex flex-column text-start">
           <p class="plan-name">Pro</p>
-          <p class="plan-price">For growing teams</p>
-          <p class="text-muted plan-copy">More collaborators per board and priority support.</p>
+          <p class="plan-price">$12 <span class="fs-6 text-muted fw-normal">/month</span></p>
+          <p class="text-muted plan-copy mb-4">More collaborators per board and priority support. Ideal for growing small teams.</p>
+          <ul class="list-unstyled mb-4 flex-grow-1">
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> Unlimited Boards</li>
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> Advanced Roles</li>
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> Priority Support</li>
+          </ul>
+          <button class="btn btn-primary w-100 shadow-brand" (click)="OpenSignup()">Get Started</button>
         </div>
       </div>
+      <!-- Plan Enterprise -->
       <div class="col-md-4">
-        <div class="plan-card">
+        <div class="plan-card d-flex flex-column text-start">
           <p class="plan-name">Enterprise</p>
           <p class="plan-price">Custom</p>
-          <p class="text-muted plan-copy">Advanced roles and controls across every board.</p>
+          <p class="text-muted plan-copy mb-4">Advanced controls, SSO, and dedicated success managers for larger organizations.</p>
+          <ul class="list-unstyled mb-4 flex-grow-1">
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> Everything in Pro</li>
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> SAML SSO</li>
+            <li class="mb-2"><i class="fa-solid fa-check text-brand me-2"></i> Dedicated Manager</li>
+          </ul>
+          <button class="btn btn-outline-secondary w-100" (click)="Openpricing()">Contact Sales</button>
         </div>
       </div>
-    </div>
-
-    <div class="text-center mt-4">
-      <button type="button" class="btn btn-outline-primary px-4" (click)="Openpricing()">
-        Compare plans in detail
-      </button>
     </div>
   </div>
 </div>
 
-<div class="cta-band">
-  <div class="container text-center">
-    <h2 class="cta-title">Bring order to your work today</h2>
-    <p class="cta-copy">Free forever on the essentials. No card required to start.</p>
-    <button type="button" class="btn btn-light btn-lg px-4" (click)="OpenSignup()">
-      Get Started Free
-    </button>
+<div class="cta-band" id="contact">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 text-center">
+        <h2 class="cta-title">Need help getting started?</h2>
+        <p class="cta-copy mb-4">Our team is here to answer your questions. Drop us a message.</p>
+        <form class="bg-white p-4 p-md-5 rounded-4 shadow-lg text-start mx-auto" style="max-width: 500px;">
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark">Email address</label>
+            <input type="email" class="form-control bg-light" placeholder="name@company.com">
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-dark">How can we help?</label>
+            <textarea class="form-control bg-light" rows="4" placeholder="Tell us about your team..."></textarea>
+          </div>
+          <button type="button" class="btn btn-primary w-100 shadow-brand py-2 fw-bold">Send Message</button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
 <footer class="footer-tasky">
   <div class="container">
     <div class="row gy-4">
-      <div class="col-md-4">
+      <div class="col-lg-4 col-md-12">
         <h4 class="fw-bold mb-2 brand-name">Tasky</h4>
         <p class="text-muted footer-tagline">Boards, roles, and a Kanban that keeps status and category apart.</p>
       </div>
-      <div class="col-6 col-md-2">
+      <div class="col-6 col-lg-2">
         <p class="footer-heading">Product</p>
         <a href="#how-it-works" class="footer-link">How it works</a>
         <a href="#features" class="footer-link">Features</a>
         <a href="#plans" class="footer-link">Pricing</a>
       </div>
-      <div class="col-6 col-md-2">
-        <p class="footer-heading">Account</p>
+      <div class="col-6 col-lg-2">
+        <p class="footer-heading">Company</p>
         <a routerLink="/login" class="footer-link">Log in</a>
         <a routerLink="/signup" class="footer-link">Sign up</a>
-      </div>
-      <div class="col-6 col-md-2">
-        <p class="footer-heading">Legal</p>
-        <a routerLink="/policy-privacy" class="footer-link">Privacy Policy</a>
+        <a routerLink="/policy-privacy" class="footer-link mt-3">Privacy Policy</a>
         <a routerLink="/terms" class="footer-link">Terms of Service</a>
+      </div>
+      <div class="col-lg-4 mt-4 mt-lg-0">
+        <p class="footer-heading">Subscribe to our newsletter</p>
+        <p class="text-muted mb-3" style="font-size: 0.85rem;">Get the latest updates on new features and product improvements.</p>
+        <div class="input-group">
+          <input type="email" class="form-control" placeholder="Email address">
+          <button class="btn btn-primary" type="button">Subscribe</button>
+        </div>
       </div>
     </div>
     <hr class="footer-rule">

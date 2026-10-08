@@ -9,6 +9,19 @@ $tasky-green-700: #1f7a3e;
 $tasky-green-800: #1a6134;
 $tasky-green-900: #145029;
 
+$tasky-yellow-50:  #fefce8;
+$tasky-yellow-100: #fef9c3;
+$tasky-yellow-200: #fef08a;
+$tasky-yellow-300: #fde047;
+$tasky-yellow-400: #facc15;
+$tasky-yellow-500: #eab308;
+$tasky-yellow-600: #ca8a04;
+$tasky-yellow-700: #a16207;
+
+$tasky-warning:       $tasky-yellow-400;
+$tasky-warning-light: $tasky-yellow-100;
+$tasky-warning-dark:  $tasky-yellow-700;
+
 $tasky-primary:       $tasky-green-500;
 $tasky-primary-hover: $tasky-green-600;
 $tasky-primary-light: $tasky-green-100;
@@ -24,6 +37,7 @@ $tasky-gradient-landing: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
 
 $tasky-bubble-1: rgba($tasky-green-400, 0.25);
 $tasky-bubble-2: rgba($tasky-green-300, 0.20);
+
 :root {
   --tasky-surface:         #{$tasky-surface};
   --tasky-surface-rgb:     255, 255, 255;
@@ -40,4 +54,8 @@ $tasky-bubble-2: rgba($tasky-green-300, 0.20);
   --tasky-primary-hover: #{$tasky-primary-hover};
   --tasky-primary-light: #{$tasky-primary-light};
   --tasky-primary-dark:  #{$tasky-primary-dark};
+
+  --tasky-warning:       #{$tasky-warning};
+  --tasky-warning-light: #{$tasky-warning-light};
+  --tasky-warning-dark:  #{$tasky-warning-dark};
 }

@@ -82,6 +82,19 @@
     border-color: rgba(#fff, 0.08);
   }
 
+  --tasky-warning-light: #{rgba($tasky-yellow-400, 0.18)};
+
+  .bg-warning-subtle {
+    background-color: rgba($tasky-yellow-400, 0.15) !important;
+    color: $tasky-yellow-300 !important;
+    border: 1px solid rgba($tasky-yellow-400, 0.3);
+  }
+
+  .stat-card .stat-icon.bg-warning-subtle {
+    background-color: rgba($tasky-yellow-400, 0.2) !important;
+    color: $tasky-yellow-300 !important;
+  }
+  
   .pricing-card {
     background-color: #242526;
     border-color: rgba($tasky-green-700, 0.4);

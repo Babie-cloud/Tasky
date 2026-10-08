@@ -1,0 +1,186 @@
+@use '../../public/styles/colors' as *;
+
+// NAVBAR
+.navbar-tasky {
+  background-color: var(--tasky-surface);
+  border-bottom: 1px solid var(--tasky-border);
+}
+.brand-name { color: var(--tasky-text); }
+.theme-toggle {
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tasky-text-muted);
+  border-color: var(--tasky-border);
+  &:hover {
+    color: $tasky-primary;
+    border-color: $tasky-primary;
+  }
+}
+
+.pricing-page-wrapper {
+  background-color: var(--tasky-surface-sunken);
+  min-height: 100vh;
+}
+
+.section-title {
+  color: var(--tasky-text);
+}
+
+.tracking-wide {
+  letter-spacing: 0.1em;
+}
+
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 40px solid;
+  opacity: 0.08; 
+  z-index: 0;
+  pointer-events: none;
+}
+
+.circle-green {
+  width: 400px;
+  height: 400px;
+  border-color: $tasky-primary;
+  top: 10%;
+  left: -100px;
+}
+
+.circle-yellow {
+  width: 300px;
+  height: 300px;
+  border-color: var(--tasky-warning);
+  bottom: 5%;
+  right: 10%;
+}
+
+.circle-brand {
+  width: 200px;
+  height: 200px;
+  border-color: $tasky-primary-dark;
+  top: 20%;
+  right: -50px;
+}
+
+.pricing-card-modern {
+  background-color: var(--tasky-surface-alt); 
+  border: 1px solid var(--tasky-border);
+  border-radius: 1.5rem;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba($tasky-primary, 0.1) !important;
+  }
+
+  .card-title {
+    color: var(--tasky-text);
+  }
+
+  .plan-name {
+    color: var(--tasky-text);
+  }
+
+  .dot-accent {
+    position: absolute;
+    top: -12px;
+    right: 24px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .dot-gray { background-color: #94a3b8; }
+  .dot-brand { background-color: $tasky-primary; }
+  .dot-warning { background-color: var(--tasky-warning); }
+}
+
+.card-featured {
+  background-color: var(--tasky-surface);
+  border-width: 2px;
+  
+  // Effet de lueur en bas
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, rgba($tasky-primary, 0.08), transparent);
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    pointer-events: none;
+  }
+}
+
+.featured-divider {
+  border-top: 1px solid var(--tasky-border);
+}
+
+.pricing-table-container {
+  background-color: var(--tasky-surface-alt);
+  border-color: var(--tasky-border) !important;
+  
+  table th, table td {
+    border-color: var(--tasky-border);
+    color: var(--tasky-text);
+  }
+}
+
+.footer-tasky {
+  background-color: var(--tasky-surface);
+  border-color: var(--tasky-border) !important;
+}
+.nav-link-quiet {
+  transition: color 0.2s ease;
+  &:hover { color: $tasky-primary !important; }
+}
+
+.footer-tasky {
+  background-color: var(--tasky-surface);
+  border-top: 1px solid var(--tasky-border);
+  padding-block: clamp(2.5rem, 4vw, 3.5rem) 1.5rem;
+}
+
+.footer-tagline {
+  max-width: 20rem;
+}
+
+.footer-heading {
+  color: var(--tasky-text);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.footer-link {
+  display: block;
+  color: var(--tasky-text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $tasky-primary;
+  }
+}
+
+.footer-rule {
+  border-color: var(--tasky-border);
+  margin-block: 2rem 1.5rem;
+}
+
+.footer-copyright {
+  font-size: 0.85rem;
+}

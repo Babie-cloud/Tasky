@@ -1,10 +1,17 @@
 @use '../../public/styles/colors' as *;
+
 .navbar-tasky {
-  background-color: var(--tasky-surface);
-  border-bottom: 1px solid var(--tasky-border);
+  background-color: rgba(var(--tasky-surface-rgb), 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--tasky-border);
+  border-radius: 50rem;
   position: sticky;
-  top: 0;
+  top: 1.5rem;
   z-index: 100;
+  max-width: 1100px;
+  margin: 0 auto 2rem auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  padding: 0.75rem 1.5rem !important;
 }
 
 .brand-name {
@@ -38,7 +45,19 @@
     border-color: $tasky-primary;
   }
 }
+.btn-login-outline {
+  color: var(--tasky-text);
+  border: 1px solid var(--tasky-border);
+  font-weight: 600;
+  background: transparent;
+  transition: all 0.2s ease;
 
+  &:hover {
+    background-color: var(--tasky-surface-alt);
+    color: $tasky-primary;
+    border-color: $tasky-primary;
+  }
+}
 .hero-section {
   background-color: var(--tasky-surface);
   padding-block: clamp(3rem, 6vw, 6rem);
@@ -68,10 +87,48 @@
   line-height: 1.6;
 }
 
-.hero-checks p {
-  color: var(--tasky-text);
-  font-size: 0.95rem;
-  margin-bottom: 0.5rem;
+.check-item {
+  position: relative;
+  cursor: pointer;
+  
+  p {
+    color: var(--tasky-text);
+    font-size: 0.95rem;
+  }
+
+  .tooltip-text {
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--tasky-text);
+    color: var(--tasky-surface);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 10;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--tasky-text) transparent transparent transparent;
+    }
+  }
+
+  &:hover .tooltip-text {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .board-preview-card {
@@ -132,6 +189,35 @@
   font-size: 0.8rem;
   margin-bottom: 0.5rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  cursor: grab;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.col-in-progress .board-preview-mini-card:hover {
+  border-color: var(--tasky-warning);
+  box-shadow: 0 4px 12px rgba(250, 204, 21, 0.2);
+  transform: scale(1.02);
+}
+
+.col-done .board-preview-mini-card:hover {
+  transform: scale(1.02);
+  border-color: $tasky-primary;
+  &::after {
+    content: 'Fait !';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #ef4444; 
+    color: white;
+    font-size: 0.65rem;
+    font-weight: bold;
+    padding: 0.2rem 0.5rem;
+    border-radius: 50rem;
+    transform: rotate(12deg);
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+  }
 }
 
 .board-preview-fab {
@@ -148,7 +234,6 @@
   justify-content: center;
   box-shadow: 0 8px 20px rgba($tasky-primary, 0.4);
 }
-
 
 .section-title {
   font-size: clamp(1.5rem, 3vw, 2rem);
@@ -223,10 +308,6 @@
   padding-block: clamp(3rem, 5vw, 5rem);
 }
 
-.step-block {
-  height: 100%;
-}
-
 .step-number {
   font-size: 1.75rem;
   font-weight: 800;
@@ -243,6 +324,21 @@
 .step-copy {
   line-height: 1.6;
 }
+
+.sticky-image-container {
+  position: sticky;
+  top: 120px; 
+  height: 60vh;
+  background: var(--tasky-surface-alt);
+  border: 1px solid var(--tasky-border);
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+
 .features-section {
   background-color: var(--tasky-surface);
   padding-block: clamp(3rem, 5vw, 5rem);
@@ -251,46 +347,78 @@
 .feature-list {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 1rem;
 }
 
-.feature-row {
+.feature-row-interactive {
   display: flex;
   align-items: flex-start;
   gap: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  transition: background 0.3s ease;
+  cursor: default;
 
-  &.feature-row-reverse {
-    flex-direction: row-reverse;
-    text-align: right;
+  .feature-icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $tasky-primary-light;
+    color: $tasky-primary-dark;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+  }
 
-    .feature-icon { margin-left: auto; }
+  .feature-content {
+    flex-grow: 1;
+  }
+
+  .feature-title {
+    color: var(--tasky-text);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    margin-top: 0.5rem;
+  }
+
+  // Accordion text
+  .feature-copy-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+  }
+  
+  .feature-copy-inner {
+    overflow: hidden;
+  }
+
+  .feature-copy {
+    margin: 0;
+    padding-top: 0.25rem;
+    line-height: 1.6;
+  }
+
+  &:hover {
+    background: var(--tasky-surface-alt);
+    .feature-copy-wrapper {
+      grid-template-rows: 1fr;
+    }
+    .feature-icon {
+      background: $tasky-primary;
+      color: white;
+    }
   }
 }
 
-.feature-icon {
-  flex-shrink: 0;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: $tasky-primary-light;
-  color: $tasky-primary-dark;
-  font-size: 1.1rem;
+.feature-giant-logo:hover img {
+  opacity: 0.25 !important;
+  filter: grayscale(0%) !important;
 }
 
-.feature-title {
-  color: var(--tasky-text);
-  font-weight: 700;
-  margin-bottom: 0.35rem;
-}
-
-.feature-copy {
-  line-height: 1.6;
-  max-width: 32rem;
-}
-
+// PLANS & PRICING
 .plans-section {
   background-color: var(--tasky-surface-sunken);
   padding-block: clamp(3rem, 5vw, 5rem);
@@ -301,8 +429,7 @@
   background: var(--tasky-surface-alt);
   border: 1px solid var(--tasky-border);
   border-radius: 1.25rem;
-  padding: 2rem 1.5rem;
-  text-align: center;
+  padding: 2.5rem 1.75rem;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 
   &:hover {
@@ -325,14 +452,15 @@
 }
 
 .plan-price {
-  font-size: 1.5rem;
+  font-size: 2.25rem;
   font-weight: 800;
   color: var(--tasky-text);
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .plan-copy {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .cta-band {
@@ -351,6 +479,7 @@
   margin-bottom: 1.5rem;
 }
 
+// FOOTER
 .footer-tasky {
   background-color: var(--tasky-surface);
   border-top: 1px solid var(--tasky-border);
@@ -385,7 +514,7 @@
 
 .footer-rule {
   border-color: var(--tasky-border);
-  margin-block: 1.5rem;
+  margin-block: 2rem 1.5rem;
 }
 
 .footer-copyright {

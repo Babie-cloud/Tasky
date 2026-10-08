@@ -1,8 +1,7 @@
-<!--- Navbar Component --->
 <nav class="navbar-tasky d-flex align-items-center justify-content-between px-4 py-3">
   <div class="d-flex align-items-center gap-2">
-    <img src="/logo.png" alt="Logo" class="logo" width="28" height="28">
-    <h4 class="fw-bold mb-0">Tasky</h4>
+    <img src="/favicon (Copie).png" alt="Logo" class="logo" width="28" height="28">
+    <h4 class="fw-bold mb-0 brand-name">Tasky</h4>
   </div>
   <div class="d-flex align-items-center gap-3">
     <button
@@ -13,185 +12,178 @@
     >
       <i class="fa-solid" [class.fa-moon]="themeService.theme() === 'light'" [class.fa-sun]="themeService.theme() === 'dark'"></i>
     </button>
-    <a routerLink="/" class="btn btn-dark btn-sm">Return to home page</a>
+    <a routerLink="/" class="btn btn-login-outline btn-sm fw-semibold">Return to home page</a>
   </div>
 </nav>
 
-<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-  <h1 class="display-4 fw-bold text-body-emphasis">Pricing</h1>
-  <p class="fs-5 text-body-secondary">
-    Choose the plan that fits how you organize your work with Tasky.
-  </p>
-</div>
+<div class="pricing-page-wrapper position-relative overflow-hidden">
+  <div class="bg-circle circle-green"></div>
+  <div class="bg-circle circle-yellow"></div>
+  <div class="bg-circle circle-brand"></div>
 
-<main class="container pb-5">
-  <div class="row row-cols-1 row-cols-md-3 mb-3 text-center g-4">
-
-    <div class="col">
-      <div class="card pricing-card mb-4 rounded-4 shadow-sm h-100">
-        <div class="card-header py-3">
-          <h4 class="my-0 fw-normal">Free</h4>
-        </div>
-        <div class="card-body">
-          <h1 class="card-title pricing-card-title">
-            $0<small class="text-body-secondary fw-light">/mo</small>
-          </h1>
-          <ul class="list-unstyled mt-3 mb-4 text-start">
-            <li><i class="fa-solid fa-check text-success me-2"></i>10 users included</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>2 GB of storage</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>Email support</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>Help center access</li>
-          </ul>
-          <button type="button" class="w-100 btn btn-lg btn-outline-primary" routerLink="/signup">
-  Sign up for free
-</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col">
-      <div class="card pricing-card pricing-card-featured mb-4 rounded-4 shadow h-100">
-        <span class="pricing-badge">Most popular</span>
-        <div class="card-header py-3">
-          <h4 class="my-0 fw-normal">Pro</h4>
-        </div>
-        <div class="card-body">
-          <h1 class="card-title pricing-card-title">
-            $15<small class="text-body-secondary fw-light">/mo</small>
-          </h1>
-          <ul class="list-unstyled mt-3 mb-4 text-start">
-            <li><i class="fa-solid fa-check text-success me-2"></i>20 users included</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>10 GB of storage</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>Priority email support</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>Help center access</li>
-          </ul>
-          <!-- Card Pro -->
-@if (errorMessage()) {
-  <p class="small text-danger mb-2">{{ errorMessage() }}</p>
-}
-<button
-  type="button"
-  class="w-100 btn btn-lg btn-primary"
-  [disabled]="loadingPlan() === 'pro'"
-  (click)="subscribe('pro')"
->
-  {{ loadingPlan() === 'pro' ? 'Redirection...' : 'Get started' }}
-</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col">
-      <div class="card pricing-card mb-4 rounded-4 shadow-sm h-100">
-        <div class="card-header py-3">
-          <h4 class="my-0 fw-normal">Enterprise</h4>
-        </div>
-        <div class="card-body">
-          <h1 class="card-title pricing-card-title">
-            $29<small class="text-body-secondary fw-light">/mo</small>
-          </h1>
-          <ul class="list-unstyled mt-3 mb-4 text-start">
-            <li><i class="fa-solid fa-check text-success me-2"></i>30 users included</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>15 GB of storage</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>Phone and email support</li>
-            <li><i class="fa-solid fa-check text-success me-2"></i>Help center access</li>
-          </ul>
-          <!-- Card Enterprise -->
-<button
-  type="button"
-  class="w-100 btn btn-lg btn-outline-primary"
-  [disabled]="loadingPlan() === 'enterprise'"
-  (click)="subscribe('enterprise')"
->
-  {{ loadingPlan() === 'enterprise' ? 'Redirection...' : 'Contact us' }}
-</button>
-        </div>
-      </div>
-    </div>
-
+  <div class="pricing-header p-3 pt-5 pb-md-4 mx-auto text-center position-relative z-1">
+    <h1 class="display-5 fw-bold section-title mb-3">Simple & Transparent Pricing</h1>
+    <p class="text-muted max-w-auth-lg mx-auto mb-0" style="font-size: 1.05rem;">
+      Choose the plan that fits how you organize your work with Tasky. No hidden fees.
+    </p>
   </div>
 
-  <h2 class="display-6 text-center mb-4">Compare plans</h2>
-  <div class="table-responsive">
-    <table class="table text-center align-middle">
-      <thead>
-        <tr>
-          <th style="width: 34%"></th>
-          <th style="width: 22%">Free</th>
-          <th style="width: 22%">Pro</th>
-          <th style="width: 22%">Enterprise</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row" class="text-start">Public</th>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-        </tr>
-        <tr>
-          <th scope="row" class="text-start">Private</th>
-          <td></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-        </tr>
-        <tr>
-          <th scope="row" class="text-start">Permissions</th>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-        </tr>
-        <tr>
-          <th scope="row" class="text-start">Sharing</th>
-          <td></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-        </tr>
-        <tr>
-          <th scope="row" class="text-start">Unlimited members</th>
-          <td></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-        </tr>
-        <tr>
-          <th scope="row" class="text-start">Extra security</th>
-          <td></td>
-          <td></td>
-          <td><i class="fa-solid fa-check text-success"></i></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</main>
+  <main class="container pb-5 position-relative z-1">
+    <div class="row row-cols-1 row-cols-md-3 mb-5 text-center g-4 justify-content-center">
 
-<footer class="pt-4 my-md-5 pt-md-5 border-top">
+      <div class="col">
+        <div class="card pricing-card-modern shadow-sm h-100 text-start">
+          <div class="dot-accent dot-gray"></div>
+          <div class="card-body d-flex flex-column p-4">
+            <h5 class="fw-semibold text-uppercase tracking-wide mb-2 plan-name" style="font-size: 0.85rem;">Free</h5>
+            <h2 class="card-title pricing-card-title mb-3">
+              $0<small class="text-muted fw-normal" style="font-size: 0.9rem;">/mo</small>
+            </h2>
+            <ul class="list-unstyled mt-2 mb-4 flex-grow-1 text-muted small">
+              <li class="mb-2 d-flex align-items-center"><i class="fa-solid fa-check text-brand me-3"></i>10 users included</li>
+              <li class="mb-2 d-flex align-items-center"><i class="fa-solid fa-check text-brand me-3"></i>2 GB of storage</li>
+              <li class="mb-2 d-flex align-items-center"><i class="fa-solid fa-check text-brand me-3"></i>Email support</li>
+              <li class="mb-2 d-flex align-items-center opacity-50"><i class="fa-solid fa-xmark text-danger me-3"></i>Priority support</li>
+            </ul>
+            <button type="button" class="btn btn-outline-brand btn-sm w-100 mt-auto rounded-pill py-2 fw-semibold" routerLink="/signup">
+              Sign up for free
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card pricing-card-modern card-featured shadow-brand-lg h-100 text-start border-brand">
+          <div class="dot-accent dot-brand"></div>
+          <div class="card-body d-flex flex-column p-4 position-relative z-1">
+            <h5 class="fw-bold text-brand text-uppercase tracking-wide mb-2" style="font-size: 0.85rem;">Pro</h5>
+            <h2 class="card-title pricing-card-title mb-3">
+              $15<small class="text-muted fw-normal" style="font-size: 0.9rem;">/mo</small>
+            </h2>
+            <ul class="list-unstyled mt-2 mb-4 flex-grow-1 small">
+              <li class="mb-2 d-flex align-items-center fw-medium"><i class="fa-solid fa-check text-brand me-3"></i>20 users included</li>
+              <li class="mb-2 d-flex align-items-center fw-medium"><i class="fa-solid fa-check text-brand me-3"></i>10 GB of storage</li>
+              <li class="mb-2 d-flex align-items-center fw-medium"><i class="fa-solid fa-check text-brand me-3"></i>Priority email support</li>
+              <li class="mb-2 d-flex align-items-center fw-medium"><i class="fa-solid fa-check text-brand me-3"></i>Advanced permissions</li>
+            </ul>
+            <div class="mt-auto pt-3 featured-divider">
+              @if (errorMessage()) { <p class="small text-danger mb-2 text-center">{{ errorMessage() }}</p> }
+              <button type="button" class="btn btn-primary btn-sm w-100 rounded-pill py-2 fw-bold" [disabled]="loadingPlan() === 'pro'" (click)="subscribe('pro')">
+                {{ loadingPlan() === 'pro' ? 'Loading...' : 'Get started' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card pricing-card-modern shadow-sm h-100 text-start">
+          <div class="dot-accent dot-warning"></div>
+          <div class="card-body d-flex flex-column p-4">
+            <h5 class="fw-semibold text-uppercase tracking-wide mb-2 plan-name" style="font-size: 0.85rem;">Enterprise</h5>
+            <h2 class="card-title pricing-card-title mb-3 text-warning-accent" style="color: var(--tasky-warning);">
+              $29<small class="text-muted fw-normal" style="font-size: 0.9rem;">/mo</small>
+            </h2>
+            <ul class="list-unstyled mt-2 mb-4 flex-grow-1 text-muted small">
+              <li class="mb-2 d-flex align-items-center"><i class="fa-solid fa-check text-brand me-3"></i>30 users included</li>
+              <li class="mb-2 d-flex align-items-center"><i class="fa-solid fa-check text-brand me-3"></i>15 GB of storage</li>
+              <li class="mb-2 d-flex align-items-center"><i class="fa-solid fa-check text-brand me-3"></i>Phone & email support</li>
+              <li class="mb-2 d-flex align-items-center"><i class="fa-solid fa-check text-brand me-3"></i>Single Sign-On (SSO)</li>
+            </ul>
+            <button type="button" class="btn btn-outline-secondary btn-sm w-100 mt-auto rounded-pill py-2 fw-semibold" [disabled]="loadingPlan() === 'enterprise'" (click)="subscribe('enterprise')">
+              {{ loadingPlan() === 'enterprise' ? 'Loading...' : 'Contact us' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 class="text-center section-title mt-5 mb-4 fw-bold">Compare features in detail</h3>
+    <div class="table-responsive rounded-4 p-4 pricing-table-container shadow-sm border">
+      <table class="table table-hover text-center align-middle mb-0 small">
+        <thead>
+          <tr>
+            <th style="width: 34%" class="text-start text-muted fw-normal pb-3">Feature</th>
+            <th style="width: 22%" class="pb-3">Free</th>
+            <th style="width: 22%" class="text-brand pb-3">Pro</th>
+            <th style="width: 22%" class="pb-3">Enterprise</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr>
+            <th scope="row" class="text-start fw-normal text-muted py-3">Public boards</th>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start fw-normal text-muted py-3">Private boards</th>
+            <td><i class="fa-solid fa-minus text-muted opacity-50"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start fw-normal text-muted py-3">Role-based Permissions</th>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start fw-normal text-muted py-3">External sharing</th>
+            <td><i class="fa-solid fa-minus text-muted opacity-50"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start fw-normal text-muted py-3">Unlimited members</th>
+            <td><i class="fa-solid fa-minus text-muted opacity-50"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start fw-normal text-muted py-3">Extra security (SSO)</th>
+            <td><i class="fa-solid fa-minus text-muted opacity-50"></i></td>
+            <td><i class="fa-solid fa-minus text-muted opacity-50"></i></td>
+            <td><i class="fa-solid fa-check text-success"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Le footer reste inchangé -->
+  <footer class="footer-tasky">
   <div class="container">
-    <div class="row">
-      <div class="col-12 col-md">
-        <small class="d-block mb-3 text-body-secondary">&copy; 2026 Tasky. All rights reserved.</small>
+    <div class="row gy-4">
+      <div class="col-lg-4 col-md-12">
+        <h4 class="fw-bold mb-2 brand-name">Tasky</h4>
+        <p class="text-muted footer-tagline">Boards, roles, and a Kanban that keeps status and category apart.</p>
       </div>
-      <div class="col-6 col-md">
-        <h5>Features</h5>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Task management</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team boards</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Integrations</a></li>
-        </ul>
+      <div class="col-6 col-lg-2">
+        <p class="footer-heading">Product</p>
+        <a href="#how-it-works" class="footer-link">How it works</a>
+        <a href="#features" class="footer-link">Features</a>
+        <a href="#plans" class="footer-link">Pricing</a>
       </div>
-      <div class="col-6 col-md">
-        <h5>Resources</h5>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Documentation</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Support</a></li>
-        </ul>
+      <div class="col-6 col-lg-2">
+        <p class="footer-heading">Company</p>
+        <a routerLink="/login" class="footer-link">Log in</a>
+        <a routerLink="/signup" class="footer-link">Sign up</a>
+        <a routerLink="/policy-privacy" class="footer-link mt-3">Privacy Policy</a>
+        <a routerLink="/terms" class="footer-link">Terms of Service</a>
       </div>
-      <div class="col-6 col-md">
-        <h5>About</h5>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" routerlink="/policy-privacy">Privacy</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" routerlink="/terms">Terms</a></li>
-        </ul>
+      <div class="col-lg-4 mt-4 mt-lg-0">
+        <p class="footer-heading">Subscribe to our newsletter</p>
+        <p class="text-muted mb-3" style="font-size: 0.85rem;">Get the latest updates on new features and product improvements.</p>
+        <div class="input-group">
+          <input type="email" class="form-control" placeholder="Email address">
+          <button class="btn btn-primary" type="button">Subscribe</button>
+        </div>
       </div>
     </div>
+    <hr class="footer-rule">
+    <p class="text-muted text-center footer-copyright mb-0">&copy; 2026 Tasky. All rights reserved.</p>
   </div>
 </footer>
+</div>
