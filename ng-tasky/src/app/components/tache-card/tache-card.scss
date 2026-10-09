@@ -1,96 +1,262 @@
 @use '../../public/styles/colors' as *;
 
+.board-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 3vw, 2.75rem) clamp(1rem, 3vw, 2rem) 3rem;
+}
+
+.board-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.board-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tasky-text-muted);
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $tasky-primary;
+  }
+}
+
+.board-title {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--tasky-text);
+  margin: 0 0 0.35rem;
+  line-height: 1.2;
+}
+
+.board-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--tasky-text-muted);
+  max-width: 36rem;
+  line-height: 1.5;
+}
+
+.board-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.board-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
 .stat-card {
   background: var(--tasky-surface);
   border: 1px solid var(--tasky-border);
   border-radius: 1rem;
-  padding: 1.25rem;
+  padding: 1.35rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--tasky-text-muted);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
 }
 
 .stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
   margin: 0;
   color: var(--tasky-text);
+  line-height: 1;
 }
 
 .stat-icon {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+}
+
+.stat-icon--total {
+  background: color-mix(in srgb, $tasky-primary 14%, transparent);
+  color: $tasky-primary;
+}
+
+.stat-icon--progress {
+  background: color-mix(in srgb, $tasky-yellow-400 16%, transparent);
+  color: $tasky-yellow-600;
+}
+
+.stat-icon--done {
+  background: color-mix(in srgb, $tasky-green-400 16%, transparent);
+  color: $tasky-green-600;
 }
 
 .board-toolbar {
-  background: var(--tasky-surface-alt);
-  border: 1px solid var(--tasky-border);
-  border-radius: 0.85rem;
-  padding: 0.6rem 0.85rem;
-}
-
-.board-column {
-  background: var(--tasky-surface-alt);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem 1.25rem;
+  background: var(--tasky-surface);
   border: 1px solid var(--tasky-border);
   border-radius: 1rem;
-  padding: 1rem;
+}
 
-  h6 {
-    color: var(--tasky-text);
+.toolbar-select {
+  width: auto;
+  min-width: 11rem;
+  flex: 0 1 auto;
+}
+
+.toolbar-search {
+  flex: 1 1 14rem;
+  min-width: min(100%, 16rem);
+}
+
+.kanban-board {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--tasky-border);
+    border-radius: 999px;
   }
 }
 
-.board-column-new {
-  background: transparent;
-  border: 1.5px dashed var(--tasky-border);
+.kanban-column {
+  flex: 0 0 min(19rem, 88vw);
+  scroll-snap-align: start;
+  background: var(--tasky-surface-sunken);
+  border: 1px solid var(--tasky-border);
+  border-radius: 1.125rem;
+  padding: 1rem 1rem 1.25rem;
+  min-height: 28rem;
+  display: flex;
+  flex-direction: column;
+}
 
-  p {
-    color: var(--tasky-text);
-  }
+.kanban-column__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0 0.15rem;
+}
+
+.kanban-column__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--tasky-text);
+  margin: 0;
+}
+
+.kanban-column__count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--tasky-text-muted);
+  background: var(--tasky-surface);
+  border: 1px solid var(--tasky-border);
+  border-radius: 999px;
+  min-width: 1.65rem;
+  height: 1.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.4rem;
+}
+
+.kanban-column--new {
+  background: transparent;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--tasky-border) 80%, $tasky-primary);
+  min-height: 20rem;
+}
+
+.kanban-column__title--new {
+  margin-bottom: 0.35rem;
+}
+
+.kanban-new-hint {
+  font-size: 0.8125rem;
+  color: var(--tasky-text-muted);
+  line-height: 1.45;
+  margin: 0 0 1rem;
 }
 
 .task-list {
-  min-height: 3.5rem;
+  flex: 1;
+  min-height: 6rem;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.75rem;
 }
 
 .task-list-empty {
   margin: 0;
-  padding: 1rem 0.5rem;
+  padding: 2rem 1rem;
   text-align: center;
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   color: var(--tasky-text-muted);
   border: 1.5px dashed var(--tasky-border);
-  border-radius: 0.65rem;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--tasky-surface) 60%, transparent);
 }
 
 .task-card {
   background: var(--tasky-surface);
   color: var(--tasky-text);
-  border-radius: 0.75rem;
-  padding: 0.75rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--tasky-border) 70%, transparent);
+  border-radius: 0.85rem;
+  padding: 0.85rem 1rem;
   font-size: 0.9rem;
   cursor: grab;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
 
   &:hover {
-    box-shadow: 0 6px 16px rgba($tasky-primary, 0.12);
-    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba($tasky-primary, 0.1);
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, $tasky-primary 35%, var(--tasky-border));
   }
 
   &:active {
@@ -98,12 +264,45 @@
   }
 }
 
+.task-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-card__title {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.task-card__delete {
+  color: var(--tasky-text-muted) !important;
+  opacity: 0.6;
+  padding: 0 !important;
+  line-height: 1;
+
+  &:hover {
+    opacity: 1;
+    color: #ef4444 !important;
+  }
+}
+
+.task-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.5rem;
+}
+
 .avatar-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.65rem;
+  height: 1.65rem;
   border-radius: 50%;
   background: $tasky-primary-dark;
   color: #fff;
@@ -114,7 +313,7 @@
 .cdk-drag-preview {
   background: var(--tasky-surface);
   box-sizing: border-box;
-  border-radius: 0.75rem;
+  border-radius: 0.85rem;
   box-shadow:
     0 5px 5px -3px rgba(0, 0, 0, 0.2),
     0 8px 10px 1px rgba(0, 0, 0, 0.14),
@@ -157,5 +356,15 @@
 
   h6 {
     color: var(--tasky-text);
+  }
+}
+
+@media (max-width: 576px) {
+  .board-header__actions {
+    width: 100%;
+
+    .btn {
+      flex: 1 1 auto;
+    }
   }
 }

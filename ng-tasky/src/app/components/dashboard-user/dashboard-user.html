@@ -1,10 +1,19 @@
-<div class="container py-4 py-md-5">
-  <div class="dashboard-header d-flex justify-content-between align-items-start mb-4">
-    <div>
-      <h2 class="fw-bold mb-1">Bon retour, {{ userName() }}</h2>
-      <p class="text-muted mb-0">Retrouve tous tes tableaux ci-dessous.</p>
+<div class="dashboard-page">
+  <header class="dashboard-hero">
+    <div class="dashboard-hero__text">
+      <p class="dashboard-eyebrow">Espace de travail</p>
+      <h1 class="dashboard-title">Bon retour, {{ userName() }}</h1>
+      <p class="dashboard-lead">
+        Retrouve tes tableaux Kanban ou crée-en un nouveau pour organiser ton équipe.
+      </p>
+      @if (!isLoading() && boards().length > 0) {
+        <p class="dashboard-meta">
+          <i class="fa-solid fa-table-columns me-1"></i>
+          {{ boards().length }} tableau{{ boards().length > 1 ? 'x' : '' }}
+        </p>
+      }
     </div>
-    <div class="d-flex align-items-center gap-2">
+    <div class="dashboard-hero__tools">
       <button
         type="button"
         class="theme-toggle"
@@ -17,65 +26,62 @@
         <i class="fa-solid fa-user"></i>
       </button>
     </div>
-  </div>
+  </header>
 
   @if (isLoading()) {
-    <div class="row g-3">
+    <div class="board-grid">
       @for (i of [1, 2, 3]; track i) {
-        <div class="col-md-4">
-          <div class="board-card-skeleton"></div>
-        </div>
+        <div class="board-card-skeleton"></div>
       }
     </div>
   } @else {
     @if (boards().length === 0) {
-      <p class="empty-hint text-muted">
-        Tu n'as pas encore de tableau — crée le premier ci-dessous pour commencer à organiser ton travail.
-      </p>
-    }
-
-    <div class="row g-3">
-      @for (board of boards(); track board._id) {
-        <div class="col-md-4">
-          <div
-            class="board-card card h-100"
+      <div class="dashboard-empty">
+        <div class="dashboard-empty__icon"><i class="fa-solid fa-layer-group"></i></div>
+        <h2 class="dashboard-empty__title">Aucun tableau pour l’instant</h2>
+        <p class="dashboard-empty__text">
+          Crée ton premier board ci-dessous : Tasky ajoute automatiquement les colonnes À faire, En cours et Terminé.
+        </p>
+      </div>
+    } @else {
+      <h2 class="section-heading">Mes tableaux</h2>
+      <div class="board-grid">
+        @for (board of boards(); track board._id) {
+          <article
+            class="board-card"
             role="button"
             tabindex="0"
             (click)="openBoard(board._id)"
             (keyup.enter)="openBoard(board._id)"
           >
-            <div class="card-body">
-              <div class="board-avatar">{{ board.name.charAt(0).toUpperCase() }}</div>
-              <h5 class="card-title mb-1">{{ board.name }}</h5>
-              <p class="board-meta text-muted small mb-0">
-                <i class="fa-solid fa-users me-1"></i>
-                {{ board.members.length }} membre{{ board.members.length > 1 ? 's' : '' }}
-              </p>
-            </div>
-          </div>
-        </div>
-      }
-
-      <div class="col-md-4">
-        <div class="board-card-new card h-100">
-          <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
-            <div class="board-avatar board-avatar-ghost">
-              <i class="fa-solid fa-plus"></i>
-            </div>
-            <input
-              type="text"
-              class="form-control mt-3 mb-2"
-              placeholder="Nom du nouveau tableau"
-              [(ngModel)]="newBoardName"
-              (keyup.enter)="createBoard()"
-            />
-            <button type="button" class="btn btn-primary fw-semibold w-100" [disabled]="isCreating()" (click)="createBoard()">
-              <i class="fa-solid fa-plus me-1"></i>
-              {{ isCreating() ? 'Création...' : 'Nouveau tableau' }}
-            </button>
-          </div>
-        </div>
+            <div class="board-avatar">{{ board.name.charAt(0).toUpperCase() }}</div>
+            <h3 class="board-card__title">{{ board.name }}</h3>
+            <p class="board-meta">
+              <i class="fa-solid fa-users me-1"></i>
+              {{ board.members.length }} membre{{ board.members.length > 1 ? 's' : '' }}
+            </p>
+            <span class="board-card__cta">Ouvrir <i class="fa-solid fa-arrow-right ms-1"></i></span>
+          </article>
+        }
       </div>
-    </div>
+    }
+
+    <section class="create-board-panel">
+      <h2 class="create-board-panel__title">Nouveau tableau</h2>
+      <p class="create-board-panel__hint">Donne un nom clair à ton projet ou à ton équipe.</p>
+      <div class="create-board-panel__form">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Ex. Marketing Q4, Sprint dev…"
+          [(ngModel)]="newBoardName"
+          (keyup.enter)="createBoard()"
+        />
+        <button type="button" class="btn btn-primary" [disabled]="isCreating()" (click)="createBoard()">
+          <i class="fa-solid fa-plus me-2"></i>
+          {{ isCreating() ? 'Création…' : 'Créer le tableau' }}
+        </button>
+      </div>
+    </section>
   }
 </div>

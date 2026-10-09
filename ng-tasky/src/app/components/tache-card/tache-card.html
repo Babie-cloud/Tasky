@@ -1,82 +1,80 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <div>
-    <h5 class="mb-0">{{ board()?.name || 'Mon tableau' }}</h5>
-    <p class="text-muted small mb-0">Glissez-déposez les tâches pour changer leur statut.</p>
-  </div>
-  <div class="d-flex gap-2">
-    <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/board', board()?._id, 'add-task']">
-      <i class="fa-solid fa-plus me-1"></i> Ajouter une tâche
-    </button>
-    <button type="button" class="btn btn-outline-brand btn-sm" (click)="showCategoryModal.set(true)">
-      <i class="fa-solid fa-tags me-1"></i> Catégories
-    </button>
-    <button type="button" class="btn btn-outline-brand btn-sm" (click)="showInviteModal.set(true)">
-      <i class="fa-solid fa-user-plus me-1"></i> Inviter
-    </button>
-  </div>
-</div>
+<div class="board-page">
+  <header class="board-header">
+    <div class="board-header__main">
+      <a routerLink="/dashboard-user" class="board-back">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Mes tableaux</span>
+      </a>
+      <h1 class="board-title">{{ board()?.name || 'Mon tableau' }}</h1>
+      <p class="board-subtitle">Glissez-déposez les tâches pour mettre à jour leur statut.</p>
+    </div>
+    <div class="board-header__actions">
+      <button type="button" class="btn btn-primary" [routerLink]="['/board', board()?._id, 'add-task']">
+        <i class="fa-solid fa-plus me-2"></i>Ajouter une tâche
+      </button>
+      <button type="button" class="btn btn-outline-brand" (click)="showCategoryModal.set(true)">
+        <i class="fa-solid fa-tags me-1"></i> Catégories
+      </button>
+      <button type="button" class="btn btn-outline-brand" (click)="showInviteModal.set(true)">
+        <i class="fa-solid fa-user-plus me-1"></i> Inviter
+      </button>
+    </div>
+  </header>
 
-<!-- Stats -->
-<div class="row g-3 mb-4">
-  <div class="col-md-4">
-    <div class="stat-card">
-      <div>
-        <p class="stat-label">Total Tasks</p>
+  <section class="board-stats" aria-label="Statistiques du tableau">
+    <article class="stat-card">
+      <div class="stat-card__body">
+        <p class="stat-label">Total des tâches</p>
         <p class="stat-value">{{ totalCount }}</p>
       </div>
-      <div class="stat-icon bg-primary-subtle text-primary"><i class="fa-solid fa-list-check"></i></div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="stat-card">
-      <div>
-        <p class="stat-label">In Progress</p>
+      <div class="stat-icon stat-icon--total"><i class="fa-solid fa-list-check"></i></div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-card__body">
+        <p class="stat-label">En cours</p>
         <p class="stat-value">{{ inProgressCount }}</p>
       </div>
-      <div class="stat-icon bg-warning-subtle text-warning"><i class="fa-solid fa-rocket"></i></div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="stat-card">
-      <div>
-        <p class="stat-label">Completed</p>
+      <div class="stat-icon stat-icon--progress"><i class="fa-solid fa-rocket"></i></div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-card__body">
+        <p class="stat-label">Terminées</p>
         <p class="stat-value">{{ completedCount }}</p>
       </div>
-      <div class="stat-icon bg-success-subtle text-success"><i class="fa-solid fa-circle-check"></i></div>
-    </div>
-  </div>
-</div>
+      <div class="stat-icon stat-icon--done"><i class="fa-solid fa-circle-check"></i></div>
+    </article>
+  </section>
 
-<!-- Filtres -->
-<div class="board-toolbar d-flex flex-wrap gap-2 align-items-center mb-3">
-  <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="filterDueStatus">
-    <option value="all">Toutes les échéances</option>
-    <option value="overdue">En retard</option>
-    <option value="today">Aujourd'hui</option>
-    <option value="week">Cette semaine</option>
-  </select>
+  <section class="board-toolbar" aria-label="Filtres">
+    <select class="form-select toolbar-select" [(ngModel)]="filterDueStatus">
+      <option value="all">Toutes les échéances</option>
+      <option value="overdue">En retard</option>
+      <option value="today">Aujourd'hui</option>
+      <option value="week">Cette semaine</option>
+    </select>
 
-  <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="filterAssignee">
-    <option value="all">Tous les membres</option>
-    @for (member of board()?.members; track member._id) {
-      @if (member.user) {
-        <option [value]="member.user._id">{{ member.user.first_name || member.email }}</option>
+    <select class="form-select toolbar-select" [(ngModel)]="filterAssignee">
+      <option value="all">Tous les membres</option>
+      @for (member of board()?.members; track member._id) {
+        @if (member.user) {
+          <option [value]="member.user._id">{{ member.user.first_name || member.email }}</option>
+        }
       }
-    }
-  </select>
+    </select>
 
-  <div class="input-group input-group-sm" style="width: 220px;">
-    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
-    <input type="text" class="form-control" placeholder="Rechercher une tâche..." [(ngModel)]="searchText" />
-  </div>
-</div>
+    <div class="toolbar-search input-group">
+      <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+      <input type="search" class="form-control" placeholder="Rechercher une tâche…" [(ngModel)]="searchText" />
+    </div>
+  </section>
 
-<!-- Kanban fixe : 3 colonnes alignées de largeur égale -->
-<div cdkDropListGroup class="row g-3">
-  @for (list of lists(); track list._id; let i = $index) {
-    <div class="col-md-4">
-      <div class="board-column h-100">
-        <h6 class="fw-bold mb-2">{{ list.title }}</h6>
+  <div cdkDropListGroup class="kanban-board">
+    @for (list of lists(); track list._id; let i = $index) {
+      <div class="kanban-column">
+        <div class="kanban-column__head">
+          <h2 class="kanban-column__title">{{ list.title }}</h2>
+          <span class="kanban-column__count">{{ tasksOf(list._id).length }}</span>
+        </div>
 
         <div
           cdkDropList
@@ -87,21 +85,21 @@
         >
           @for (task of tasksOf(list._id); track task._id) {
             @if (taskVisible(task)) {
-              <div class="task-card d-flex flex-column gap-1" cdkDrag (click)="openTask(task)">
-                <div class="d-flex justify-content-between align-items-start">
-                  <span>{{ task.title }}</span>
+              <div class="task-card" cdkDrag (click)="openTask(task)">
+                <div class="task-card__top">
+                  <span class="task-card__title">{{ task.title }}</span>
                   <button
-                    class="btn btn-sm btn-link text-danger p-0"
+                    type="button"
+                    class="task-card__delete btn btn-sm btn-link"
+                    aria-label="Supprimer la tâche"
                     (click)="$event.stopPropagation(); deleteTask(task._id, list._id)"
                   >
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="task-card__meta">
                   @if (dueBadge(task); as badge) {
                     <span class="badge {{ badge.class }}">{{ badge.label }}</span>
-                  } @else {
-                    <span></span>
                   }
                   @if (assigneeInitials(task); as initials) {
                     <span class="avatar-chip" title="Assignée">{{ initials }}</span>
@@ -113,23 +111,21 @@
             <p class="task-list-empty">Dépose une tâche ici</p>
           }
         </div>
-
       </div>
-    </div>
-  }
+    }
 
-  <div class="col-md-4">
-    <div class="board-column board-column-new h-100">
-      <p class="fw-bold mb-2">+ Nouvelle liste</p>
+    <div class="kanban-column kanban-column--new">
+      <h2 class="kanban-column__title kanban-column__title--new">Nouvelle liste</h2>
+      <p class="kanban-new-hint">Ajoute une colonne pour organiser autrement ton flux.</p>
       <input
         type="text"
-        class="form-control form-control-sm mb-2"
-        placeholder="Ex: Etudes, Cahiers..."
+        class="form-control"
+        placeholder="Ex. Études, Backlog…"
         [(ngModel)]="newListTitle"
         (keyup.enter)="addList()"
       />
-      <button type="button" class="btn btn-sm btn-outline-brand w-100" (click)="addList()">
-        <i class="fa-solid fa-plus me-1"></i> Ajouter une liste
+      <button type="button" class="btn btn-outline-brand w-100 mt-3" (click)="addList()">
+        <i class="fa-solid fa-plus me-1"></i> Ajouter la liste
       </button>
     </div>
   </div>
@@ -144,7 +140,7 @@
     <div class="modal-content-custom" (click)="$event.stopPropagation()">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h6 class="fw-bold mb-0">Catégories du tableau</h6>
-        <button class="btn btn-sm btn-icon-ghost" (click)="showCategoryModal.set(false)">
+        <button type="button" class="btn btn-sm btn-icon-ghost" (click)="showCategoryModal.set(false)">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -161,4 +157,3 @@
   (updated)="onTaskUpdated($event)"
   (deleted)="onTaskDeleted($event)"
 ></app-task-detail>
-
