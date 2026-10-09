@@ -12,7 +12,7 @@ import { AuthService } from '../../core/services/auth-service';
   styleUrl: './pricing.scss',
 })
 export class Pricing {
-  themeService = new ThemeService();
+  themeService = inject(ThemeService);
   private router = inject(Router);
   private billingService = inject(BillingService);
   private authService = inject(AuthService);

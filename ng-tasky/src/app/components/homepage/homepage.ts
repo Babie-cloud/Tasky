@@ -9,7 +9,7 @@ import { ThemeService } from '../../core/services/theme-service';
   styleUrl: './homepage.scss',
 })
 export class Homepage {
-  themeService = new ThemeService();
+  themeService = inject(ThemeService);
       private authService = inject(AuthService);
       private router = inject(Router);
   isLoggedIn = this.authService.isLoggedIn();

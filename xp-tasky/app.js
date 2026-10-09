@@ -8,7 +8,7 @@ var cors = require('cors');
 const connectDB = require('./db');
 
 const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
+const { buildSwaggerSpec } = require('./swagger.config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -75,29 +75,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 connectDB().catch(err => console.error('[DB] Erreur critique de connexion', err));
 
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Tasky API',
-      version: '1.0.0',
-      description: 'Documentation de l\'API open source pour Tasky (Gestion de tâches Kanban)',
-      contact: {
-        name: 'Équipe Tasky'
-      }
-    },
-    servers: [
-      {
-        url: 'http://localhost:3000',
-        description: 'Serveur de développement'
-      }
-    ],
-  },
-  apis: ['./routes/*.js', './components/*.js'], 
-};
+const swaggerSpec = buildSwaggerSpec();
 
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get('/api-docs.json', (_req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCssUrl: '/stylesheets/swagger-theme.css',
+    customSiteTitle: 'Tasky API — Documentation',
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      docExpansion: 'list',
+      filter: true,
+    },
+  })
+);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

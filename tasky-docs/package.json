@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "openapi:sync": "node ../xp-tasky/scripts/export-openapi.js",
+    "predev": "npm run openapi:sync",
+    "prebuild": "npm run openapi:sync",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",

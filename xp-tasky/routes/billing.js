@@ -15,7 +15,49 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4200';
 
 router.use(requireAuth);
 
-// 1. Créer une session Checkout 
+/**
+ * @swagger
+ * /api/billing/create-checkout-session:
+ *   post:
+ *     tags: [Billing]
+ *     summary: Démarrer un abonnement Stripe Checkout
+ *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               plan: { type: string, enum: [pro, enterprise], example: pro }
+ *     responses:
+ *       200:
+ *         description: URL de redirection Stripe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url: { type: string, format: uri }
+ *
+ * /api/billing/create-portal-session:
+ *   post:
+ *     tags: [Billing]
+ *     summary: Portail client Stripe (gestion abonnement)
+ *     security: [{ bearerAuth: [] }]
+ *     responses:
+ *       200:
+ *         description: URL du portail
+ *
+ * /api/billing/status:
+ *   get:
+ *     tags: [Billing]
+ *     summary: Statut d'abonnement de l'utilisateur
+ *     security: [{ bearerAuth: [] }]
+ *     responses:
+ *       200:
+ *         description: Plan et statut Stripe
+ */
+
 router.post('/create-checkout-session', async (req, res) => {
   try {
     const rawPlan = req.body.plan;

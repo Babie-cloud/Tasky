@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './core/services/theme-service';
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -7,6 +9,11 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
+  private readonly themeService = inject(ThemeService);
 
   protected readonly title = signal('ng-tasky');
+
+  constructor() {
+    void this.themeService.theme();
+  }
 }

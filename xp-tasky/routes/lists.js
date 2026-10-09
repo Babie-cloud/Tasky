@@ -7,7 +7,104 @@ const boardAccess = require('../middlewares/board-access');
 
 router.use(requireAuth);
 
-// Lister les listes d'un board
+/**
+ * @swagger
+ * /api/lists:
+ *   get:
+ *     tags: [Lists]
+ *     summary: Lister les colonnes d'un tableau
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: query
+ *         name: board
+ *         required: true
+ *         schema: { type: string }
+ *         description: ID du tableau Kanban
+ *     responses:
+ *       200: { description: Liste des colonnes triées par ordre }
+ *   post:
+ *     tags: [Lists]
+ *     summary: Créer une colonne
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: query
+ *         name: board
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [title]
+ *             properties:
+ *               title: { type: string, example: Backlog }
+ *               board: { type: string }
+ *     responses:
+ *       201: { description: Colonne créée }
+ *
+ * /api/lists/reorder:
+ *   put:
+ *     tags: [Lists]
+ *     summary: Réordonner les colonnes
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: query
+ *         name: board
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               orderedIds: { type: array, items: { type: string } }
+ *               board: { type: string }
+ *     responses:
+ *       200: { description: Ordre mis à jour }
+ *
+ * /api/lists/{id}:
+ *   put:
+ *     tags: [Lists]
+ *     summary: Renommer une colonne
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *       - in: query
+ *         name: board
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title: { type: string }
+ *               board: { type: string }
+ *     responses:
+ *       200: { description: Colonne renommée }
+ *   delete:
+ *     tags: [Lists]
+ *     summary: Supprimer une colonne et ses tâches
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *       - in: query
+ *         name: board
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200: { description: Colonne supprimée }
+ */
+
 router.get('/', boardAccess('observer'), async (req, res) => {
   const lists = await List.find({ board: req.board._id }).sort({ order: 1 });
   res.json(lists);

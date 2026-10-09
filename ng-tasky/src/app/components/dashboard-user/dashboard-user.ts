@@ -18,7 +18,7 @@ export class DashboardUser implements OnInit {
   private userService = inject(UserService);
   private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
-  themeService = new ThemeService();
+  themeService = inject(ThemeService);
 
   userName = signal('there');
   boards = signal<Board[]>([]);

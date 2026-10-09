@@ -24,16 +24,16 @@ export class ThemeService {
     this.theme.set(this.theme() === 'light' ? 'dark' : 'light');
   }
 
- private getInitialTheme(): 'light' | 'dark' {
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    if (saved) return saved;
-
-    // Vérifie si matchMedia existe avant d'appeler la fonction
+  private getInitialTheme(): Theme {
+    const saved =
+      (localStorage.getItem(this.storageKey) as Theme | null) ||
+      (localStorage.getItem('theme') as Theme | null);
+    if (saved === 'light' || saved === 'dark') {
+      return saved;
+    }
     if (typeof window.matchMedia === 'function') {
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
+    return 'light';
   }
-  return 'light';
-}
 }

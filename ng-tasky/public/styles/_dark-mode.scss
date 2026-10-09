@@ -1,5 +1,19 @@
 @use './colors' as *;
 
+[data-bs-theme='light'] {
+  --tasky-surface:         #{$tasky-surface};
+  --tasky-surface-rgb:     255, 255, 255;
+  --tasky-surface-alt:     #{$tasky-surface-alt};
+  --tasky-surface-sunken:  #f3f4f6;
+  --tasky-surface-raised:  #{$tasky-surface};
+  --tasky-text:            #{$tasky-text};
+  --tasky-text-muted:      #{$tasky-text-muted};
+  --tasky-border:          #{rgba($tasky-green-300, 0.55)};
+
+  --bs-body-bg: var(--tasky-surface) !important;
+  --bs-body-color: var(--tasky-text);
+}
+
 [data-bs-theme='dark'] {
   --tasky-surface:        #242526;
   --tasky-surface-rgb:    36, 37, 38;

@@ -9,6 +9,107 @@ const { OAuth2Client } = require('google-auth-library');
 
 const User = require('../models/User');
 
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Créer un compte
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email: { type: string, format: email }
+ *               password: { type: string, minLength: 8 }
+ *               confirm_password: { type: string }
+ *               first_name: { type: string }
+ *               last_name: { type: string }
+ *     responses:
+ *       201: { description: Compte créé, token JWT retourné }
+ *       409: { description: Email déjà utilisé }
+ *
+ * /api/auth/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Connexion email / mot de passe
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email: { type: string, format: email }
+ *               password: { type: string }
+ *     responses:
+ *       200: { description: Token JWT }
+ *       401: { description: Identifiants invalides }
+ *
+ * /api/auth/google:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Connexion Google (ID token)
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               credential: { type: string, description: JWT Google One Tap }
+ *     responses:
+ *       200: { description: Token JWT Tasky }
+ *
+ * /api/auth/facebook:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Connexion Facebook
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               accessToken: { type: string }
+ *               userID: { type: string }
+ *     responses:
+ *       200: { description: Token JWT Tasky }
+ *
+ * /api/auth/forgot-password:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Demande de réinitialisation du mot de passe
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email: { type: string, format: email }
+ *     responses:
+ *       200: { description: Email envoyé si le compte existe }
+ *
+ * /api/auth/reset-password:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Confirmer un nouveau mot de passe
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [token, password]
+ *             properties:
+ *               token: { type: string }
+ *               password: { type: string, minLength: 8 }
+ *     responses:
+ *       200: { description: Mot de passe mis à jour }
+ */
+
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const JWT_SECRET = process.env.JWT_SECRET;
 

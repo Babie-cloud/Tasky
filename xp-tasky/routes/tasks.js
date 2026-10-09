@@ -19,11 +19,11 @@ router.use(requireAuth);
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *               name: board
- *               required: true
- *               schema:
- *                 type: string
- *               description: ID du tableau
+ *         name: board
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID du tableau
  *     responses:
  *       200:
  *         description: Liste des tâches récupérée avec succès.

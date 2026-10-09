@@ -6,6 +6,57 @@ const requireAuth = require('../middlewares/auth');
 
 router.use(requireAuth);
 
+/**
+ * @swagger
+ * /users/me:
+ *   get:
+ *     tags: [Users]
+ *     summary: Profil de l'utilisateur connecté
+ *     security: [{ bearerAuth: [] }]
+ *     responses:
+ *       200: { description: Profil utilisateur }
+ *       401: { description: Non authentifié }
+ *   put:
+ *     tags: [Users]
+ *     summary: Mettre à jour le profil
+ *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name: { type: string }
+ *               last_name: { type: string }
+ *               phone: { type: string }
+ *               bio: { type: string, maxLength: 280 }
+ *     responses:
+ *       200: { description: Profil mis à jour }
+ *   delete:
+ *     tags: [Users]
+ *     summary: Supprimer le compte
+ *     security: [{ bearerAuth: [] }]
+ *     responses:
+ *       200: { description: Compte supprimé }
+ *
+ * /users/me/password:
+ *   put:
+ *     tags: [Users]
+ *     summary: Changer le mot de passe
+ *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [currentPassword, newPassword]
+ *             properties:
+ *               currentPassword: { type: string }
+ *               newPassword: { type: string, minLength: 8 }
+ *     responses:
+ *       200: { description: Mot de passe changé }
+ */
+
 const PROFILE_FIELDS = [
   'first_name',
   'last_name',
