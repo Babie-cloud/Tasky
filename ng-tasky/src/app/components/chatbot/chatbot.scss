@@ -1,0 +1,137 @@
+@use '../../../../public/styles/colors' as *;
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+
+  .chat-toggle-btn {
+    background-color: $tasky-primary;
+    color: white;
+    border: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
+
+    &:hover {
+      background-color: $tasky-primary-hover;
+      transform: scale(1.1);
+    }
+
+    .chat-icon {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+  }
+
+  .chat-box {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 320px;
+    height: 400px;
+    background: $tasky-surface;
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 25px rgba($tasky-primary, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--tasky-border);
+
+    .chat-header {
+      background: $tasky-primary;
+      color: white;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      div {
+        padding: 8px 12px;
+        border-radius: 0.75rem;
+        max-width: 80%;
+        font-size: 0.9rem;
+
+        &.user {
+          background: $tasky-primary;
+          color: white;
+          align-self: flex-end;
+        }
+
+        &.bot {
+          background: $tasky-surface-alt;
+          color: $tasky-text;
+          align-self: flex-start;
+          border: 1px solid var(--tasky-border);
+        }
+      }
+    }
+
+    .chat-input-area {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid var(--tasky-border);
+      background: $tasky-surface-alt;
+
+      input {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid rgba($tasky-green-300, 0.55);
+        border-radius: 0.75rem;
+        outline: none;
+        color: $tasky-text;
+        background: $tasky-surface;
+
+        &:focus {
+          border-color: $tasky-primary;
+          box-shadow: 0 0 0 0.2rem rgba($tasky-primary, 0.15);
+        }
+      }
+
+      button {
+        margin-left: 8px;
+        background: $tasky-primary;
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        font-weight: 600;
+
+        &:hover {
+          background: $tasky-primary-hover;
+        }
+      }
+    }
+  }
+}

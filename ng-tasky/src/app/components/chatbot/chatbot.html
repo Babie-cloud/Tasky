@@ -1,0 +1,27 @@
+<div class="chatbot-container">
+ <button class="chat-toggle-btn" (click)="toggleChat()">
+    <img src="assets/favicon (Copie).png" alt="Chat IA" class="chat-icon">
+  </button>
+
+  @if (isOpen) {
+    <div class="chat-box">
+      <div class="chat-header">
+        <h3>Tasky Assistant</h3>
+        <button (click)="toggleChat()">×</button>
+      </div>
+      
+      <div class="chat-messages">
+        @for (msg of messages; track msg) {
+          <div [class.user]="msg.isUser" [class.bot]="!msg.isUser">
+            {{ msg.text }}
+          </div>
+        }
+      </div>
+
+      <div class="chat-input-area">
+        <input type="text" [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Pose ta question...">
+        <button (click)="sendMessage()">Envoyer</button>
+      </div>
+    </div>
+  }
+</div>

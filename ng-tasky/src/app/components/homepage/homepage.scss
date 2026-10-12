@@ -327,17 +327,11 @@
 
 .sticky-image-container {
   position: sticky;
-  top: 120px; 
-  height: 60vh;
-  background: var(--tasky-surface-alt);
-  border: 1px solid var(--tasky-border);
-  border-radius: 1.5rem;
+  top: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
 }
-
 
 .features-section {
   background-color: var(--tasky-surface);

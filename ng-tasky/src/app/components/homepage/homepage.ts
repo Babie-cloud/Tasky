@@ -2,9 +2,10 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth-service';
 import { ThemeService } from '../../core/services/theme-service';
+import { Chatbot } from '../chatbot/chatbot';
 @Component({
   selector: 'app-homepage',
-  imports: [RouterLink],
+  imports: [RouterLink, Chatbot],
   templateUrl: './homepage.html',
   styleUrl: './homepage.scss',
 })

@@ -13,6 +13,7 @@ import { Profile } from './components/profile/profile';
 import { PolicyPrivacy } from './layout/policy-privacy/policy-privacy';
 import { Terms } from './layout/terms/terms';
 import { CategoryManager } from './components/category-manager/category-manager';
+import { Chatbot } from './components/chatbot/chatbot';
 export const routes: Routes = [
   { path: '', component: Homepage },
   { path: 'login', component: Login },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'resetpassword', component: Resetpassword },
   { path: 'pricing', component: Pricing },
   { path: 'add-task', component: AddTask },
+  { path: 'chatbot', component: Chatbot },
   { path: 'category-manager', component: CategoryManager },
   { path: 'dashboard-user', component: DashboardUser, canActivate: [authGuard] },
   { path: 'board/:boardId', component: TacheCard, canActivate: [authGuard] },

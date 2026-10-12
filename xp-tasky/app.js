@@ -9,6 +9,7 @@ const connectDB = require('./db');
 
 const swaggerUi = require('swagger-ui-express');
 const { buildSwaggerSpec } = require('./swagger.config');
+const aiRoutes = require('./routes/ai');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -105,6 +106,7 @@ app.use('/api/boards', boardsRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api/billing', billingRouter);
 app.use('/api/categories', categoriesRouter);
+app.use('/api/ai', aiRoutes);
 
 app.use(function(req, res, next) {
   next(createError(404));
